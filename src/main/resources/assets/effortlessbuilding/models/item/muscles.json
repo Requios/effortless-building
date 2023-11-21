@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "effortlessbuilding:items/muscles"
+        "layer0": "effortlessbuilding:item/muscles"
     }
 }
