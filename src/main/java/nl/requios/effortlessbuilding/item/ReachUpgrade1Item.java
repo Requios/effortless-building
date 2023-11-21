@@ -3,8 +3,8 @@ package nl.requios.effortlessbuilding.item;
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -14,7 +14,8 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import nl.requios.effortlessbuilding.CommonConfig;
 import nl.requios.effortlessbuilding.EffortlessBuilding;
-import nl.requios.effortlessbuilding.EffortlessBuildingClient;
+import nl.requios.effortlessbuilding.capability.CapabilityHandler;
+import nl.requios.effortlessbuilding.capability.IPowerLevel;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -30,28 +31,29 @@ public class ReachUpgrade1Item extends Item {
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+		ItemStack stack = player.getItemInHand(hand);
+		IPowerLevel powerLevel = player.getCapability(CapabilityHandler.POWER_LEVEL_CAPABILITY).orElse(null);
+		if (powerLevel != null) {
+			int currentLevel = powerLevel.getPowerLevel();
+			if (currentLevel == 0) {
+				if (!world.isClientSide) {
+					powerLevel.increasePowerLevel();
+					EffortlessBuilding.log(player, "Upgraded power level to " + powerLevel.getPowerLevel());
 
-		if (!world.isClientSide) return InteractionResultHolder.consume(player.getItemInHand(hand));
+					stack.shrink(1);
 
-		int currentLevel = EffortlessBuildingClient.POWER_LEVEL.getPowerLevel();
-		if (currentLevel == 0) {
+					world.playSound((Player) null, player.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1f, 1f);
 
-			EffortlessBuildingClient.POWER_LEVEL.increasePowerLevel();
-			EffortlessBuilding.log(player, "Upgraded power level to " + EffortlessBuildingClient.POWER_LEVEL.getPowerLevel());
-			player.setItemInHand(hand, ItemStack.EMPTY);
+					CapabilityHandler.syncToClient(player);
+				}
+				return InteractionResultHolder.sidedSuccess(stack, world.isClientSide());
+			} else if (currentLevel > 0) {
+				if (!world.isClientSide && hand == InteractionHand.MAIN_HAND) {
+					EffortlessBuilding.log(player, "Already used this upgrade! Current power level is " + powerLevel.getPowerLevel() + ".");
 
-			SoundEvent soundEvent = SoundEvent.createVariableRangeEvent(new ResourceLocation("entity.player.levelup"));
-			player.playSound(soundEvent, 1f, 1f);
-
-			return InteractionResultHolder.consume(player.getItemInHand(hand));
-
-		} else if (currentLevel > 0) {
-
-			EffortlessBuilding.log(player, "Already used this upgrade! Current power level is " + EffortlessBuildingClient.POWER_LEVEL.getPowerLevel() + ".");
-
-			SoundEvent soundEvent = SoundEvent.createVariableRangeEvent(new ResourceLocation("item.armor.equip_leather"));
-			player.playSound(soundEvent, 1f, 1f);
-
+					world.playSound((Player) null, player.blockPosition(), SoundEvents.ARMOR_EQUIP_LEATHER, SoundSource.PLAYERS, 1f, 1f);
+				}
+			}
 		}
 
 		return InteractionResultHolder.fail(player.getItemInHand(hand));

@@ -3,10 +3,10 @@ package nl.requios.effortlessbuilding.buildmode.buildmodes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
-import nl.requios.effortlessbuilding.EffortlessBuildingClient;
 import nl.requios.effortlessbuilding.buildmode.BuildModes;
 import nl.requios.effortlessbuilding.buildmode.ModeOptions;
 import nl.requios.effortlessbuilding.buildmode.TwoClicksBuildMode;
+import nl.requios.effortlessbuilding.capability.CapabilityHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ public class Floor extends TwoClicksBuildMode {
 		criteriaList.add(new Criteria(yBound, start));
 
 		//Remove invalid criteria
-		int reach = EffortlessBuildingClient.POWER_LEVEL.getBuildModeReach(player);
+		int reach = CapabilityHandler.getBuildModeReach(player);
 		criteriaList.removeIf(criteria -> !criteria.isValid(start, look, reach, player, skipRaytrace));
 
 		//If none are valid, return empty list of blocks

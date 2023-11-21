@@ -17,6 +17,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import nl.requios.effortlessbuilding.buildmode.BuildModeEnum;
 import nl.requios.effortlessbuilding.buildmode.ModeOptions;
+import nl.requios.effortlessbuilding.capability.CapabilityHandler;
 import nl.requios.effortlessbuilding.gui.buildmode.PlayerSettingsGui;
 import nl.requios.effortlessbuilding.gui.buildmode.RadialMenu;
 import nl.requios.effortlessbuilding.gui.buildmodifier.ModifiersScreen;
@@ -133,7 +134,7 @@ public class ClientEvents {
 
         //Radial menu
         if (keyBindings[0].isDown()) {
-            if (!EffortlessBuildingClient.POWER_LEVEL.isDisabled(player)) {
+            if (!CapabilityHandler.isDisabled(player)) {
                 if (!RadialMenu.instance.isVisible()) {
                     Minecraft.getInstance().setScreen(RadialMenu.instance);
                 }
@@ -174,7 +175,7 @@ public class ClientEvents {
         if (player == null) return;
 
         //Disabled if max reach is 0, might be set in the config that way.
-        if (EffortlessBuildingClient.POWER_LEVEL.isDisabled(player)) {
+        if (CapabilityHandler.isDisabled(player)) {
             EffortlessBuilding.log(player, "Build modifiers are disabled until your power level has increased. Increase your power level by consuming certain items.");
         } else {
             mc.setScreen(new ModifiersScreen());

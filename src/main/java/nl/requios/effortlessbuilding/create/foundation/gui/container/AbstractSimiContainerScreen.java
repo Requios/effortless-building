@@ -15,7 +15,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import nl.requios.effortlessbuilding.create.foundation.gui.AllGuiTextures;
 import nl.requios.effortlessbuilding.create.foundation.gui.TickableGuiEventListener;
 import nl.requios.effortlessbuilding.create.foundation.gui.widget.AbstractSimiWidget;
 

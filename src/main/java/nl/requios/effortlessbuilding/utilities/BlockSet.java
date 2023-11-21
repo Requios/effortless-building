@@ -6,7 +6,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
 import nl.requios.effortlessbuilding.EffortlessBuilding;
-import nl.requios.effortlessbuilding.EffortlessBuildingClient;
+import nl.requios.effortlessbuilding.capability.CapabilityHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -102,7 +102,7 @@ public class BlockSet extends HashMap<BlockPos, BlockEntry> implements Iterable<
     public static class ClientSide {
         public static boolean isFull(BlockSet blockSet) {
             //Limit number of blocks you can place
-            int limit = EffortlessBuildingClient.POWER_LEVEL.getMaxBlocksPlacedAtOnce(net.minecraft.client.Minecraft.getInstance().player);
+            int limit = CapabilityHandler.getMaxBlocksPlacedAtOnce(net.minecraft.client.Minecraft.getInstance().player, false);
             if (blockSet.size() >= limit) {
                 if (logging) EffortlessBuilding.log("BlockSet limit reached, not adding block.");
                 return true;
