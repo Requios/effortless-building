@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "effortlessbuilding:items/diamondrandomizerbag"
+        "layer0": "effortlessbuilding:item/diamondrandomizerbag"
     }
 }

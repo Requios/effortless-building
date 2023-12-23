@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "effortlessbuilding:items/reachupgrade2"
+        "layer0": "effortlessbuilding:item/reachupgrade2"
     }
 }
