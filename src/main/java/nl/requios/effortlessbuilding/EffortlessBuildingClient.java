@@ -20,7 +20,6 @@ public class EffortlessBuildingClient {
     public static final BlockPreviews BLOCK_PREVIEWS = new BlockPreviews();
     public static final BuilderFilter BUILDER_FILTER = new BuilderFilter();
     public static final ItemUsageTracker ITEM_USAGE_TRACKER = new ItemUsageTracker();
-    public static final PowerLevel POWER_LEVEL = new PowerLevel();
 
     public static void onConstructorClient(IEventBus modEventBus, IEventBus forgeEventBus) {
         modEventBus.addListener(EffortlessBuildingClient::clientSetup);

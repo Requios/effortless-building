@@ -8,9 +8,9 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import nl.requios.effortlessbuilding.AllGuiTextures;
 import nl.requios.effortlessbuilding.AllIcons;
-import nl.requios.effortlessbuilding.EffortlessBuildingClient;
 import nl.requios.effortlessbuilding.buildmodifier.BaseModifier;
 import nl.requios.effortlessbuilding.buildmodifier.RadialMirror;
+import nl.requios.effortlessbuilding.capability.CapabilityHandler;
 import nl.requios.effortlessbuilding.create.foundation.gui.widget.IconButton;
 import nl.requios.effortlessbuilding.create.foundation.gui.widget.ScrollInput;
 import nl.requios.effortlessbuilding.create.foundation.utility.Components;
@@ -107,7 +107,7 @@ public class RadialMirrorEntry extends BaseModifierEntry<RadialMirror> {
 
 		//Radius
 		radiusInput = new LabeledScrollInput(0, 0, 27, 18)
-			.withRange(0, EffortlessBuildingClient.POWER_LEVEL.getMaxMirrorRadius(Minecraft.getInstance().player))
+			.withRange(0, CapabilityHandler.getMaxMirrorRadius(Minecraft.getInstance().player, false))
 			.titled(Minecraft.getInstance().player.isCreative() ?
 					Component.literal("Radius") :
 					Component.literal("Radius. Use Reach Upgrade items to increase maximum."))

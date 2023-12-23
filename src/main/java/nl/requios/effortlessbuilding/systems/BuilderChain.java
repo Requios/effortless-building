@@ -21,6 +21,7 @@ import nl.requios.effortlessbuilding.ClientConfig;
 import nl.requios.effortlessbuilding.ClientEvents;
 import nl.requios.effortlessbuilding.EffortlessBuildingClient;
 import nl.requios.effortlessbuilding.buildmode.BuildModeEnum;
+import nl.requios.effortlessbuilding.capability.CapabilityHandler;
 import nl.requios.effortlessbuilding.compatibility.CompatHelper;
 import nl.requios.effortlessbuilding.item.AbstractRandomizerBagItem;
 import nl.requios.effortlessbuilding.network.PacketHandler;
@@ -103,7 +104,8 @@ public class BuilderChain {
         }
 
         var player = Minecraft.getInstance().player;
-        if (player != null && !EffortlessBuildingClient.POWER_LEVEL.canBreakFar(player)) return;
+        if (player == null) return;
+        if (!CapabilityHandler.canBreakFar(player)) return;
 
         if (buildingState == BuildingState.IDLE){
             buildingState = BuildingState.BREAKING;
@@ -208,7 +210,7 @@ public class BuilderChain {
 
     private BlockEntry findStartPosition(Player player, BuildModeEnum buildMode) {
 
-        int maxReach = EffortlessBuildingClient.POWER_LEVEL.getPlacementReach(player);
+        int maxReach = CapabilityHandler.getPlacementReach(player, false);
 
         //Determine if we should look far or nearby
         boolean shouldLookAtNear = buildMode == BuildModeEnum.DISABLED || maxReach < 3;
@@ -241,7 +243,7 @@ public class BuilderChain {
             //We can only break
 
             //Do not break far if we are not allowed to
-            if (!shouldLookAtNear && !EffortlessBuildingClient.POWER_LEVEL.canBreakFar(player)) return null;
+            if (!shouldLookAtNear && !CapabilityHandler.canBreakFar(player)) return null;
         }
 
         var blockEntry = new BlockEntry(startPos);

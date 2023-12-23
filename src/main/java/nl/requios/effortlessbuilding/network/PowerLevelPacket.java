@@ -1,14 +1,15 @@
 package nl.requios.effortlessbuilding.network;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.network.NetworkEvent;
-import nl.requios.effortlessbuilding.EffortlessBuilding;
-import nl.requios.effortlessbuilding.EffortlessBuildingClient;
+import nl.requios.effortlessbuilding.capability.CapabilityHandler;
 
 import java.util.function.Supplier;
 
 /**
- * Sync power level between server and client, for saving and loading.
+ * Sync power level from server to client
  */
 public class PowerLevelPacket {
 
@@ -31,19 +32,19 @@ public class PowerLevelPacket {
 
 	public static class Handler {
 		public static void handle(PowerLevelPacket message, Supplier<NetworkEvent.Context> ctx) {
-			if (ctx.get().getDirection().getReceptionSide().isServer()) {
-				ctx.get().enqueueWork(() -> {
-					var player = ctx.get().getSender();
-					//To server, save to persistent player data
-					EffortlessBuilding.SERVER_POWER_LEVEL.setPowerLevel(player, message.powerLevel);
-				});
-			} else {
-				ctx.get().enqueueWork(() -> {
-					//To client, load into system
-					EffortlessBuildingClient.POWER_LEVEL.setPowerLevel(message.powerLevel);
-				});
-			}
-			ctx.get().setPacketHandled(true);
+			NetworkEvent.Context context = ctx.get();
+			context.enqueueWork(() -> {
+				if (context.getDirection().getReceptionSide().isClient()) {
+					Player player = Minecraft.getInstance().player;
+					if (player != null) {
+						player.getCapability(CapabilityHandler.POWER_LEVEL_CAPABILITY, null)
+								.ifPresent(levelCap -> {
+									levelCap.setPowerLevel(message.powerLevel);
+								});
+					}
+				}
+			});
+			context.setPacketHandled(true);
 		}
 	}
 }

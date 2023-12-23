@@ -35,7 +35,6 @@ import nl.requios.effortlessbuilding.proxy.IProxy;
 import nl.requios.effortlessbuilding.proxy.ServerProxy;
 import nl.requios.effortlessbuilding.systems.ItemUsageTracker;
 import nl.requios.effortlessbuilding.systems.ServerBlockPlacer;
-import nl.requios.effortlessbuilding.systems.ServerPowerLevel;
 import nl.requios.effortlessbuilding.systems.UndoRedo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -54,7 +53,6 @@ public class EffortlessBuilding {
 	public static final ServerBlockPlacer SERVER_BLOCK_PLACER = new ServerBlockPlacer();
 	public static final UndoRedo UNDO_REDO = new UndoRedo();
 	public static final ItemUsageTracker ITEM_USAGE_TRACKER = new ItemUsageTracker();
-	public static final ServerPowerLevel SERVER_POWER_LEVEL = new ServerPowerLevel();
 
 	//Registration
 	private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);

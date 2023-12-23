@@ -7,9 +7,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import nl.requios.effortlessbuilding.AllGuiTextures;
-import nl.requios.effortlessbuilding.EffortlessBuildingClient;
 import nl.requios.effortlessbuilding.buildmodifier.Array;
 import nl.requios.effortlessbuilding.buildmodifier.BaseModifier;
+import nl.requios.effortlessbuilding.capability.CapabilityHandler;
 import nl.requios.effortlessbuilding.create.foundation.gui.widget.ScrollInput;
 import nl.requios.effortlessbuilding.gui.elements.LabeledScrollInput;
 import nl.requios.effortlessbuilding.utilities.MathHelper;
@@ -85,7 +85,7 @@ public class ArrayEntry extends BaseModifierEntry<Array> {
 		super.onValueChanged();
 		
 		int currentReach = Math.max(-1, getArrayReach());
-		int maxReach = EffortlessBuildingClient.POWER_LEVEL.getMaxBlocksPerAxis(Minecraft.getInstance().player);
+		int maxReach = CapabilityHandler.getMaxBlocksPerAxis(Minecraft.getInstance().player, false);
 		ChatFormatting reachColor = isCurrentReachValid(currentReach, maxReach) ? ChatFormatting.GRAY : ChatFormatting.RED;
 		var reachText = "" + reachColor + currentReach + ChatFormatting.GRAY + "/" + ChatFormatting.GRAY + maxReach;
 		reachLabel.text = Component.literal(reachText);

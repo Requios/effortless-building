@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import nl.requios.effortlessbuilding.EffortlessBuildingClient;
+import nl.requios.effortlessbuilding.capability.CapabilityHandler;
 import nl.requios.effortlessbuilding.utilities.BlockEntry;
 import nl.requios.effortlessbuilding.utilities.BlockSet;
 
@@ -48,7 +49,7 @@ public abstract class TwoClicksBuildMode extends BaseBuildMode {
 		if (secondPos == null) return;
 
 		//Limit amount of blocks we can place per row
-		int axisLimit = EffortlessBuildingClient.POWER_LEVEL.getMaxBlocksPerAxis(player);
+		int axisLimit = CapabilityHandler.getMaxBlocksPerAxis(player, false);
 
 		int x1 = firstPos.getX(), x2 = secondPos.getX();
 		int y1 = firstPos.getY(), y2 = secondPos.getY();

@@ -17,9 +17,9 @@ public class PacketHandler {
 			PROTOCOL_VERSION::equals
 			);
 
-	public static void register() {
-		int id = 0;
+	private static int id = 0;
 
+	public static void register() {
 		INSTANCE.registerMessage(id++, IsUsingBuildModePacket.class, IsUsingBuildModePacket::encode, IsUsingBuildModePacket::decode,
 				IsUsingBuildModePacket.Handler::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
 		INSTANCE.registerMessage(id++, IsQuickReplacingPacket.class, IsQuickReplacingPacket::encode, IsQuickReplacingPacket::decode,
