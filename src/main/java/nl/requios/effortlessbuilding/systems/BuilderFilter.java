@@ -12,7 +12,7 @@ import nl.requios.effortlessbuilding.utilities.PlaceChecker;
 @OnlyIn(Dist.CLIENT)
 public class BuilderFilter {
     public void filterOnCoordinates(BlockSet blocks, Player player) {
-        var world = player.level();
+        var world = player.level;
         var iter = blocks.entrySet().iterator();
         while (iter.hasNext()) {
             var pos = iter.next().getValue().blockPos;
@@ -76,7 +76,7 @@ public class BuilderFilter {
 
         boolean remove = false;
 
-        if (placing && !PlaceChecker.shouldPlaceBlock(player.level(), blockEntry)) remove = true;
+        if (placing && !PlaceChecker.shouldPlaceBlock(player.level, blockEntry)) remove = true;
 
         return remove;
     }

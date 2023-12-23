@@ -112,11 +112,11 @@ public class RadialMirror extends BaseModifier {
 		BlockState newBlockState = blockState;
 
 		if (startAngleToCenter < -0.751 * Math.PI || startAngleToCenter > 0.749 * Math.PI) {
-			newBlockState = blockState.rotate(player.level(), startPos, Rotation.CLOCKWISE_180);
+			newBlockState = blockState.rotate(player.level, startPos, Rotation.CLOCKWISE_180);
 		} else if (startAngleToCenter < -0.251 * Math.PI) {
-			newBlockState = blockState.rotate(player.level(), startPos, Rotation.COUNTERCLOCKWISE_90);
+			newBlockState = blockState.rotate(player.level, startPos, Rotation.COUNTERCLOCKWISE_90);
 		} else if (startAngleToCenter > 0.249 * Math.PI) {
-			newBlockState = blockState.rotate(player.level(), startPos, Rotation.CLOCKWISE_90);
+			newBlockState = blockState.rotate(player.level, startPos, Rotation.CLOCKWISE_90);
 		}
 
 		return newBlockState;
@@ -127,17 +127,17 @@ public class RadialMirror extends BaseModifier {
 		double angleToCenter = Mth.atan2(relVec.x, relVec.z); //between -PI and PI
 
 		if (angleToCenter < -0.751 * Math.PI || angleToCenter > 0.749 * Math.PI) {
-			newBlockState = blockState.rotate(player.level(), startPos, Rotation.CLOCKWISE_180);
+			newBlockState = blockState.rotate(player.level, startPos, Rotation.CLOCKWISE_180);
 			if (alternate) {
 				newBlockState = newBlockState.mirror(Mirror.FRONT_BACK);
 			}
 		} else if (angleToCenter < -0.251 * Math.PI) {
-			newBlockState = blockState.rotate(player.level(), startPos, Rotation.CLOCKWISE_90);
+			newBlockState = blockState.rotate(player.level, startPos, Rotation.CLOCKWISE_90);
 			if (alternate) {
 				newBlockState = newBlockState.mirror(Mirror.LEFT_RIGHT);
 			}
 		} else if (angleToCenter > 0.249 * Math.PI) {
-			newBlockState = blockState.rotate(player.level(), startPos, Rotation.COUNTERCLOCKWISE_90);
+			newBlockState = blockState.rotate(player.level, startPos, Rotation.COUNTERCLOCKWISE_90);
 			if (alternate) {
 				newBlockState = newBlockState.mirror(Mirror.LEFT_RIGHT);
 			}

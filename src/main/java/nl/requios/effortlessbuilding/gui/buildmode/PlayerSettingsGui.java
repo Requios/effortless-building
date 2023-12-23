@@ -5,7 +5,6 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.gui.screens.Screen;
@@ -67,19 +66,19 @@ public class PlayerSettingsGui extends Screen {
 	}
 
 	@Override
-	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
-		this.renderBackground(guiGraphics);
+	public void render(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
+		this.renderBackground(ms);
 
 		int yy = top;
-		guiGraphics.drawString(font, "Shader type", left, yy + 5, 0xFFFFFF, false);
+		font.draw(ms, "Shader type", left, yy + 5, 0xFFFFFF);
 
 		yy += 50;
-		guiGraphics.drawString(font, "Shader speed", left, yy + 5, 0xFFFFFF, false);
+		font.draw(ms, "Shader speed", left, yy + 5, 0xFFFFFF);
 
-		super.render(guiGraphics, mouseX, mouseY, partialTicks);
+		super.render(ms, mouseX, mouseY, partialTicks);
 
 		if (showShaderList)
-			this.shaderTypeList.render(guiGraphics, mouseX, mouseY, partialTicks);
+			this.shaderTypeList.render(ms, mouseX, mouseY, partialTicks);
 	}
 
 	@Override
@@ -191,7 +190,7 @@ public class PlayerSettingsGui extends Screen {
 
 		//From AbstractSelectionList, disabled parts
 		@Override
-		public void render(GuiGraphics guiGraphics, int p_render_1_, int p_render_2_, float p_render_3_) {
+		public void render(PoseStack guiGraphics, int p_render_1_, int p_render_2_, float p_render_3_) {
 			this.renderBackground(guiGraphics);
 			int i = this.getScrollbarPosition();
 			int j = i + 6;
@@ -284,9 +283,9 @@ public class PlayerSettingsGui extends Screen {
 			}
 
 			@Override
-			public void render(GuiGraphics guiGraphics, int itemIndex, int rowTop, int rowLeft, int rowWidth, int rowHeight, int mouseX, int mouseY, boolean hovered, float partialTicks) {
+			public void render(PoseStack ms, int itemIndex, int rowTop, int rowLeft, int rowWidth, int rowHeight, int mouseX, int mouseY, boolean hovered, float partialTicks) {
 				if (rowTop + 10 > ShaderTypeList.this.y0 && rowTop + rowHeight - 5 < ShaderTypeList.this.y1)
-					guiGraphics.drawString(font, shaderType.name, ShaderTypeList.this.x0 + 8, rowTop + 4, 0xFFFFFF, false);
+					font.draw(ms, shaderType.name, ShaderTypeList.this.x0 + 8, rowTop + 4, 0xFFFFFF);
 			}
 
 			@Override

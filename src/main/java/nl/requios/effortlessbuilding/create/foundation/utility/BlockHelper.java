@@ -185,7 +185,7 @@ public class BlockHelper {
 					return false;
 
 				BlockState belowState = world.getBlockState(pos.below());
-				if (belowState.blocksMotion() || belowState.liquid())
+				if (belowState.getMaterial().blocksMotion() || belowState.getMaterial().isLiquid())
 					world.setBlockAndUpdate(pos, Blocks.WATER.defaultBlockState());
 				return true;
 			}
@@ -213,7 +213,7 @@ public class BlockHelper {
 		int idx = chunk.getSectionIndex(target.getY());
 		LevelChunkSection chunksection = chunk.getSection(idx);
 		if (chunksection == null) {
-			chunksection = new LevelChunkSection(world.registryAccess()
+			chunksection = new LevelChunkSection(chunk.getSectionYFromSectionIndex(idx), world.registryAccess()
 					.registryOrThrow(Registries.BIOME));
 			chunk.getSections()[idx] = chunksection;
 		}

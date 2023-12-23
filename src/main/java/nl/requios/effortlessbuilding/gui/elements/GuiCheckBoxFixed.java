@@ -1,9 +1,9 @@
 package nl.requios.effortlessbuilding.gui.elements;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
@@ -29,11 +29,11 @@ public class GuiCheckBoxFixed extends Button {
 	}
 
 	@Override
-	public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partial) {
+	public void renderWidget(PoseStack ms, int mouseX, int mouseY, float partial) {
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderTexture(0, WIDGETS_LOCATION);
 		//Is deprecated but still works
-		ScreenUtils.blitWithBorder(guiGraphics, this.getX(), this.getY(), 0, 46, this.boxWidth, this.height, 200, 20, 2, 3, 2, 2, 0);
+		ScreenUtils.blitWithBorder(ms, this.getX(), this.getY(), 0, 46, this.boxWidth, this.height, 200, 20, 2, 3, 2, 2, 0);
 		int color = 14737632;
 
 		if (packedFGColor != 0) {
@@ -45,9 +45,9 @@ public class GuiCheckBoxFixed extends Button {
 		Font font = Minecraft.getInstance().font;
 
 		if (this.isChecked)
-			guiGraphics.drawCenteredString(font, "x", this.getX() + this.boxWidth / 2 + 1, this.getY() + 1, 14737632);
+			drawCenteredString(ms, font, "x", this.getX() + this.boxWidth / 2 + 1, this.getY() + 1, 14737632);
 
-		guiGraphics.drawString(font, getMessage(), this.getX() + this.boxWidth + 2, this.getY() + 2, color, false);
+		font.draw(ms, getMessage(), this.getX() + this.boxWidth + 2, this.getY() + 2, color);
 	}
 
 	@Override

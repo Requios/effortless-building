@@ -1,7 +1,7 @@
 package nl.requios.effortlessbuilding.create.foundation.gui.widget;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.client.gui.GuiGraphics;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.network.chat.Component;
 import nl.requios.effortlessbuilding.create.foundation.gui.AllGuiTextures;
 
@@ -16,7 +16,7 @@ public class Indicator extends AbstractSimiWidget {
 	}
 
 	@Override
-	public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks ) {
+	public void render(PoseStack ms, int mouseX, int mouseY, float partialTicks ) {
 		if (!visible)
 			return;
 		AllGuiTextures toDraw;
@@ -28,7 +28,7 @@ public class Indicator extends AbstractSimiWidget {
 			case GREEN: toDraw = AllGuiTextures.INDICATOR_GREEN; break;
 			default: toDraw = AllGuiTextures.INDICATOR; break;
 		}
-		toDraw.render(graphics, getX(), getY());
+		toDraw.render(ms, getX(), getY());
 	}
 
 	public enum State {

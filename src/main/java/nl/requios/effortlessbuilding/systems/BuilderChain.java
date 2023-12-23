@@ -88,7 +88,7 @@ public class BuilderChain {
                 player.swing(InteractionHand.MAIN_HAND);
 
                 blocks.skipFirst = buildMode == BuildModeEnum.DISABLED;
-                long placeTime = player.level().getGameTime();
+                long placeTime = player.level.getGameTime();
                 if (blocks.size() > 1) placeTime += ClientConfig.visuals.appearAnimationLength.get();
                 PacketHandler.INSTANCE.sendToServer(new ServerPlaceBlocksPacket(blocks, placeTime));
             }
@@ -112,7 +112,7 @@ public class BuilderChain {
             blocks.setStartPos(new BlockEntry(startPosForBreaking));
             EffortlessBuildingClient.BUILD_MODIFIERS.findCoordinates(blocks, player);
             EffortlessBuildingClient.BUILDER_FILTER.filterOnCoordinates(blocks, player);
-            findExistingBlockStates(player.level());
+            findExistingBlockStates(player.level);
             EffortlessBuildingClient.BUILDER_FILTER.filterOnExistingBlockStates(blocks, player);
         }
 
@@ -231,7 +231,7 @@ public class BuilderChain {
 
             //Offset in direction of sidehit if not quickreplace and not replaceable
             boolean shouldOffsetStartPosition = EffortlessBuildingClient.BUILD_SETTINGS.shouldOffsetStartPosition();
-            boolean replaceable = player.level().getBlockState(startPos).canBeReplaced();
+            boolean replaceable = player.level.getBlockState(startPos).canBeReplaced();
             boolean becomesDoubleSlab = SurvivalHelper.doesBecomeDoubleSlab(player, startPos);
             if (!shouldOffsetStartPosition && !replaceable && !becomesDoubleSlab) {
                 startPos = startPos.relative(lookingAt.getDirection());
@@ -281,7 +281,7 @@ public class BuilderChain {
             }
 
             //Find new blockstate
-            blockEntry.setItemAndFindNewBlockState(itemStack, player.level(), originalDirection, clickedFace, relativeHitVec);
+            blockEntry.setItemAndFindNewBlockState(itemStack, player.level, originalDirection, clickedFace, relativeHitVec);
 
             //Filter on new blockstate
             if (EffortlessBuildingClient.BUILDER_FILTER.filterOnNewBlockState(blockEntry, player)) {
@@ -320,9 +320,9 @@ public class BuilderChain {
 
             if (blocks.getLastBlockEntry() != null && blocks.getLastBlockEntry().newBlockState != null) {
                 var lastBlockState = blocks.getLastBlockEntry().newBlockState;
-                SoundType soundType = lastBlockState.getBlock().getSoundType(lastBlockState, player.level(), blocks.lastPos, player);
+                SoundType soundType = lastBlockState.getBlock().getSoundType(lastBlockState, player.level, blocks.lastPos, player);
                 SoundEvent soundEvent = buildingState == BuildingState.BREAKING ? soundType.getBreakSound() : soundType.getPlaceSound();
-                player.level().playSound(player, player.blockPosition(), soundEvent, SoundSource.BLOCKS, 0.3f, 0.8f);
+                player.level.playSound(player, player.blockPosition(), soundEvent, SoundSource.BLOCKS, 0.3f, 0.8f);
             }
         }
     }

@@ -109,7 +109,7 @@ public class BuildModes {
 		if (!skipRaytrace) {
 			//collision within a 1 block radius to selected is fine
 			ClipContext rayTraceContext = new ClipContext(start, lineBound, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player);
-			HitResult rayTraceResult = player.level().clip(rayTraceContext);
+			HitResult rayTraceResult = player.level.clip(rayTraceContext);
 			intersects = rayTraceResult != null && rayTraceResult.getType() == HitResult.Type.BLOCK &&
 				planeBound.subtract(rayTraceResult.getLocation()).lengthSqr() > 4;
 		}

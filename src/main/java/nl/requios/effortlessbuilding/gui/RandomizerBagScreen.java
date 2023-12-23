@@ -1,6 +1,7 @@
 package nl.requios.effortlessbuilding.gui;
 
-import net.minecraft.client.gui.GuiGraphics;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -25,22 +26,24 @@ public class RandomizerBagScreen extends AbstractContainerScreen<RandomizerBagCo
 	}
 
 	@Override
-	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
-		renderBackground(guiGraphics);
-		super.render(guiGraphics, mouseX, mouseY, partialTicks);
-		this.renderTooltip(guiGraphics, mouseX, mouseY);
+	public void render(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
+		renderBackground(ms);
+		super.render(ms, mouseX, mouseY, partialTicks);
+		this.renderTooltip(ms, mouseX, mouseY);
 	}
 
 	@Override
-	protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
-		guiGraphics.drawString(this.font, this.title, 8, 6, 0x404040, false);
-		guiGraphics.drawString(this.font, this.playerInventoryTitle, 8, imageHeight - 96 + 2, 0x404040, false);
+	protected void renderLabels(PoseStack ms, int mouseX, int mouseY) {
+		this.font.draw(ms, this.title, 8, 6, 0x404040);
+		this.font.draw(ms, this.playerInventoryTitle, 8, imageHeight - 96 + 2, 0x404040);
 	}
 
 	@Override
-	protected void renderBg(GuiGraphics guiGraphics, float partialTicks, int mouseX, int mouseY) {
+	protected void renderBg(PoseStack ms, float partialTicks, int mouseX, int mouseY) {
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1f);
+		RenderSystem.setShaderTexture(0, guiTextures);
 		int marginHorizontal = (width - imageWidth) / 2;
 		int marginVertical = (height - imageHeight) / 2;
-		guiGraphics.blit(guiTextures, marginHorizontal, marginVertical, 0, 0, imageWidth, imageHeight);
+		blit(ms, marginHorizontal, marginVertical, 0, 0, imageWidth, imageHeight);
 	}
 }

@@ -1,7 +1,7 @@
 package nl.requios.effortlessbuilding.gui.buildmodifier;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -145,7 +145,7 @@ public class ModifiersScreen extends AbstractSimiScreen {
 	}
 	
 	@Override
-	protected void renderWindow(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
+	protected void renderWindow(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
 	
 	}
 	

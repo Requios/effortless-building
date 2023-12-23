@@ -1,6 +1,7 @@
 package nl.requios.effortlessbuilding.gui.elements;
 
-import net.minecraft.client.gui.GuiGraphics;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.resources.ResourceLocation;
@@ -50,7 +51,9 @@ public class GuiIconButton extends Button {
 	}
 
 	@Override
-	public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
+	public void renderWidget(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
+		RenderSystem.setShaderTexture(0, this.resourceLocation);
+
 		int currentIconX = this.iconX;
 		int currentIconY = this.iconY;
 
@@ -60,14 +63,14 @@ public class GuiIconButton extends Button {
 		}
 
 		//Draws a textured rectangle at the current z-value. Used to be drawTexturedModalRect in Gui.
-		guiGraphics.blit(resourceLocation, this.getX(), this.getY(), currentIconX, currentIconY, this.iconWidth, this.iconHeight);
+		blit(ms, this.getX(), this.getY(), currentIconX, currentIconY, this.iconWidth, this.iconHeight);
 	}
 
-	public void drawTooltip(GuiGraphics guiGraphics, Screen screen, int mouseX, int mouseY) {
+	public void drawTooltip(PoseStack ms, Screen screen, int mouseX, int mouseY) {
 		boolean flag = mouseX >= getX() && mouseX < getX() + width && mouseY >= getY() && mouseY < getY() + height;
 
 		if (flag) {
-			guiGraphics.renderComponentTooltip(screen.getMinecraft().font, tooltip, mouseX - 10, mouseY + 25);
+			screen.renderComponentTooltip(ms, tooltip, mouseX - 10, mouseY + 25);
 		}
 	}
 }

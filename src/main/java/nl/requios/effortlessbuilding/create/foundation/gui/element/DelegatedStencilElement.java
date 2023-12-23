@@ -1,6 +1,6 @@
 package nl.requios.effortlessbuilding.create.foundation.gui.element;
 
-import net.minecraft.client.gui.GuiGraphics;
+import com.mojang.blaze3d.vertex.PoseStack;
 import nl.requios.effortlessbuilding.create.foundation.gui.UIRenderHelper;
 import nl.requios.effortlessbuilding.create.foundation.utility.Color;
 
@@ -35,18 +35,18 @@ public class DelegatedStencilElement extends StencilElement {
 	}
 
 	@Override
-	protected void renderStencil(GuiGraphics graphics) {
-		stencil.render(graphics, width, height, 1);
+	protected void renderStencil(PoseStack ms) {
+		stencil.render(ms, width, height, 1);
 	}
 
 	@Override
-	protected void renderElement(GuiGraphics graphics) {
-		element.render(graphics, width, height, alpha);
+	protected void renderElement(PoseStack ms) {
+		element.render(ms, width, height, alpha);
 	}
 
 	@FunctionalInterface
 	public interface ElementRenderer {
-		void render(GuiGraphics graphics, int width, int height, float alpha);
+		void render(PoseStack ms, int width, int height, float alpha);
 	}
 
 }

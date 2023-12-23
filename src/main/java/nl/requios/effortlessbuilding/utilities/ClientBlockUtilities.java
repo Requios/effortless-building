@@ -43,13 +43,13 @@ public class ClientBlockUtilities {
         if (blockEntry == null || blockEntry.newBlockState == null)
             return;
 
-        SoundType soundType = blockEntry.newBlockState.getBlock().getSoundType(blockEntry.newBlockState, player.level(), blockEntry.blockPos, player);
+        SoundType soundType = blockEntry.newBlockState.getBlock().getSoundType(blockEntry.newBlockState, player.level, blockEntry.blockPos, player);
         SoundEvent soundEvent = breaking ? soundType.getBreakSound() : soundType.getPlaceSound();
-        player.level().playSound(player, player.blockPosition(), soundEvent, SoundSource.BLOCKS, 0.6f, soundType.getPitch());
+        player.level.playSound(player, player.blockPosition(), soundEvent, SoundSource.BLOCKS, 0.6f, soundType.getPitch());
     }
 
     public static BlockHitResult getLookingAtFar(Player player) {
-        Level world = player.level();
+        Level world = player.level;
 
         //base distance off of player ability (config)
         float raytraceRange = EffortlessBuildingClient.POWER_LEVEL.getPlacementReach(player);

@@ -1,7 +1,8 @@
 package nl.requios.effortlessbuilding;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.GuiGraphics;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -46,16 +47,23 @@ public enum AllGuiTextures implements ScreenElement {
     public void bind() {
         RenderSystem.setShaderTexture(0, location);
     }
-    
+
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void render(GuiGraphics ms, int x, int y) {
-        ms.blit(location, x, y, 0, startX, startY, width, height, 256, 256);
+    public void render(PoseStack poseStack, int x, int y) {
+        bind();
+        GuiComponent.blit(poseStack, x, y, 0, startX, startY, width, height, 256, 256);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void render(PoseStack poseStack, int x, int y, GuiComponent component) {
+        bind();
+        component.blit(poseStack, x, y, 0, startX, startY, width, height, 256, 256);
     }
     
     @OnlyIn(Dist.CLIENT)
-    public void render(GuiGraphics ms, int x, int y, Color c) {
+    public void render(PoseStack poseStack, int x, int y, Color c, GuiComponent component) {
         bind();
-        UIRenderHelper.drawColoredTexture(ms, c, x, y, startX, startY, width, height);
+        UIRenderHelper.drawColoredTexture(poseStack, c, x, y, startX, startY, width, height);
     }
 }

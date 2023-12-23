@@ -1,7 +1,8 @@
 package nl.requios.effortlessbuilding.create.foundation.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.GuiGraphics;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -72,15 +73,21 @@ public enum AllGuiTextures implements ScreenElement {
 		RenderSystem.setShaderTexture(0, location);
 	}
 
-	@OnlyIn(Dist.CLIENT)
-	public void render(GuiGraphics graphics, int x, int y) {
-		graphics.blit(location, x, y, startX, startY, width, height);
+	public void render(PoseStack ms, int x, int y) {
+		bind();
+		GuiComponent.blit(ms, x, y, startX, startY, width, height);
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public void render(GuiGraphics graphics, int x, int y, Color c) {
+	public void render(PoseStack ms, int x, int y, GuiComponent component) {
 		bind();
-		UIRenderHelper.drawColoredTexture(graphics, c, x, y, startX, startY, width, height);
+		component.blit(ms, x, y, startX, startY, width, height);
+	}
+
+	@OnlyIn(Dist.CLIENT)
+	public void render(PoseStack ms, int x, int y, Color c) {
+		bind();
+		UIRenderHelper.drawColoredTexture(ms, c, x, y, startX, startY, width, height);
 	}
 
 }

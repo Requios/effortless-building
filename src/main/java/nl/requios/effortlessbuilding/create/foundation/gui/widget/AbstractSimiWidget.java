@@ -1,6 +1,6 @@
 package nl.requios.effortlessbuilding.create.foundation.gui.widget;
 
-import net.minecraft.client.gui.GuiGraphics;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipPositioner;
@@ -68,22 +68,22 @@ public abstract class AbstractSimiWidget extends AbstractWidget implements Ticka
 	public void tick() {}
 
 	@Override
-	public void renderWidget(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-		beforeRender(graphics, mouseX, mouseY, partialTicks);
-		doRender(graphics, mouseX, mouseY, partialTicks);
-		afterRender(graphics, mouseX, mouseY, partialTicks);
+	public void renderWidget(@Nonnull PoseStack ms, int mouseX, int mouseY, float partialTicks) {
+		beforeRender(ms, mouseX, mouseY, partialTicks);
+		doRender(ms, mouseX, mouseY, partialTicks);
+		afterRender(ms, mouseX, mouseY, partialTicks);
 		wasHovered = isHoveredOrFocused();
 	}
 
-	protected void beforeRender(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-		graphics.pose().pushPose();
+	protected void beforeRender(@Nonnull PoseStack ms, int mouseX, int mouseY, float partialTicks) {
+		ms.pushPose();
 	}
 
-	protected void doRender(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+	protected void doRender(@Nonnull PoseStack ms, int mouseX, int mouseY, float partialTicks) {
 	}
 
-	protected void afterRender(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-		graphics.pose().popPose();
+	protected void afterRender(@Nonnull PoseStack ms, int mouseX, int mouseY, float partialTicks) {
+		ms.popPose();
 	}
 
 	public void runCallback(double mouseX, double mouseY) {

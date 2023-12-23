@@ -103,7 +103,7 @@ public class ModeOptions {
 			case CIRCLE_START_CORNER -> circleStart = ActionEnum.CIRCLE_START_CORNER;
 		}
 
-		if (player.level().isClientSide &&
+		if (player.level.isClientSide &&
 			action != ActionEnum.OPEN_MODIFIER_SETTINGS &&
 			action != ActionEnum.OPEN_PLAYER_SETTINGS &&
 			action != ActionEnum.PREVIOUS_BUILD_MODE &&

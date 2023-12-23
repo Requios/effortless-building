@@ -1,7 +1,7 @@
 package nl.requios.effortlessbuilding.create.foundation.gui.widget;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.GuiGraphics;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.network.chat.Component;
 import nl.requios.effortlessbuilding.create.foundation.gui.AllGuiTextures;
 import nl.requios.effortlessbuilding.create.foundation.gui.element.ScreenElement;
@@ -20,7 +20,7 @@ public class IconButton extends AbstractSimiWidget {
 	}
 
 	@Override
-	public void doRender(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+	public void doRender(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
 		if (visible) {
 			isHovered = mouseX >= getX() && mouseY >= getY() && mouseX < getX() + width && mouseY < getY() + height;
 
@@ -28,13 +28,14 @@ public class IconButton extends AbstractSimiWidget {
 				: isMouseOver(mouseX, mouseY) ? AllGuiTextures.BUTTON_HOVER : AllGuiTextures.BUTTON;
 
 			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-			drawBg(graphics, button);
-			icon.render(graphics, getX() + 1, getY() + 1);
+			drawBg(ms, button);
+			icon.render(ms, getX() + 1, getY() + 1);
 		}
 	}
 
-	protected void drawBg(GuiGraphics graphics, AllGuiTextures button) {
-		graphics.blit(button.location, getX(), getY(), button.startX, button.startY, button.width, button.height);
+	protected void drawBg(PoseStack ms, AllGuiTextures button) {
+		AllGuiTextures.BUTTON.bind();
+		blit(ms, getX(), getY(), button.startX, button.startY, button.width, button.height);
 	}
 
 	public void setToolTip(Component text) {

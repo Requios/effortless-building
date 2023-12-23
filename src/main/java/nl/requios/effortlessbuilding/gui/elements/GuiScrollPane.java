@@ -6,7 +6,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.Screen;
@@ -72,7 +71,7 @@ public class GuiScrollPane extends SlotGui {
 
 	//Removed background
 	@Override
-	public void render(GuiGraphics guiGraphics, int mouseXIn, int mouseYIn, float partialTicks) {
+	public void render(PoseStack guiGraphics, int mouseXIn, int mouseYIn, float partialTicks) {
 		if (this.visible) {
 			this.mouseX = mouseXIn;
 			this.mouseY = mouseYIn;
@@ -170,8 +169,8 @@ public class GuiScrollPane extends SlotGui {
 	}
 
 	@Override
-	protected void renderItem(GuiGraphics guiGraphics, int slotIndex, int xPos, int yPos, int heightIn, int mouseXIn, int mouseYIn, float partialTicks) {
-		this.getListEntry(slotIndex).drawEntry(guiGraphics, slotIndex, xPos, yPos, this.getRowWidth(), heightIn, mouseXIn, mouseYIn,
+	protected void renderItem(PoseStack ms, int slotIndex, int xPos, int yPos, int heightIn, int mouseXIn, int mouseYIn, float partialTicks) {
+		this.getListEntry(slotIndex).drawEntry(ms, slotIndex, xPos, yPos, this.getRowWidth(), heightIn, mouseXIn, mouseYIn,
 			this.getSlotIndexFromScreenCoords(mouseXIn, mouseYIn) == slotIndex, partialTicks);
 	}
 
@@ -324,7 +323,7 @@ public class GuiScrollPane extends SlotGui {
 
 	//Draw in center if it fits
 	@Override
-	protected void renderList(GuiGraphics guiGraphics, int insideLeft, int insideTop, int mouseXIn, int mouseYIn, float partialTicks) {
+	protected void renderList(PoseStack guiGraphics, int insideLeft, int insideTop, int mouseXIn, int mouseYIn, float partialTicks) {
 		int itemCount = this.getItemCount();
 		Tesselator tessellator = Tesselator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuilder();
@@ -405,7 +404,7 @@ public class GuiScrollPane extends SlotGui {
 			entry.updateScreen();
 	}
 
-	public void drawTooltip(GuiGraphics guiGraphics, Screen guiScreen, int mouseX, int mouseY) {
+	public void drawTooltip(PoseStack guiGraphics, Screen guiScreen, int mouseX, int mouseY) {
 		for (IScrollEntry entry : this.listEntries)
 			entry.drawTooltip(guiGraphics, guiScreen, mouseX, mouseY);
 	}
@@ -436,7 +435,7 @@ public class GuiScrollPane extends SlotGui {
 
 		void updateScreen();
 
-		void drawTooltip(GuiGraphics guiGraphics, Screen guiScreen, int mouseX, int mouseY);
+		void drawTooltip(PoseStack guiGraphics, Screen guiScreen, int mouseX, int mouseY);
 
 		boolean charTyped(char eventChar, int eventKey);
 
@@ -446,7 +445,7 @@ public class GuiScrollPane extends SlotGui {
 
 		void updatePosition(int slotIndex, int x, int y, float partialTicks);
 
-		void drawEntry(GuiGraphics guiGraphics, int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, float partialTicks);
+		void drawEntry(PoseStack guiGraphics, int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, float partialTicks);
 
 		/**
 		 * Called when the mouse is clicked within this entry. Returning true means that something within this entry was

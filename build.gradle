@@ -122,7 +122,7 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
     jarJar("com.jozufozu.flywheel:flywheel-forge-${flywheel_minecraft_version}:${flywheel_version}") {
-        jarJar.ranged(it, '[0.6.10,0.7)')
+        jarJar.ranged(it, '[0.6.9,0.7)')
     }
 
     if (flywheelInWorkspace) {

@@ -29,7 +29,7 @@ public class ServerBlockPlacer {
         //Iterator to prevent concurrent modification exception
         for (var iterator = delayedEntries.iterator(); iterator.hasNext(); ) {
             DelayedEntry entry = iterator.next();
-            long gameTime = entry.player.level().getGameTime();
+            long gameTime = entry.player.level.getGameTime();
             if (gameTime >= entry.placeTime) {
                 applyBlockSet(entry.player, entry.blocks);
                 iterator.remove();
@@ -99,7 +99,7 @@ public class ServerBlockPlacer {
 
     private boolean applyBlockEntry(Player player, BlockEntry block) {
 
-        block.existingBlockState = player.level().getBlockState(block.blockPos);
+        block.existingBlockState = player.level.getBlockState(block.blockPos);
         boolean breaking = BlockUtilities.isNullOrAir(block.newBlockState);
         if (!validateBlockEntry(player, block, breaking)) return false;
 
@@ -134,7 +134,7 @@ public class ServerBlockPlacer {
         if (!validateBlockEntry(player, tempBlockEntry, breaking)) return false;
 
         //Update newBlockState for future redo's
-        block.newBlockState = player.level().getBlockState(block.blockPos);
+        block.newBlockState = player.level.getBlockState(block.blockPos);
 
         boolean success;
         isPlacingOrBreakingBlocks = true;
@@ -231,7 +231,7 @@ public class ServerBlockPlacer {
 
     private boolean validateBlockEntry(Player player, BlockEntry block, boolean breaking) {
 
-        if (!player.level().isLoaded(block.blockPos)) return false;
+        if (!player.level.isLoaded(block.blockPos)) return false;
 
         if (breaking && BlockUtilities.isNullOrAir(block.existingBlockState)) return false;
 

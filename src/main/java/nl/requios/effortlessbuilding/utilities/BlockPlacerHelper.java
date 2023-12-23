@@ -27,7 +27,7 @@ public class BlockPlacerHelper {
             }
         }
 
-        boolean brokeBlock = BlockHelper.destroyBlockAs(player.level(), blockEntry.blockPos, player, usedTool, 0f, stack -> {
+        boolean brokeBlock = BlockHelper.destroyBlockAs(player.level, blockEntry.blockPos, player, usedTool, 0f, stack -> {
             if (!player.isCreative()) {
                 ItemHandlerHelper.giveItemToPlayer(player, stack);
             }
@@ -38,7 +38,7 @@ public class BlockPlacerHelper {
     //ForgeHooks::onPlaceItemIntoWorld, removed itemstack usage
     public static boolean placeBlock(Player player, BlockEntry blockEntry) {
 
-        Level level = player.level();
+        Level level = player.level;
         var itemStack = new ItemStack(blockEntry.item);
 
         level.captureBlockSnapshots = true;

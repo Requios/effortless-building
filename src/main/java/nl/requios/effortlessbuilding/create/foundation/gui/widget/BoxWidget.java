@@ -1,6 +1,6 @@
 package nl.requios.effortlessbuilding.create.foundation.gui.widget;
 
-import net.minecraft.client.gui.GuiGraphics;
+import com.mojang.blaze3d.vertex.PoseStack;
 import nl.requios.effortlessbuilding.create.foundation.gui.Theme;
 import nl.requios.effortlessbuilding.create.foundation.gui.UIRenderHelper;
 import nl.requios.effortlessbuilding.create.foundation.gui.element.BoxElement;
@@ -96,8 +96,8 @@ public class BoxWidget extends ElementWidget {
 	}
 
 	@Override
-	protected void beforeRender(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-		super.beforeRender(graphics, mouseX, mouseY, partialTicks);
+	protected void beforeRender(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
+		super.beforeRender(ms, mouseX, mouseY, partialTicks);
 
 		if (isHovered != wasHovered) {
 			startGradientAnimation(
@@ -119,7 +119,7 @@ public class BoxWidget extends ElementWidget {
 	}
 
 	@Override
-	public void doRender(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+	public void doRender(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
 		float fadeValue = fade.getValue(partialTicks);
 		if (fadeValue < .1f)
 			return;
@@ -129,9 +129,9 @@ public class BoxWidget extends ElementWidget {
 				.gradientBorder(gradientColor1, gradientColor2)
 				.at(getX(), getY(), z)
 				.withBounds(width, height)
-				.render(graphics);
+				.render(ms);
 
-		super.doRender(graphics, mouseX, mouseY, partialTicks);
+		super.doRender(ms, mouseX, mouseY, partialTicks);
 
 		wasHovered = isHovered;
 	}

@@ -2,7 +2,6 @@ package nl.requios.effortlessbuilding.create.foundation.gui.element;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.MutableComponent;
 import nl.requios.effortlessbuilding.create.foundation.utility.Components;
 
@@ -46,7 +45,7 @@ public class TextStencilElement extends DelegatedStencilElement {
 	}
 
 	@Override
-	protected void renderStencil(GuiGraphics graphics) {
+	protected void renderStencil(PoseStack ms) {
 		float x = 0, y = 0;
 		if (centerHorizontally)
 			x = width / 2f - font.width(component) / 2f;
@@ -54,11 +53,11 @@ public class TextStencilElement extends DelegatedStencilElement {
 		if (centerVertically)
 			y = height / 2f - (font.lineHeight - 1) / 2f;
 
-		graphics.drawString(font, component, Math.round(x), Math.round(y), 0xff_000000, false);
+		font.draw(ms, component, Math.round(x), Math.round(y), 0xff_000000);
 	}
 
 	@Override
-	protected void renderElement(GuiGraphics graphics) {
+	protected void renderElement(PoseStack ms) {
 		float x = 0, y = 0;
 		if (centerHorizontally)
 			x = width / 2f - font.width(component) / 2f;
@@ -66,10 +65,9 @@ public class TextStencilElement extends DelegatedStencilElement {
 		if (centerVertically)
 			y = height / 2f - (font.lineHeight - 1) / 2f;
 
-		PoseStack ms = graphics.pose();
 		ms.pushPose();
 		ms.translate(x, y, 0);
-		element.render(graphics, font.width(component), font.lineHeight + 2, alpha);
+		element.render(ms, font.width(component), font.lineHeight + 2, alpha);
 		ms.popPose();
 	}
 

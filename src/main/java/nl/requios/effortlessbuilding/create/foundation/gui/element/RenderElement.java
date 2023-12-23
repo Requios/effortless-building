@@ -1,12 +1,12 @@
 package nl.requios.effortlessbuilding.create.foundation.gui.element;
 
-import net.minecraft.client.gui.GuiGraphics;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 public abstract class RenderElement implements ScreenElement {
 
 	public static final RenderElement EMPTY = new RenderElement() {
 		@Override
-		public void render(GuiGraphics graphics) {
+		public void render(PoseStack ms) {
 		}
 	};
 
@@ -66,11 +66,11 @@ public abstract class RenderElement implements ScreenElement {
 		return z;
 	}
 
-	public abstract void render(GuiGraphics graphics);
+	public abstract void render(PoseStack ms);
 
 	@Override
-	public void render(GuiGraphics graphics, int x, int y) {
-		this.at(x, y).render(graphics);
+	public void render(PoseStack ms, int x, int y) {
+		this.at(x, y).render(ms);
 	}
 
 	public static class SimpleRenderElement extends RenderElement {
@@ -82,8 +82,8 @@ public abstract class RenderElement implements ScreenElement {
 		}
 
 		@Override
-		public void render(GuiGraphics graphics) {
-			renderable.render(graphics, (int) x, (int) y);
+		public void render(PoseStack ms) {
+			renderable.render(ms, (int) x, (int) y);
 		}
 	}
 }
