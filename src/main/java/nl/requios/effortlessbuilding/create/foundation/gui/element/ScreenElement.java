@@ -1,12 +1,12 @@
 package nl.requios.effortlessbuilding.create.foundation.gui.element;
 
-import net.minecraft.client.gui.GuiGraphics;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public interface ScreenElement {
 
 	@OnlyIn(Dist.CLIENT)
-	void render(GuiGraphics graphics, int x, int y);
+	void render(PoseStack poseStack, int x, int y);
 
 }

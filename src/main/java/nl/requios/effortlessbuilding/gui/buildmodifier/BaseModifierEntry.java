@@ -1,6 +1,6 @@
 package nl.requios.effortlessbuilding.gui.buildmodifier;
 
-import net.minecraft.client.gui.GuiGraphics;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.network.chat.Component;
 import nl.requios.effortlessbuilding.AllGuiTextures;
 import nl.requios.effortlessbuilding.buildmodifier.BaseModifier;
@@ -80,39 +80,39 @@ public abstract class BaseModifierEntry<T extends BaseModifier> extends Modifier
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int index, int y, int x, int width, int height, int mouseX, int mouseY, boolean p_230432_9_, float partialTicks) {
+    public void render(PoseStack ms, int index, int y, int x, int width, int height, int mouseX, int mouseY, boolean p_230432_9_, float partialTicks) {
 
         left = x + width / 2 - BACKGROUND_WIDTH / 2;
         right = x + width / 2 + BACKGROUND_WIDTH / 2;
         top = y;
         bottom = y + BACKGROUND_HEIGHT;
         
-        background.render(guiGraphics, left, top);
+        background.render(ms, left, top);
         
         enableButton.setX(left + 4);
         enableButton.setY(top + 3);
-        enableButton.render(guiGraphics, mouseX, mouseY, partialTicks);
+        enableButton.render(ms, mouseX, mouseY, partialTicks);
         if (modifier.enabled)
-            AllGuiTextures.CHECKMARK.render(guiGraphics, left + 5, top + 3);
+            AllGuiTextures.CHECKMARK.render(ms, left + 5, top + 3);
         
         nameLabel.setX(left + 18);
         nameLabel.setY(top + 4);
-        nameLabel.render(guiGraphics, mouseX, mouseY, partialTicks);
+        nameLabel.render(ms, mouseX, mouseY, partialTicks);
     
         moveUpButton.visible = screen.canMoveUp(this);
         moveDownButton.visible = screen.canMoveDown(this);
         
         moveUpButton.setX(right - 31);
         moveUpButton.setY(top + 3);
-        moveUpButton.render(guiGraphics, mouseX, mouseY, partialTicks);
+        moveUpButton.render(ms, mouseX, mouseY, partialTicks);
         
         moveDownButton.setX(right - 22);
         moveDownButton.setY(top + 3);
-        moveDownButton.render(guiGraphics, mouseX, mouseY, partialTicks);
+        moveDownButton.render(ms, mouseX, mouseY, partialTicks);
         
         removeButton.setX(right - 13);
         removeButton.setY(top + 3);
-        removeButton.render(guiGraphics, mouseX, mouseY, partialTicks);
+        removeButton.render(ms, mouseX, mouseY, partialTicks);
     }
 
     public void onValueChanged() {

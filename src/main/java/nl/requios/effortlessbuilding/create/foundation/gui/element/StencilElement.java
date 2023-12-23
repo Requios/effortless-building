@@ -6,26 +6,24 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 
 public abstract class StencilElement extends RenderElement {
 
 	@Override
-	public void render(GuiGraphics graphics) {
-		PoseStack ms = graphics.pose();
+	public void render(PoseStack ms) {
 		ms.pushPose();
 		transform(ms);
 		prepareStencil(ms);
-		renderStencil(graphics);
+		renderStencil(ms);
 		prepareElement(ms);
-		renderElement(graphics);
+		renderElement(ms);
 		cleanUp(ms);
 		ms.popPose();
 	}
 
-	protected abstract void renderStencil(GuiGraphics graphics);
+	protected abstract void renderStencil(PoseStack graphics);
 
-	protected abstract void renderElement(GuiGraphics graphics);
+	protected abstract void renderElement(PoseStack graphics);
 
 	protected void transform(PoseStack ms) {
 		ms.translate(x, y, z);

@@ -9,7 +9,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -161,8 +160,7 @@ public class GuiGameElement {
 		}
 
 		@Override
-		public void render(GuiGraphics graphics) {
-			PoseStack matrixStack = graphics.pose();
+		public void render(PoseStack matrixStack) {
 			prepareMatrix(matrixStack);
 
 			Minecraft mc = Minecraft.getInstance();
@@ -256,8 +254,7 @@ public class GuiGameElement {
 		}
 
 		@Override
-		public void render(GuiGraphics graphics) {
-			PoseStack matrixStack = graphics.pose();
+		public void render(PoseStack matrixStack) {
 			prepareMatrix(matrixStack);
 			transformMatrix(matrixStack);
 			renderItemIntoGUI(matrixStack, stack, customLighting == null);

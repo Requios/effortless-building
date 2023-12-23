@@ -285,8 +285,8 @@ public class UndoRedo {
 		//then anything it drops
 		if (itemStack.isEmpty()) {
 			//Cannot check drops on clientside because loot tables are server only
-			if (!player.level().isClientSide) {
-				List<ItemStack> itemsDropped = Block.getDrops(blockState, (ServerLevel) player.level(), BlockPos.ZERO, null);
+			if (!player.level.isClientSide) {
+				List<ItemStack> itemsDropped = Block.getDrops(blockState, (ServerLevel) player.level, BlockPos.ZERO, null);
 				for (ItemStack itemStackDropped : itemsDropped) {
 					if (itemStackDropped.getItem() instanceof BlockItem) {
 						Block block = ((BlockItem) itemStackDropped.getItem()).getBlock();

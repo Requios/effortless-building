@@ -6,7 +6,6 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import nl.requios.effortlessbuilding.create.foundation.utility.Color;
 import nl.requios.effortlessbuilding.create.foundation.utility.Couple;
@@ -65,8 +64,8 @@ public class BoxElement extends RenderElement {
 	}
 
 	@Override
-	public void render(GuiGraphics graphics) {
-		renderBox(graphics.pose());
+	public void render(PoseStack ms) {
+		renderBox(ms);
 	}
 
 	//total box width = 1 * 2 (outer border) + 1 * 2 (inner color border) + 2 * borderOffset + width

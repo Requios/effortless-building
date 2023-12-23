@@ -1,9 +1,9 @@
 package nl.requios.effortlessbuilding.gui.elements;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Renderable;
@@ -95,17 +95,17 @@ public class GuiNumberField {
 		return result;
 	}
 
-	public void drawNumberField(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+	public void drawNumberField(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
 		textField.setY(y + 1);
 		minusButton.setY(y - 1);
 		plusButton.setY(y - 1);
 
-		textField.render(graphics, mouseX, mouseY, partialTicks);
-		minusButton.render(graphics, mouseX, mouseY, partialTicks);
-		plusButton.render(graphics, mouseX, mouseY, partialTicks);
+		textField.render(ms, mouseX, mouseY, partialTicks);
+		minusButton.render(ms, mouseX, mouseY, partialTicks);
+		plusButton.render(ms, mouseX, mouseY, partialTicks);
 	}
 
-	public void drawTooltip(GuiGraphics graphics, Screen screen, int mouseX, int mouseY) {
+	public void drawTooltip(PoseStack ms, Screen screen, int mouseX, int mouseY) {
 		boolean insideTextField = mouseX >= x + buttonWidth && mouseX < x + width - buttonWidth && mouseY >= y && mouseY < y + height;
 		boolean insideMinusButton = mouseX >= x && mouseX < x + buttonWidth && mouseY >= y && mouseY < y + height;
 		boolean insidePlusButton = mouseX >= x + width - buttonWidth && mouseX < x + width && mouseY >= y && mouseY < y + height;
@@ -133,7 +133,7 @@ public class GuiNumberField {
 			textLines.add(Component.literal("Hold ").append(Component.literal("ctrl ").withStyle(ChatFormatting.DARK_GREEN)).append("for ")
 				.append(Component.literal("5").withStyle(ChatFormatting.RED)));
 		}
-		graphics.renderComponentTooltip(screen.getMinecraft().font, textLines, mouseX - 10, mouseY + 25);
+		screen.renderComponentTooltip(ms, textLines, mouseX - 10, mouseY + 25);
 
 	}
 

@@ -2,7 +2,7 @@
   "type": "effortlessbuilding:single_item_loot_modifier",
   "conditions": [
     {
-      "condition": "minecraft:alternative",
+      "condition": "minecraft:any_of",
       "terms": [
         {
           "condition": "forge:loot_table_id",

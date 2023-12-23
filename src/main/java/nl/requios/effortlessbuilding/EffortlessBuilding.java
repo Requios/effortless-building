@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.loot.IGlobalLootModifier;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import net.minecraftforge.event.CreativeModeTabEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -106,8 +106,8 @@ public class EffortlessBuilding {
 		CompatHelper.setup();
 	}
 
-	public static void addTabContents(final BuildCreativeModeTabContentsEvent event) {
-		if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
+	public static void addTabContents(final CreativeModeTabEvent.BuildContents event) {
+		if (event.getTab() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
 			List<ItemStack> stacks = ITEMS.getEntries().stream().map(reg -> new ItemStack(reg.get())).toList();
 			event.acceptAll(stacks);
 		}

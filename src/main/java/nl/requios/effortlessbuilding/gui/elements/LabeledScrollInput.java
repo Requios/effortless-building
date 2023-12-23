@@ -1,8 +1,8 @@
 package nl.requios.effortlessbuilding.gui.elements;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import nl.requios.effortlessbuilding.create.foundation.gui.widget.Label;
 import nl.requios.effortlessbuilding.create.foundation.gui.widget.ScrollInput;
@@ -31,12 +31,12 @@ public class LabeledScrollInput extends ScrollInput {
 
     //TODO: Check if this works
     @Override
-    public void doRender(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
-        super.doRender(guiGraphics, mouseX, mouseY, partialTicks);
+    public void doRender(@NotNull PoseStack ms, int mouseX, int mouseY, float partialTicks) {
+        super.doRender(ms, mouseX, mouseY, partialTicks);
 
         label.setX(getX() + width / 2 - Minecraft.getInstance().font.width(label.text) / 2);
         label.setY(getY() + height / 2 - Minecraft.getInstance().font.lineHeight / 2);
-        label.render(guiGraphics, mouseX, mouseY, partialTicks);
+        label.render(ms, mouseX, mouseY, partialTicks);
     }
     
     @Override

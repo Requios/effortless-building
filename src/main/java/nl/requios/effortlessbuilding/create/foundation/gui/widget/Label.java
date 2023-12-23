@@ -1,9 +1,9 @@
 package nl.requios.effortlessbuilding.create.foundation.gui.widget;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import nl.requios.effortlessbuilding.create.foundation.utility.Components;
@@ -70,7 +70,7 @@ public class Label extends AbstractSimiWidget {
 	}
 
 	@Override
-	protected void doRender(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+	protected void doRender(@Nonnull PoseStack ms, int mouseX, int mouseY, float partialTicks) {
 		if (text == null || text.getString().isEmpty())
 			return;
 
@@ -79,7 +79,10 @@ public class Label extends AbstractSimiWidget {
 		if (suffix != null && !suffix.isEmpty())
 			copy.append(suffix);
 
-		graphics.drawString(font, copy, getX(), getY(), color, hasShadow);
+		if (hasShadow)
+			font.drawShadow(ms, copy, getX(), getY(), color);
+		else
+			font.draw(ms, copy, getX(), getY(), color);
 	}
 
 }

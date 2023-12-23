@@ -1,8 +1,8 @@
 package nl.requios.effortlessbuilding.gui.elements;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraftforge.api.distmarker.Dist;
@@ -39,7 +39,7 @@ public abstract class GuiCollapsibleScrollEntry implements GuiScrollPane.IScroll
 	}
 
 	@Override
-	public void drawTooltip(GuiGraphics guiGraphics, Screen guiScreen, int mouseX, int mouseY) {
+	public void drawTooltip(PoseStack ms, Screen guiScreen, int mouseX, int mouseY) {
 	}
 
 	@Override

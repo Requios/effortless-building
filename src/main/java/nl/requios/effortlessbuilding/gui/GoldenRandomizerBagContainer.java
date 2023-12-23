@@ -139,7 +139,7 @@ public class GoldenRandomizerBagContainer extends AbstractContainerMenu {
 	@Override
 	public void removed(Player player) {
 		super.removed(player);
-		if (!player.level().isClientSide) {
+		if (!player.level.isClientSide) {
 			broadcastChanges();
 		}
 	}

@@ -1,7 +1,7 @@
 package nl.requios.effortlessbuilding.create.foundation.gui.container;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import net.minecraft.client.gui.GuiGraphics;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Renderable;
@@ -15,7 +15,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import nl.requios.effortlessbuilding.create.foundation.gui.AllGuiTextures;
 import nl.requios.effortlessbuilding.create.foundation.gui.TickableGuiEventListener;
 import nl.requios.effortlessbuilding.create.foundation.gui.widget.AbstractSimiWidget;
 
@@ -92,26 +91,26 @@ public abstract class AbstractSimiContainerScreen<T extends AbstractContainerMen
 	}
 
 	@Override
-	public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+	public void render(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
 		partialTicks = minecraft.getFrameTime();
 
-		renderBackground(graphics);
+		renderBackground(ms);
 
-		super.render(graphics, mouseX, mouseY, partialTicks);
+		super.render(ms, mouseX, mouseY, partialTicks);
 
-		renderForeground(graphics, mouseX, mouseY, partialTicks);
+		renderForeground(ms, mouseX, mouseY, partialTicks);
 	}
 
 	@Override
-	protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
+	protected void renderLabels(PoseStack ms, int mouseX, int mouseY) {
 		// no-op to prevent screen- and inventory-title from being rendered at incorrect
 		// location
 		// could also set this.titleX/Y and this.playerInventoryTitleX/Y to the proper
 		// values instead
 	}
 
-	protected void renderForeground(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-		renderTooltip(graphics, mouseX, mouseY);
+	protected void renderForeground(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
+		renderTooltip(ms, mouseX, mouseY);
 		for (Renderable widget : renderables) {
 			if (widget instanceof AbstractSimiWidget simiWidget && simiWidget.isMouseOver(mouseX, mouseY)) {
 				List<Component> tooltip = simiWidget.getToolTip();
@@ -119,7 +118,7 @@ public abstract class AbstractSimiContainerScreen<T extends AbstractContainerMen
 					continue;
 				int ttx = simiWidget.lockedTooltipX == -1 ? mouseX : simiWidget.lockedTooltipX + simiWidget.getX();
 				int tty = simiWidget.lockedTooltipY == -1 ? mouseY : simiWidget.lockedTooltipY + simiWidget.getY();
-				graphics.renderComponentTooltip(font, tooltip, ttx, tty);
+				renderComponentTooltip(ms, tooltip, ttx, tty);
 			}
 		}
 	}
@@ -128,7 +127,7 @@ public abstract class AbstractSimiContainerScreen<T extends AbstractContainerMen
 		return leftPos - windowXOffset + (imageWidth - textureWidth) / 2;
 	}
 
-//	public void renderPlayerInventory(GuiGraphics graphics, int x, int y) {
+//	public void renderPlayerInventory(PoseStack graphics, int x, int y) {
 //		AllGuiTextures.PLAYER_INVENTORY.render(graphics, x, y);
 //		graphics.drawString(font, playerInventoryTitle, x + 8, y + 6, 0x404040, false);
 //	}
@@ -168,14 +167,14 @@ public abstract class AbstractSimiContainerScreen<T extends AbstractContainerMen
 	}
 
 	@Deprecated
-	protected void debugWindowArea(GuiGraphics graphics) {
-		graphics.fill(leftPos + imageWidth, topPos + imageHeight, leftPos, topPos, 0xD3D3D3D3);
+	protected void debugWindowArea(PoseStack ms) {
+		fill(ms, leftPos + imageWidth, topPos + imageHeight, leftPos, topPos, 0xD3D3D3D3);
 	}
 
 	@Deprecated
-	protected void debugExtraAreas(GuiGraphics graphics) {
+	protected void debugExtraAreas(PoseStack ms) {
 		for (Rect2i area : getExtraAreas()) {
-			graphics.fill(area.getX() + area.getWidth(), area.getY() + area.getHeight(), area.getX(), area.getY(),
+			fill(ms, area.getX() + area.getWidth(), area.getY() + area.getHeight(), area.getX(), area.getY(),
 				0xD3D3D3D3);
 		}
 	}

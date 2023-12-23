@@ -26,7 +26,7 @@ public class SurvivalHelper {
 
 	public static boolean doesBecomeDoubleSlab(Player player, BlockPos pos) {
 
-		BlockState placedBlockState = player.level().getBlockState(pos);
+		BlockState placedBlockState = player.level.getBlockState(pos);
 
 		ItemStack itemstack = player.getItemInHand(InteractionHand.MAIN_HAND);
 		if (CompatHelper.isItemBlockProxy(itemstack))
