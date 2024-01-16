@@ -33,17 +33,21 @@ public class PowerLevelPacket {
 	public static class Handler {
 		public static void handle(PowerLevelPacket message, Supplier<NetworkEvent.Context> ctx) {
 			NetworkEvent.Context context = ctx.get();
-			context.enqueueWork(() -> {
-				if (context.getDirection().getReceptionSide().isClient()) {
-					Player player = Minecraft.getInstance().player;
-					if (player != null) {
-						player.getCapability(CapabilityHandler.POWER_LEVEL_CAPABILITY, null)
-								.ifPresent(levelCap -> {
-									levelCap.setPowerLevel(message.powerLevel);
-								});
+			if (context.getDirection().getReceptionSide().isClient()) {
+				context.enqueueWork(new Runnable() {
+					// Use anon - lambda causes classloading issues
+					@Override
+					public void run() {
+						Player player = Minecraft.getInstance().player;
+						if (player != null) {
+							player.getCapability(CapabilityHandler.POWER_LEVEL_CAPABILITY, null)
+									.ifPresent(levelCap -> {
+										levelCap.setPowerLevel(message.powerLevel);
+									});
+						}
 					}
-				}
-			});
+				});
+			}
 			context.setPacketHandled(true);
 		}
 	}
