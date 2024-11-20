@@ -4,12 +4,12 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import nl.requios.effortlessbuilding.AllGuiTextures;
 import nl.requios.effortlessbuilding.buildmodifier.Array;
 import nl.requios.effortlessbuilding.buildmodifier.BaseModifier;
-import nl.requios.effortlessbuilding.capability.CapabilityHandler;
+import nl.requios.effortlessbuilding.attachment.AttachmentHandler;
 import nl.requios.effortlessbuilding.create.foundation.gui.widget.ScrollInput;
 import nl.requios.effortlessbuilding.gui.elements.LabeledScrollInput;
 import nl.requios.effortlessbuilding.utilities.MathHelper;
@@ -59,8 +59,8 @@ public class ArrayEntry extends BaseModifierEntry<Array> {
 	}
 
 	@Override
-	public void render(GuiGraphics guiGraphics, int index, int y, int x, int width, int height, int mouseX, int mouseY, boolean p_230432_9_, float partialTicks) {
-		super.render(guiGraphics, index, y, x, width, height, mouseX, mouseY, p_230432_9_, partialTicks);
+	public void render(GuiGraphics guiGraphics, int index, int y, int x, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTicks) {
+		super.render(guiGraphics, index, y, x, width, height, mouseX, mouseY, hovering, partialTicks);
 
 		//draw offset inputs
 		for (int i = 0; i < 3; i++) {
@@ -85,7 +85,7 @@ public class ArrayEntry extends BaseModifierEntry<Array> {
 		super.onValueChanged();
 		
 		int currentReach = Math.max(-1, getArrayReach());
-		int maxReach = CapabilityHandler.getMaxBlocksPerAxis(Minecraft.getInstance().player, false);
+		int maxReach = AttachmentHandler.getMaxBlocksPerAxis(Minecraft.getInstance().player, false);
 		ChatFormatting reachColor = isCurrentReachValid(currentReach, maxReach) ? ChatFormatting.GRAY : ChatFormatting.RED;
 		var reachText = "" + reachColor + currentReach + ChatFormatting.GRAY + "/" + ChatFormatting.GRAY + maxReach;
 		reachLabel.text = Component.literal(reachText);

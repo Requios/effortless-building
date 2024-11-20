@@ -13,8 +13,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import nl.requios.effortlessbuilding.EffortlessBuilding;
-import nl.requios.effortlessbuilding.capability.CapabilityHandler;
-import nl.requios.effortlessbuilding.capability.IPowerLevel;
+import nl.requios.effortlessbuilding.attachment.AttachmentHandler;
+import nl.requios.effortlessbuilding.attachment.PowerLevel;
 import nl.requios.effortlessbuilding.create.foundation.item.TooltipHelper;
 
 import javax.annotation.Nullable;
@@ -31,18 +31,19 @@ public class PowerLevelItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        IPowerLevel powerLevel = player.getCapability(CapabilityHandler.POWER_LEVEL_CAPABILITY).orElse(null);
+        PowerLevel powerLevel = player.getData(EffortlessBuilding.POWER_LEVEL);
         if (powerLevel != null) {
             if (powerLevel.canIncreasePowerLevel()) {
                 if (!world.isClientSide) {
                     powerLevel.increasePowerLevel();
+                    player.setData(EffortlessBuilding.POWER_LEVEL, powerLevel);
                     EffortlessBuilding.log(player, "Upgraded power level to " + powerLevel.getPowerLevel());
 
                     stack.shrink(1);
 
                     world.playSound((Player) null, player.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1f, 1f);
 
-                    CapabilityHandler.syncToClient(player);
+                    AttachmentHandler.syncToClient(player);
                 }
 
                 return InteractionResultHolder.sidedSuccess(stack, world.isClientSide());

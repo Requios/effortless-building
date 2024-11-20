@@ -1,9 +1,6 @@
 package nl.requios.effortlessbuilding.create;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.common.Mod;
-
-@Mod.EventBusSubscriber(Dist.CLIENT)
+//@Mod.EventBusSubscriber(Dist.CLIENT)
 public class CreateClientTest {
 
 //    @SubscribeEvent

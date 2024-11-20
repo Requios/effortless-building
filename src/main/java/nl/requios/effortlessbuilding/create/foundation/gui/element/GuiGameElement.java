@@ -30,7 +30,7 @@ import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.RenderTypeHelper;
+import net.neoforged.neoforge.client.RenderTypeHelper;
 import nl.requios.effortlessbuilding.create.foundation.gui.ILightingSettings;
 import nl.requios.effortlessbuilding.create.foundation.gui.UIRenderHelper;
 import nl.requios.effortlessbuilding.create.foundation.utility.Color;
@@ -268,7 +268,7 @@ public class GuiGameElement {
 			ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
 			BakedModel bakedModel = renderer.getModel(stack, null, null, 0);
 
-			renderer.textureManager.getTexture(InventoryMenu.BLOCK_ATLAS).setFilter(false, false);
+			Minecraft.getInstance().textureManager.getTexture(InventoryMenu.BLOCK_ATLAS).setFilter(false, false);
 			RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
 			RenderSystem.enableBlend();
 			RenderSystem.enableCull();

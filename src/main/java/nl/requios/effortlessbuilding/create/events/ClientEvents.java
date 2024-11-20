@@ -6,14 +6,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RenderLevelStageEvent;
-import net.minecraftforge.client.event.ViewportEvent;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.TickEvent.ClientTickEvent;
-import net.minecraftforge.event.level.LevelEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
+import net.neoforged.neoforge.client.event.ViewportEvent;
+import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.event.TickEvent.ClientTickEvent;
+import net.neoforged.neoforge.event.level.LevelEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
 import nl.requios.effortlessbuilding.create.Create;
 import nl.requios.effortlessbuilding.create.CreateClient;
 import nl.requios.effortlessbuilding.create.foundation.render.SuperRenderTypeBuffer;
@@ -21,7 +21,7 @@ import nl.requios.effortlessbuilding.create.foundation.utility.AnimationTickHold
 import nl.requios.effortlessbuilding.create.foundation.utility.CameraAngleAnimationService;
 import nl.requios.effortlessbuilding.create.foundation.utility.worldWrappers.WrappedClientWorld;
 
-@EventBusSubscriber(Dist.CLIENT)
+@Mod.EventBusSubscriber(Dist.CLIENT)
 public class ClientEvents {
 
 	private static final String ITEM_PREFIX = "item." + Create.ID;

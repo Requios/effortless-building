@@ -13,8 +13,8 @@ import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import nl.requios.effortlessbuilding.create.foundation.gui.TickableGuiEventListener;
 import nl.requios.effortlessbuilding.create.foundation.gui.widget.AbstractSimiWidget;
 
@@ -93,8 +93,6 @@ public abstract class AbstractSimiContainerScreen<T extends AbstractContainerMen
 	@Override
 	public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
 		partialTicks = minecraft.getFrameTime();
-
-		renderBackground(graphics);
 
 		super.render(graphics, mouseX, mouseY, partialTicks);
 

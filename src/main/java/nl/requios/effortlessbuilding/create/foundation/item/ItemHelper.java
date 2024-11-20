@@ -1,5 +1,6 @@
 package nl.requios.effortlessbuilding.create.foundation.item;
 
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 import nl.requios.effortlessbuilding.create.foundation.utility.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
@@ -8,8 +9,7 @@ import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.items.IItemHandler;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import javax.annotation.Nullable;

@@ -57,9 +57,9 @@ public class NBTHelper {
 		listNBT.forEach(inbt -> consumer.accept((CompoundTag) inbt));
 	}
 
-	public static ListTag writeItemList(Iterable<ItemStack> stacks) {
-		return writeCompoundList(stacks, ItemStack::serializeNBT);
-	}
+//	public static ListTag writeItemList(Iterable<ItemStack> stacks) {
+//		return writeCompoundList(stacks, ItemStack::serializeNBT);
+//	}
 
 	public static List<ItemStack> readItemList(ListTag stacks) {
 		return readCompoundList(stacks, ItemStack::of);

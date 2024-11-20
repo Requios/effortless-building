@@ -1,33 +1,26 @@
-package nl.requios.effortlessbuilding.capability;
+package nl.requios.effortlessbuilding.attachment;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.CapabilityToken;
-import net.minecraftforge.network.PacketDistributor;
 import nl.requios.effortlessbuilding.CommonConfig;
 import nl.requios.effortlessbuilding.EffortlessBuilding;
-import nl.requios.effortlessbuilding.network.PacketHandler;
-import nl.requios.effortlessbuilding.network.PowerLevelPacket;
+import nl.requios.effortlessbuilding.network.message.PowerLevelPacket;
 
-public class CapabilityHandler {
+public class AttachmentHandler {
     public static final ResourceLocation POWER_LEVEL_CAP = new ResourceLocation(EffortlessBuilding.MODID, "power_level");
-    public static final Capability<IPowerLevel> POWER_LEVEL_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {
-    });
 
     public static void syncToClient(Player player) {
-        IPowerLevel powerLevel = player.getCapability(CapabilityHandler.POWER_LEVEL_CAPABILITY).orElse(null);
+        PowerLevel powerLevel = player.getData(EffortlessBuilding.POWER_LEVEL);
         if (powerLevel == null) return; //Should never be null but just to be sure
 
-        PacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), new PowerLevelPacket(powerLevel.getPowerLevel()));
+        ((ServerPlayer)player).connection.send(new PowerLevelPacket(powerLevel.getPowerLevel()));
     }
 
     //Helper methods to reduce boilerplate code
     public static boolean canReplaceBlocks(Player player) {
         if (player != null) {
-            IPowerLevel powerLevel = player.getCapability(CapabilityHandler.POWER_LEVEL_CAPABILITY).orElse(null);
+            PowerLevel powerLevel = player.getData(EffortlessBuilding.POWER_LEVEL);
             if (powerLevel != null) {
                 return powerLevel.canReplaceBlocks(player);
             }
@@ -37,7 +30,7 @@ public class CapabilityHandler {
 
     public static int getMaxBlocksPerAxis(Player player, boolean nextPowerLevel) {
         if (player != null) {
-            IPowerLevel powerLevel = player.getCapability(CapabilityHandler.POWER_LEVEL_CAPABILITY).orElse(null);
+            PowerLevel powerLevel = player.getData(EffortlessBuilding.POWER_LEVEL);
             if (powerLevel != null) {
                 return powerLevel.getMaxBlocksPerAxis(player, nextPowerLevel);
             }
@@ -47,7 +40,7 @@ public class CapabilityHandler {
 
     public static int getMaxBlocksPlacedAtOnce(Player player, boolean nextPowerLevel) {
         if (player != null) {
-            IPowerLevel powerLevel = player.getCapability(CapabilityHandler.POWER_LEVEL_CAPABILITY).orElse(null);
+            PowerLevel powerLevel = player.getData(EffortlessBuilding.POWER_LEVEL);
             if (powerLevel != null) {
                 return powerLevel.getMaxBlocksPlacedAtOnce(player, nextPowerLevel);
             }
@@ -57,7 +50,7 @@ public class CapabilityHandler {
 
     public static int getMaxMirrorRadius(Player player, boolean nextPowerLevel) {
         if (player != null) {
-            IPowerLevel powerLevel = player.getCapability(CapabilityHandler.POWER_LEVEL_CAPABILITY).orElse(null);
+            PowerLevel powerLevel = player.getData(EffortlessBuilding.POWER_LEVEL);
             if (powerLevel != null) {
                 return powerLevel.getMaxMirrorRadius(player, nextPowerLevel);
             }
@@ -67,7 +60,7 @@ public class CapabilityHandler {
 
     public static int getBuildModeReach(Player player) {
         if (player != null) {
-            IPowerLevel powerLevel = player.getCapability(CapabilityHandler.POWER_LEVEL_CAPABILITY).orElse(null);
+            PowerLevel powerLevel = player.getData(EffortlessBuilding.POWER_LEVEL);
             if (powerLevel != null) {
                 return powerLevel.getBuildModeReach(player);
             }
@@ -77,7 +70,7 @@ public class CapabilityHandler {
 
     public static int getPlacementReach(Player player, boolean nextPowerLevel) {
         if (player != null) {
-            IPowerLevel powerLevel = player.getCapability(CapabilityHandler.POWER_LEVEL_CAPABILITY).orElse(null);
+            PowerLevel powerLevel = player.getData(EffortlessBuilding.POWER_LEVEL);
             if (powerLevel != null) {
                 return powerLevel.getPlacementReach(player, nextPowerLevel);
             }
@@ -87,7 +80,7 @@ public class CapabilityHandler {
 
     public static int getPowerLevel(Player player) {
         if (player != null) {
-            IPowerLevel powerLevel = player.getCapability(CapabilityHandler.POWER_LEVEL_CAPABILITY).orElse(null);
+            PowerLevel powerLevel = player.getData(EffortlessBuilding.POWER_LEVEL);
             if (powerLevel != null) {
                 return powerLevel.getPowerLevel();
             }
@@ -97,7 +90,7 @@ public class CapabilityHandler {
 
     public static int getNextPowerLevel(Player player) {
         if (player != null) {
-            IPowerLevel powerLevel = player.getCapability(CapabilityHandler.POWER_LEVEL_CAPABILITY).orElse(null);
+            PowerLevel powerLevel = player.getData(EffortlessBuilding.POWER_LEVEL);
             if (powerLevel != null) {
                 return powerLevel.getNextPowerLevel();
             }
@@ -107,7 +100,7 @@ public class CapabilityHandler {
 
     public static boolean canIncreasePowerLevel(Player player) {
         if (player != null) {
-            IPowerLevel powerLevel = player.getCapability(CapabilityHandler.POWER_LEVEL_CAPABILITY).orElse(null);
+            PowerLevel powerLevel = player.getData(EffortlessBuilding.POWER_LEVEL);
             if (powerLevel != null) {
                 return powerLevel.canIncreasePowerLevel();
             }
@@ -117,7 +110,7 @@ public class CapabilityHandler {
 
     public static boolean isDisabled(Player player) {
         if (player != null) {
-            IPowerLevel powerLevel = player.getCapability(CapabilityHandler.POWER_LEVEL_CAPABILITY).orElse(null);
+            PowerLevel powerLevel = player.getData(EffortlessBuilding.POWER_LEVEL);
             if (powerLevel != null) {
                 return powerLevel.isDisabled(player);
             }
@@ -127,7 +120,7 @@ public class CapabilityHandler {
 
     public static boolean canBreakFar(Player player) {
         if (player != null) {
-            IPowerLevel powerLevel = player.getCapability(CapabilityHandler.POWER_LEVEL_CAPABILITY).orElse(null);
+            PowerLevel powerLevel = player.getData(EffortlessBuilding.POWER_LEVEL);
             if (powerLevel != null) {
                 return powerLevel.canBreakFar(player);
             }

@@ -9,12 +9,10 @@ import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.network.PacketDistributor;
-import nl.requios.effortlessbuilding.capability.CapabilityHandler;
-import nl.requios.effortlessbuilding.capability.IPowerLevel;
-import nl.requios.effortlessbuilding.capability.PowerLevelCapability;
-import nl.requios.effortlessbuilding.network.PacketHandler;
-import nl.requios.effortlessbuilding.network.PowerLevelPacket;
+import nl.requios.effortlessbuilding.EffortlessBuilding;
+import nl.requios.effortlessbuilding.attachment.AttachmentHandler;
+import nl.requios.effortlessbuilding.attachment.PowerLevel;
+import nl.requios.effortlessbuilding.network.message.PowerLevelPacket;
 
 public class PowerLevelCommand {
 
@@ -37,7 +35,7 @@ public class PowerLevelCommand {
                 })))
                 .then(Commands.literal("set")
                 .then(Commands.argument("target", EntityArgument.player())
-                .then(Commands.argument("value", IntegerArgumentType.integer(0, PowerLevelCapability.MAX_POWER_LEVEL)).executes(ctx -> {
+                .then(Commands.argument("value", IntegerArgumentType.integer(0, PowerLevel.MAX_POWER_LEVEL)).executes(ctx -> {
 
                     //Set power level
                     setPowerLevel(ctx.getSource(), EntityArgument.getPlayer(ctx, "target"), ctx.getArgument("value", Integer.class));
@@ -47,15 +45,14 @@ public class PowerLevelCommand {
     }
 
     private static void logPowerLevel(CommandSourceStack source, Player player) {
-        int powerLevel = CapabilityHandler.getPowerLevel(player);
+        int powerLevel = AttachmentHandler.getPowerLevel(player);
         source.sendSuccess(() -> Component.translatable("effortlessbuilding.commands.powerlevel", player.getDisplayName(), powerLevel), false);
     }
 
     private static void setPowerLevel(CommandSourceStack source, Player player, int powerLevel) throws CommandSyntaxException {
-        IPowerLevel powerCap = player.getCapability(CapabilityHandler.POWER_LEVEL_CAPABILITY).orElse(null);
-        if (powerCap == null) return; //Should never be null but just to be sure
+        PowerLevel powerCap = player.getData(EffortlessBuilding.POWER_LEVEL);
         powerCap.setPowerLevel(powerLevel);
-        PacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), new PowerLevelPacket(powerLevel));
+        ((ServerPlayer)player).connection.send(new PowerLevelPacket(powerLevel));
 
         source.sendSuccess(() -> Component.translatable("effortlessbuilding.commands.powerlevel.success", player.getDisplayName(), powerLevel), true);
     }

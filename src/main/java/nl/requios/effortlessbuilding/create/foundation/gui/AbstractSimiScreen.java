@@ -10,8 +10,8 @@ import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import nl.requios.effortlessbuilding.create.foundation.gui.widget.AbstractSimiWidget;
 import nl.requios.effortlessbuilding.create.foundation.utility.Components;
 import nl.requios.effortlessbuilding.gui.buildmodifier.ModifiersScreenList;
@@ -114,13 +114,18 @@ public abstract class AbstractSimiScreen extends Screen {
 		prepareFrame();
 
 		renderWindowBackground(graphics, mouseX, mouseY, partialTicks);
-		renderWindow(graphics, mouseX, mouseY, partialTicks);
 		super.render(graphics, mouseX, mouseY, partialTicks);
+		renderWindow(graphics, mouseX, mouseY, partialTicks);
 		renderWindowForeground(graphics, mouseX, mouseY, partialTicks);
 
 		endFrame();
 
 		ms.popPose();
+	}
+
+	@Override
+	public void renderBackground(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
+//		super.renderBackground(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
 	}
 
 	@Override
@@ -141,7 +146,7 @@ public abstract class AbstractSimiScreen extends Screen {
 	protected void prepareFrame() {}
 
 	protected void renderWindowBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-		renderBackground(graphics);
+		this.renderTransparentBackground(graphics); //Manually draw background
 	}
 
 	protected abstract void renderWindow(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks);

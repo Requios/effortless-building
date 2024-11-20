@@ -34,9 +34,9 @@ import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.level.BlockEvent;
+import net.neoforged.neoforge.common.IPlantable;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.level.BlockEvent;
 
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
@@ -159,7 +159,7 @@ public class BlockHelper {
 		
 		if (player != null) {
 			BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(world, pos, state, player);
-			MinecraftForge.EVENT_BUS.post(event);
+			NeoForge.EVENT_BUS.post(event);
 			if (event.isCanceled())
 				return false;
 

@@ -1,23 +1,18 @@
 package nl.requios.effortlessbuilding.gui.buildmode;
 
-import com.mojang.blaze3d.vertex.*;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.Mth;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.gui.widget.ExtendedButton;
-import net.minecraftforge.client.gui.widget.ForgeSlider;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.client.gui.widget.ExtendedSlider;
 import nl.requios.effortlessbuilding.EffortlessBuilding;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -54,7 +49,7 @@ public class PlayerSettingsGui extends Screen {
 		addRenderableOnly(shaderTypeButton);
 
 		yy += 50;
-		ForgeSlider slider = new ForgeSlider(right - 200, yy, 200, 20, Component.empty(), Component.empty(), 0.5, 2.0, 1.0, true);
+		ExtendedSlider slider = new ExtendedSlider(right - 200, yy, 200, 20, Component.empty(), Component.empty(), 0.5, 2.0, 1.0, true);
 		addRenderableOnly(slider);
 
 		closeButton = new ExtendedButton(left + 50, bottom - 20, 180, 20, Component.literal("Done"), (button) -> this.minecraft.player.closeContainer());
@@ -68,15 +63,13 @@ public class PlayerSettingsGui extends Screen {
 
 	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
-		this.renderBackground(guiGraphics);
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 
 		int yy = top;
 		guiGraphics.drawString(font, "Shader type", left, yy + 5, 0xFFFFFF, false);
 
 		yy += 50;
 		guiGraphics.drawString(font, "Shader speed", left, yy + 5, 0xFFFFFF, false);
-
-		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 
 		if (showShaderList)
 			this.shaderTypeList.render(guiGraphics, mouseX, mouseY, partialTicks);
@@ -118,8 +111,8 @@ public class PlayerSettingsGui extends Screen {
 	class ShaderTypeList extends ObjectSelectionList<PlayerSettingsGui.ShaderTypeList.ShaderTypeEntry> {
 
 		public ShaderTypeList(Minecraft mcIn) {
-			super(mcIn, 180, 140, top + 20, top + 100, 18);
-			this.setLeftPos(right - width);
+			super(mcIn, 180, 140, top + 20, /*top + 100,*/ 18);
+			this.setX(right - width);
 
 			for (int i = 0; i < 40; i++) {
 
@@ -151,33 +144,33 @@ public class PlayerSettingsGui extends Screen {
 		}
 
 		@Override
-		public boolean mouseClicked(double p_mouseClicked_1_, double p_mouseClicked_3_, int p_mouseClicked_5_) {
+		public boolean mouseClicked(double mouseX, double mouseY, int pButton) {
 			if (!showShaderList) return false;
-			return super.mouseClicked(p_mouseClicked_1_, p_mouseClicked_3_, p_mouseClicked_5_);
+			return super.mouseClicked(mouseX, mouseY, pButton);
 		}
 
 		@Override
-		public boolean mouseReleased(double p_mouseReleased_1_, double p_mouseReleased_3_, int p_mouseReleased_5_) {
+		public boolean mouseReleased(double mouseX, double mouseY, int button) {
 			if (!showShaderList) return false;
-			return super.mouseReleased(p_mouseReleased_1_, p_mouseReleased_3_, p_mouseReleased_5_);
+			return super.mouseReleased(mouseX, mouseY, button);
 		}
 
 		@Override
-		public boolean mouseDragged(double p_mouseDragged_1_, double p_mouseDragged_3_, int p_mouseDragged_5_, double p_mouseDragged_6_, double p_mouseDragged_8_) {
+		public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
 			if (!showShaderList) return false;
-			return super.mouseDragged(p_mouseDragged_1_, p_mouseDragged_3_, p_mouseDragged_5_, p_mouseDragged_6_, p_mouseDragged_8_);
+			return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
 		}
 
 		@Override
-		public boolean mouseScrolled(double p_mouseScrolled_1_, double p_mouseScrolled_3_, double p_mouseScrolled_5_) {
+		public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
 			if (!showShaderList) return false;
-			return super.mouseScrolled(p_mouseScrolled_1_, p_mouseScrolled_3_, p_mouseScrolled_5_);
+			return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
 		}
 
 		@Override
-		public boolean isMouseOver(double p_isMouseOver_1_, double p_isMouseOver_3_) {
+		public boolean isMouseOver(double mouseX, double mouseY) {
 			if (!showShaderList) return false;
-			return super.isMouseOver(p_isMouseOver_1_, p_isMouseOver_3_);
+			return super.isMouseOver(mouseX, mouseY);
 		}
 
 		public boolean isFocused() {
@@ -190,90 +183,90 @@ public class PlayerSettingsGui extends Screen {
 		}
 
 		//From AbstractSelectionList, disabled parts
-		@Override
-		public void render(GuiGraphics guiGraphics, int p_render_1_, int p_render_2_, float p_render_3_) {
-			this.renderBackground(guiGraphics);
-			int i = this.getScrollbarPosition();
-			int j = i + 6;
-			Tesselator tessellator = Tesselator.getInstance();
-			BufferBuilder bufferbuilder = tessellator.getBuilder();
-//            this.minecraft.getTextureManager().bindTexture(AbstractGui.BACKGROUND_LOCATION);
-			RenderSystem.enableBlend();
-			RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
-			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-			float f = 32.0F;
-			bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-			bufferbuilder.vertex(this.x0, this.y1, 0.0D).color(20, 20, 20, 180).endVertex();
-			bufferbuilder.vertex(this.x1, this.y1, 0.0D).color(20, 20, 20, 180).endVertex();
-			bufferbuilder.vertex(this.x1, this.y0, 0.0D).color(20, 20, 20, 180).endVertex();
-			bufferbuilder.vertex(this.x0, this.y0, 0.0D).color(20, 20, 20, 180).endVertex();
-			tessellator.end();
-			int k = this.getRowLeft();
-			int l = this.y0 + 4 - (int) this.getScrollAmount();
-			if (this.renderHeader) {
-				this.renderHeader(guiGraphics, k, l);
-			}
+//		@Override //TODO: Check if this is still needed!
+//		public void render(GuiGraphics guiGraphics, int p_render_1_, int p_render_2_, float p_render_3_) {
+//			this.renderBackground(guiGraphics);
+//			int i = this.getScrollbarPosition();
+//			int j = i + 6;
+//			Tesselator tessellator = Tesselator.getInstance();
+//			BufferBuilder bufferbuilder = tessellator.getBuilder();
+////            this.minecraft.getTextureManager().bindTexture(AbstractGui.BACKGROUND_LOCATION);
+//			RenderSystem.enableBlend();
+//			RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
+//			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+//			float f = 32.0F;
+//			bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+//			bufferbuilder.vertex(this.x0, this.y1, 0.0D).color(20, 20, 20, 180).endVertex();
+//			bufferbuilder.vertex(this.x1, this.y1, 0.0D).color(20, 20, 20, 180).endVertex();
+//			bufferbuilder.vertex(this.x1, this.y0, 0.0D).color(20, 20, 20, 180).endVertex();
+//			bufferbuilder.vertex(this.x0, this.y0, 0.0D).color(20, 20, 20, 180).endVertex();
+//			tessellator.end();
+//			int k = this.getRowLeft();
+//			int l = this.y0 + 4 - (int) this.getScrollAmount();
+//			if (this.renderHeader) {
+//				this.renderHeader(guiGraphics, k, l);
+//			}
+//
+//			this.renderList(guiGraphics, p_render_1_, p_render_2_, p_render_3_);
+//			RenderSystem.disableDepthTest();
+////            this.renderHoleBackground(0, this.y0, 255, 255);
+////            this.renderHoleBackground(this.y1, this.height, 255, 255);
+//			RenderSystem.enableBlend();
+//			RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
+////			RenderSystem.disableTexture();
+//			RenderSystem.setShader(GameRenderer::getPositionColorShader);
+////            int i1 = 4;
+////            bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
+////            bufferbuilder.pos((double)this.x0, (double)(this.y0 + 4), 0.0D).tex(0.0F, 1.0F).color(0, 0, 0, 0).endVertex();
+////            bufferbuilder.pos((double)this.x1, (double)(this.y0 + 4), 0.0D).tex(1.0F, 1.0F).color(0, 0, 0, 0).endVertex();
+////            bufferbuilder.pos((double)this.x1, (double)this.y0, 0.0D).tex(1.0F, 0.0F).color(0, 0, 0, 255).endVertex();
+////            bufferbuilder.pos((double)this.x0, (double)this.y0, 0.0D).tex(0.0F, 0.0F).color(0, 0, 0, 255).endVertex();
+////            tessellator.draw();
+////            bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
+////            bufferbuilder.pos((double)this.x0, (double)this.y1, 0.0D).tex(0.0F, 1.0F).color(0, 0, 0, 255).endVertex();
+////            bufferbuilder.pos((double)this.x1, (double)this.y1, 0.0D).tex(1.0F, 1.0F).color(0, 0, 0, 255).endVertex();
+////            bufferbuilder.pos((double)this.x1, (double)(this.y1 - 4), 0.0D).tex(1.0F, 0.0F).color(0, 0, 0, 0).endVertex();
+////            bufferbuilder.pos((double)this.x0, (double)(this.y1 - 4), 0.0D).tex(0.0F, 0.0F).color(0, 0, 0, 0).endVertex();
+////            tessellator.draw();
+//
+//			//SCROLLBAR
+//			int j1 = this.getMaxScroll();
+//			if (j1 > 0) {
+//				int k1 = (int) ((float) ((this.y1 - this.y0) * (this.y1 - this.y0)) / (float) this.getMaxPosition());
+//				k1 = Mth.clamp(k1, 32, this.y1 - this.y0 - 8);
+//				int l1 = (int) this.getScrollAmount() * (this.y1 - this.y0 - k1) / j1 + this.y0;
+//				if (l1 < this.y0) {
+//					l1 = this.y0;
+//				}
+//
+//				bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+//				bufferbuilder.vertex(i, this.y1, 0.0D).uv(0.0F, 1.0F).color(0, 0, 0, 255).endVertex();
+//				bufferbuilder.vertex(j, this.y1, 0.0D).uv(1.0F, 1.0F).color(0, 0, 0, 255).endVertex();
+//				bufferbuilder.vertex(j, this.y0, 0.0D).uv(1.0F, 0.0F).color(0, 0, 0, 255).endVertex();
+//				bufferbuilder.vertex(i, this.y0, 0.0D).uv(0.0F, 0.0F).color(0, 0, 0, 255).endVertex();
+//				tessellator.end();
+//				bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+//				bufferbuilder.vertex(i, l1 + k1, 0.0D).uv(0.0F, 1.0F).color(128, 128, 128, 255).endVertex();
+//				bufferbuilder.vertex(j, l1 + k1, 0.0D).uv(1.0F, 1.0F).color(128, 128, 128, 255).endVertex();
+//				bufferbuilder.vertex(j, l1, 0.0D).uv(1.0F, 0.0F).color(128, 128, 128, 255).endVertex();
+//				bufferbuilder.vertex(i, l1, 0.0D).uv(0.0F, 0.0F).color(128, 128, 128, 255).endVertex();
+//				tessellator.end();
+//				bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+//				bufferbuilder.vertex(i, l1 + k1 - 1, 0.0D).uv(0.0F, 1.0F).color(192, 192, 192, 255).endVertex();
+//				bufferbuilder.vertex(j - 1, l1 + k1 - 1, 0.0D).uv(1.0F, 1.0F).color(192, 192, 192, 255).endVertex();
+//				bufferbuilder.vertex(j - 1, l1, 0.0D).uv(1.0F, 0.0F).color(192, 192, 192, 255).endVertex();
+//				bufferbuilder.vertex(i, l1, 0.0D).uv(0.0F, 0.0F).color(192, 192, 192, 255).endVertex();
+//				tessellator.end();
+//			}
+//
+////            this.renderDecorations(p_render_1_, p_render_2_);
+////			RenderSystem.enableTexture();
+//			RenderSystem.disableBlend();
+//		}
 
-			this.renderList(guiGraphics, p_render_1_, p_render_2_, p_render_3_);
-			RenderSystem.disableDepthTest();
-//            this.renderHoleBackground(0, this.y0, 255, 255);
-//            this.renderHoleBackground(this.y1, this.height, 255, 255);
-			RenderSystem.enableBlend();
-			RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
-//			RenderSystem.disableTexture();
-			RenderSystem.setShader(GameRenderer::getPositionColorShader);
-//            int i1 = 4;
-//            bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-//            bufferbuilder.pos((double)this.x0, (double)(this.y0 + 4), 0.0D).tex(0.0F, 1.0F).color(0, 0, 0, 0).endVertex();
-//            bufferbuilder.pos((double)this.x1, (double)(this.y0 + 4), 0.0D).tex(1.0F, 1.0F).color(0, 0, 0, 0).endVertex();
-//            bufferbuilder.pos((double)this.x1, (double)this.y0, 0.0D).tex(1.0F, 0.0F).color(0, 0, 0, 255).endVertex();
-//            bufferbuilder.pos((double)this.x0, (double)this.y0, 0.0D).tex(0.0F, 0.0F).color(0, 0, 0, 255).endVertex();
-//            tessellator.draw();
-//            bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-//            bufferbuilder.pos((double)this.x0, (double)this.y1, 0.0D).tex(0.0F, 1.0F).color(0, 0, 0, 255).endVertex();
-//            bufferbuilder.pos((double)this.x1, (double)this.y1, 0.0D).tex(1.0F, 1.0F).color(0, 0, 0, 255).endVertex();
-//            bufferbuilder.pos((double)this.x1, (double)(this.y1 - 4), 0.0D).tex(1.0F, 0.0F).color(0, 0, 0, 0).endVertex();
-//            bufferbuilder.pos((double)this.x0, (double)(this.y1 - 4), 0.0D).tex(0.0F, 0.0F).color(0, 0, 0, 0).endVertex();
-//            tessellator.draw();
-
-			//SCROLLBAR
-			int j1 = this.getMaxScroll();
-			if (j1 > 0) {
-				int k1 = (int) ((float) ((this.y1 - this.y0) * (this.y1 - this.y0)) / (float) this.getMaxPosition());
-				k1 = Mth.clamp(k1, 32, this.y1 - this.y0 - 8);
-				int l1 = (int) this.getScrollAmount() * (this.y1 - this.y0 - k1) / j1 + this.y0;
-				if (l1 < this.y0) {
-					l1 = this.y0;
-				}
-
-				bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-				bufferbuilder.vertex(i, this.y1, 0.0D).uv(0.0F, 1.0F).color(0, 0, 0, 255).endVertex();
-				bufferbuilder.vertex(j, this.y1, 0.0D).uv(1.0F, 1.0F).color(0, 0, 0, 255).endVertex();
-				bufferbuilder.vertex(j, this.y0, 0.0D).uv(1.0F, 0.0F).color(0, 0, 0, 255).endVertex();
-				bufferbuilder.vertex(i, this.y0, 0.0D).uv(0.0F, 0.0F).color(0, 0, 0, 255).endVertex();
-				tessellator.end();
-				bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-				bufferbuilder.vertex(i, l1 + k1, 0.0D).uv(0.0F, 1.0F).color(128, 128, 128, 255).endVertex();
-				bufferbuilder.vertex(j, l1 + k1, 0.0D).uv(1.0F, 1.0F).color(128, 128, 128, 255).endVertex();
-				bufferbuilder.vertex(j, l1, 0.0D).uv(1.0F, 0.0F).color(128, 128, 128, 255).endVertex();
-				bufferbuilder.vertex(i, l1, 0.0D).uv(0.0F, 0.0F).color(128, 128, 128, 255).endVertex();
-				tessellator.end();
-				bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-				bufferbuilder.vertex(i, l1 + k1 - 1, 0.0D).uv(0.0F, 1.0F).color(192, 192, 192, 255).endVertex();
-				bufferbuilder.vertex(j - 1, l1 + k1 - 1, 0.0D).uv(1.0F, 1.0F).color(192, 192, 192, 255).endVertex();
-				bufferbuilder.vertex(j - 1, l1, 0.0D).uv(1.0F, 0.0F).color(192, 192, 192, 255).endVertex();
-				bufferbuilder.vertex(i, l1, 0.0D).uv(0.0F, 0.0F).color(192, 192, 192, 255).endVertex();
-				tessellator.end();
-			}
-
-//            this.renderDecorations(p_render_1_, p_render_2_);
-//			RenderSystem.enableTexture();
-			RenderSystem.disableBlend();
-		}
-
-		public int getMaxScroll() {
-			return Math.max(0, this.getMaxPosition() - (this.y1 - this.y0 - 4));
-		}
+//		public int getMaxScroll() {
+//			return Math.max(0, this.getMaxPosition() - (this.y1 - this.y0 - 4));
+//		}
 
 		@OnlyIn(Dist.CLIENT)
 		public class ShaderTypeEntry extends ObjectSelectionList.Entry<ShaderTypeEntry> {
@@ -285,8 +278,8 @@ public class PlayerSettingsGui extends Screen {
 
 			@Override
 			public void render(GuiGraphics guiGraphics, int itemIndex, int rowTop, int rowLeft, int rowWidth, int rowHeight, int mouseX, int mouseY, boolean hovered, float partialTicks) {
-				if (rowTop + 10 > ShaderTypeList.this.y0 && rowTop + rowHeight - 5 < ShaderTypeList.this.y1)
-					guiGraphics.drawString(font, shaderType.name, ShaderTypeList.this.x0 + 8, rowTop + 4, 0xFFFFFF, false);
+				if (rowTop + 10 > ShaderTypeList.this.getY() && rowTop + rowHeight - 5 < (ShaderTypeList.this.getY() + ShaderTypeList.this.getHeight()))
+					guiGraphics.drawString(font, shaderType.name, ShaderTypeList.this.getX() + 8, rowTop + 4, 0xFFFFFF, false);
 			}
 
 			@Override

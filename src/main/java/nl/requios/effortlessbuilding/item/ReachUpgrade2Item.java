@@ -14,8 +14,8 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import nl.requios.effortlessbuilding.CommonConfig;
 import nl.requios.effortlessbuilding.EffortlessBuilding;
-import nl.requios.effortlessbuilding.capability.CapabilityHandler;
-import nl.requios.effortlessbuilding.capability.IPowerLevel;
+import nl.requios.effortlessbuilding.attachment.AttachmentHandler;
+import nl.requios.effortlessbuilding.attachment.PowerLevel;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -33,7 +33,7 @@ public class ReachUpgrade2Item extends Item {
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
 		ItemStack stack = player.getItemInHand(hand);
-		IPowerLevel powerLevel = player.getCapability(CapabilityHandler.POWER_LEVEL_CAPABILITY).orElse(null);
+		PowerLevel powerLevel = player.getData(EffortlessBuilding.POWER_LEVEL);
 		if (powerLevel != null) {
 			int currentLevel = powerLevel.getPowerLevel();
 			if (currentLevel == 1) {
@@ -45,7 +45,7 @@ public class ReachUpgrade2Item extends Item {
 
 					world.playSound((Player) null, player.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1f, 1f);
 
-					CapabilityHandler.syncToClient(player);
+					AttachmentHandler.syncToClient(player);
 				}
 				return InteractionResultHolder.sidedSuccess(stack, world.isClientSide());
 			} else if (currentLevel < 1) {

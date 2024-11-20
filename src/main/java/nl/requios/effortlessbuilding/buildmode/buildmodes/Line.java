@@ -5,7 +5,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import nl.requios.effortlessbuilding.buildmode.BuildModes;
 import nl.requios.effortlessbuilding.buildmode.TwoClicksBuildMode;
-import nl.requios.effortlessbuilding.capability.CapabilityHandler;
+import nl.requios.effortlessbuilding.attachment.AttachmentHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +31,7 @@ public class Line extends TwoClicksBuildMode {
 		criteriaList.add(new Criteria(zBound, firstPos, start));
 
 		//Remove invalid criteria
-		int reach = CapabilityHandler.getBuildModeReach(player);
+		int reach = AttachmentHandler.getBuildModeReach(player);
 		criteriaList.removeIf(criteria -> !criteria.isValid(start, look, reach, player, skipRaytrace));
 
 		//If none are valid, return empty list of blocks

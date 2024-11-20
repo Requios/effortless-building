@@ -13,8 +13,8 @@ import net.minecraft.client.gui.components.events.AbstractContainerEventHandler;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.util.Mth;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collections;
@@ -114,6 +114,7 @@ public abstract class SlotGui extends AbstractContainerEventHandler implements R
 		this.scrolling = p_updateScrollingState_5_ == 0 && p_updateScrollingState_1_ >= (double) this.getScrollbarPosition() && p_updateScrollingState_1_ < (double) (this.getScrollbarPosition() + 6);
 	}
 
+	@Override
 	public boolean mouseClicked(double p_mouseClicked_1_, double p_mouseClicked_3_, int p_mouseClicked_5_) {
 		this.updateScrollingState(p_mouseClicked_1_, p_mouseClicked_3_, p_mouseClicked_5_);
 		if (this.isVisible() && this.isMouseInList(p_mouseClicked_1_, p_mouseClicked_3_)) {
@@ -136,21 +137,23 @@ public abstract class SlotGui extends AbstractContainerEventHandler implements R
 		}
 	}
 
-	public boolean mouseReleased(double p_mouseReleased_1_, double p_mouseReleased_3_, int p_mouseReleased_5_) {
+	@Override
+	public boolean mouseReleased(double mouseX, double mouseY, int pButton) {
 		if (this.getFocused() != null) {
-			this.getFocused().mouseReleased(p_mouseReleased_1_, p_mouseReleased_3_, p_mouseReleased_5_);
+			this.getFocused().mouseReleased(mouseX, mouseY, pButton);
 		}
 
 		return false;
 	}
 
-	public boolean mouseDragged(double p_mouseDragged_1_, double p_mouseDragged_3_, int p_mouseDragged_5_, double p_mouseDragged_6_, double p_mouseDragged_8_) {
-		if (super.mouseDragged(p_mouseDragged_1_, p_mouseDragged_3_, p_mouseDragged_5_, p_mouseDragged_6_, p_mouseDragged_8_)) {
+	@Override
+	public boolean mouseDragged(double mouseX, double pMouseY, int button, double dragX, double dragY) {
+		if (super.mouseDragged(mouseX, pMouseY, button, dragX, dragY)) {
 			return true;
-		} else if (this.isVisible() && p_mouseDragged_5_ == 0 && this.scrolling) {
-			if (p_mouseDragged_3_ < (double) this.y0) {
+		} else if (this.isVisible() && button == 0 && this.scrolling) {
+			if (pMouseY < (double) this.y0) {
 				this.yo = 0.0D;
-			} else if (p_mouseDragged_3_ > (double) this.y1) {
+			} else if (pMouseY > (double) this.y1) {
 				this.yo = this.getMaxScroll();
 			} else {
 				double d0 = this.getMaxScroll();
@@ -165,7 +168,7 @@ public abstract class SlotGui extends AbstractContainerEventHandler implements R
 					d1 = 1.0D;
 				}
 
-				this.yo += p_mouseDragged_8_ * d1;
+				this.yo += dragY * d1;
 				this.capYPosition();
 			}
 
@@ -175,15 +178,17 @@ public abstract class SlotGui extends AbstractContainerEventHandler implements R
 		}
 	}
 
-	public boolean mouseScrolled(double p_mouseScrolled_1_, double p_mouseScrolled_3_, double p_mouseScrolled_5_) {
+	@Override
+	public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
 		if (!this.isVisible()) {
 			return false;
 		} else {
-			this.yo -= p_mouseScrolled_5_ * (double) this.itemHeight / 2.0D;
+			this.yo -= scrollX * (double) this.itemHeight / 2.0D;
 			return true;
 		}
 	}
 
+	@Override
 	public boolean keyPressed(int p_keyPressed_1_, int p_keyPressed_2_, int p_keyPressed_3_) {
 		if (!this.isVisible()) {
 			return false;

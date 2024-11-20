@@ -7,7 +7,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.minecraft.Util;
-import net.minecraft.client.renderer.ChunkBufferBuilderPack;
+import net.minecraft.client.renderer.SectionBufferBuilderPack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
@@ -59,31 +59,28 @@ public class SuperRenderTypeBuffer implements MultiBufferSource {
 	private static class SuperRenderTypeBufferPhase {
 
 		// Visible clones from RenderBuffers
-		private final ChunkBufferBuilderPack fixedBufferPack = new ChunkBufferBuilderPack();
+		private final SectionBufferBuilderPack fixedBufferPack = new SectionBufferBuilderPack();
 		private final SortedMap<RenderType, BufferBuilder> fixedBuffers = Util.make(new Object2ObjectLinkedOpenHashMap<>(), map -> {
-				map.put(Sheets.solidBlockSheet(), fixedBufferPack.builder(RenderType.solid()));
-				map.put(Sheets.cutoutBlockSheet(), fixedBufferPack.builder(RenderType.cutout()));
-				map.put(Sheets.bannerSheet(), fixedBufferPack.builder(RenderType.cutoutMipped()));
-				map.put(Sheets.translucentCullBlockSheet(), fixedBufferPack.builder(RenderType.translucent()));
-				put(map, Sheets.shieldSheet());
-				put(map, Sheets.bedSheet());
-				put(map, Sheets.shulkerBoxSheet());
-				put(map, Sheets.signSheet());
-				put(map, Sheets.chestSheet());
-				put(map, RenderType.translucentNoCrumbling());
-				put(map, RenderType.armorGlint());
-				put(map, RenderType.armorEntityGlint());
-				put(map, RenderType.glint());
-				put(map, RenderType.glintDirect());
-				put(map, RenderType.glintTranslucent());
-				put(map, RenderType.entityGlint());
-				put(map, RenderType.entityGlintDirect());
-				put(map, RenderType.waterMask());
-				put(map, RenderTypes.getOutlineSolid());
-				ModelBakery.DESTROY_TYPES.forEach((p_173062_) -> {
-					put(map, p_173062_);
-				});
-			});
+			map.put(Sheets.solidBlockSheet(), this.fixedBufferPack.builder(RenderType.solid()));
+			map.put(Sheets.cutoutBlockSheet(), this.fixedBufferPack.builder(RenderType.cutout()));
+			map.put(Sheets.bannerSheet(), this.fixedBufferPack.builder(RenderType.cutoutMipped()));
+			map.put(Sheets.translucentCullBlockSheet(), this.fixedBufferPack.builder(RenderType.translucent()));
+			put(map, Sheets.shieldSheet());
+			put(map, Sheets.bedSheet());
+			put(map, Sheets.shulkerBoxSheet());
+			put(map, Sheets.signSheet());
+			put(map, Sheets.hangingSignSheet());
+			map.put(Sheets.chestSheet(), new BufferBuilder(786432));
+			put(map, RenderType.armorGlint());
+			put(map, RenderType.armorEntityGlint());
+			put(map, RenderType.glint());
+			put(map, RenderType.glintDirect());
+			put(map, RenderType.glintTranslucent());
+			put(map, RenderType.entityGlint());
+			put(map, RenderType.entityGlintDirect());
+			put(map, RenderType.waterMask());
+			ModelBakery.DESTROY_TYPES.forEach(p_173062_ -> put(map, p_173062_));
+		});
 		private final BufferSource bufferSource = MultiBufferSource.immediateWithBuffers(fixedBuffers, new BufferBuilder(256));
 
 		private static void put(Object2ObjectLinkedOpenHashMap<RenderType, BufferBuilder> map, RenderType type) {

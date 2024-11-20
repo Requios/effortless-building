@@ -1,14 +1,14 @@
 package nl.requios.effortlessbuilding;
 
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
-import static net.minecraftforge.common.ForgeConfigSpec.*;
+import static net.neoforged.neoforge.common.ModConfigSpec.*;
 
 public class ClientConfig {
 
 	private static final Builder builder = new Builder();
 	public static final Visuals visuals = new Visuals(builder);
-	public static final ForgeConfigSpec spec = builder.build();
+	public static final ModConfigSpec spec = builder.build();
 
 	public static class Visuals {
 		public final BooleanValue showBlockPreviews;

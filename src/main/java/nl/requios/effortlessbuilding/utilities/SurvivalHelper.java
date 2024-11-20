@@ -8,7 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.event.ForgeEventFactory;
+import net.neoforged.neoforge.event.EventHooks;
 import nl.requios.effortlessbuilding.compatibility.CompatHelper;
 
 public class SurvivalHelper {
@@ -21,7 +21,7 @@ public class SurvivalHelper {
 
 		if (player.isCreative()) return true;
 
-		return ForgeEventFactory.doPlayerHarvestCheck(player, blockState, true);
+		return EventHooks.doPlayerHarvestCheck(player, blockState, true);
 	}
 
 	public static boolean doesBecomeDoubleSlab(Player player, BlockPos pos) {

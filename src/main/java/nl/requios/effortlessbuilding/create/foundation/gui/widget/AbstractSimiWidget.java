@@ -3,8 +3,6 @@ package nl.requios.effortlessbuilding.create.foundation.gui.widget;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipPositioner;
-import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.network.chat.Component;
 import nl.requios.effortlessbuilding.create.foundation.gui.TickableGuiEventListener;
 import nl.requios.effortlessbuilding.create.foundation.utility.Components;
@@ -39,10 +37,10 @@ public abstract class AbstractSimiWidget extends AbstractWidget implements Ticka
 		super(x, y, width, height, message);
 	}
 
-	@Override
-	protected ClientTooltipPositioner createTooltipPositioner() {
-		return DefaultTooltipPositioner.INSTANCE;
-	}
+//	@Override
+//	protected ClientTooltipPositioner createTooltipPositioner() {
+//		return DefaultTooltipPositioner.INSTANCE;
+//	}
 
 	public <T extends AbstractSimiWidget> T withCallback(BiConsumer<Integer, Integer> cb) {
 		this.onClick = cb;

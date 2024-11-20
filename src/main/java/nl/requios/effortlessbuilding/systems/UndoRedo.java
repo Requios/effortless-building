@@ -8,7 +8,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraftforge.common.util.BlockSnapshot;
+import net.neoforged.neoforge.common.util.BlockSnapshot;
 import nl.requios.effortlessbuilding.EffortlessBuilding;
 import nl.requios.effortlessbuilding.ServerConfig;
 import nl.requios.effortlessbuilding.utilities.*;

@@ -11,8 +11,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.minecraftforge.client.model.data.ModelData;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.neoforge.client.model.data.ModelData;
 import nl.requios.effortlessbuilding.create.foundation.render.RenderTypes;
 import nl.requios.effortlessbuilding.create.foundation.utility.Iterate;
 

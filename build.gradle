@@ -1,25 +1,11 @@
-buildscript {
-    repositories {
-        maven { url = 'https://maven.minecraftforge.net' }
-        mavenCentral()
-        maven { url = 'https://repo.spongepowered.org/repository/maven-public' }
-        maven { url = 'https://maven.parchmentmc.org' }
-    }
-    dependencies {
-        classpath "net.minecraftforge.gradle:ForgeGradle:${forgegradle_version}"
-        classpath "org.spongepowered:mixingradle:${mixingradle_version}"
-        classpath "org.parchmentmc:librarian:${librarian_version}"
-    }
-}
-
 plugins {
+    id 'java-library'
+    id 'eclipse'
+    id 'idea'
+    id 'maven-publish'
+    id 'net.neoforged.gradle.userdev' version "${neogradle_version}"
     id 'com.matthewprenger.cursegradle' version "${cursegradle_version}"
 }
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'org.parchmentmc.librarian.forgegradle'
-apply plugin: 'eclipse'
-apply plugin: 'maven-publish'
-apply plugin: 'org.spongepowered.mixin'
 
 jarJar.enable()
 
@@ -37,57 +23,48 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + ' (' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 
-minecraft {
-    mappings channel: 'parchment', version: "${parchment_version}-${minecraft_version}"
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+minecraft.accessTransformers.file rootProject.file('src/main/resources/META-INF/accesstransformer.cfg')
 
-    runs {
-        client {
-            workingDirectory project.file('run')
-            arg '-mixin.config=flywheel.mixins.json'
-            //jvmArgs '-XX:+UnlockCommercialFeatures' // uncomment for profiling
-            property 'forge.logging.console.level', 'info'
+runs {
+    // applies to all the run configs below
+    configureEach { net.neoforged.gradle.dsl.common.runs.run.Run run ->
+        // Recommended logging data for a userdev environment
+        systemProperty 'forge.logging.markers', 'REGISTRIES'
 
-            mods {
-                effortlessbuilding {
-                    source sourceSets.main
-                }
+        // Recommended logging level for the console
+        systemProperty 'forge.logging.console.level', 'debug'
 
-                if (flywheelInWorkspace) {
-                    flywheel {
-                        source project(":Flywheel").sourceSets.main
-                    }
-                }
-            }
+        //Limit ram usage for the dev environment to 4GB
+        jvmArgument '-Xmx4G'
+        if (run.project.javaToolchains.launcherFor(java.toolchain).map { it.metadata.vendor }.getOrElse("").contains("JetBrains")) {
+            jvmArgument '-XX:+AllowEnhancedClassRedefinition'
         }
 
-        server {
-            workingDirectory project.file('run/server')
-            property 'forge.logging.console.level', 'info'
-            mods {
-                effortlessbuilding {
-                    source sourceSets.main
-                }
+        modSource project.sourceSets.main
+    }
+
+    client {
+        // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+        systemProperty 'neoforge.enabledGameTestNamespaces', "effortlessbuilding"
+
+        if (flywheelInWorkspace) {
+            dependencies {
+                runtime project(':Flywheel')
             }
         }
+    }
 
-        data {
-            workingDirectory project.file('run')
-            property 'forge.logging.markers', 'REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.console.level', 'debug'
-            args '--mod', 'effortlessbuilding', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources')
-            mods {
-                effortlessbuilding {
-                    source sourceSets.main
-                }
+    server {
+        systemProperty 'neoforge.enabledGameTestNamespaces', "effortlessbuilding"
+        programArgument '--nogui'
+    }
 
-                if (flywheelInWorkspace) {
-                    flywheel {
-                        source project(":Flywheel").sourceSets.main
-                    }
-                }
-            }
-        }
+    data {
+        // example of overriding the workingDirectory set in configureEach above, uncomment if you want to use it
+        // workingDirectory project.file('run-data')
+
+        // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
+        programArguments.addAll '--mod', "effortlessbuilding", '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
     }
 }
 
@@ -97,10 +74,13 @@ repositories {
         name = 'tterrag maven'
         url = 'https://maven.tterrag.com'
     }
-
-    maven {
-        url = 'https://www.cursemaven.com'
-        content {
+    exclusiveContent {
+        forRepository {
+            maven {
+                url "https://cursemaven.com"
+            }
+        }
+        filter {
             includeGroup "curse.maven"
         }
     }
@@ -119,22 +99,16 @@ repositories {
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    implementation "net.neoforged:neoforge:${neo_version}"
 
     jarJar("com.jozufozu.flywheel:flywheel-forge-${flywheel_minecraft_version}:${flywheel_version}") {
-        jarJar.ranged(it, '[0.6.10,0.7)')
+        version { prefer "0.6.10" }
     }
 
     if (flywheelInWorkspace) {
         implementation project(':Flywheel')
     } else {
-        implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-${flywheel_minecraft_version}:${flywheel_version}")
-    }
-
-    // Prevent Mixin annotation processor from getting into IntelliJ's annotation processor settings
-    // This allows 'Settings > Build, Execution, and Deployment > Build Tools > Gradle > Build and run using' set to IntelliJ to work correctly
-    if (!Boolean.getBoolean('idea.sync.active')) {
-        annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
+        implementation "com.jozufozu.flywheel:flywheel-forge-${flywheel_minecraft_version}:${flywheel_version}"
     }
 }
 
@@ -179,8 +153,7 @@ java {
     withJavadocJar()
 }
 
-jar.finalizedBy('reobfJar')
-tasks.jarJar.finalizedBy('reobfJarJar')
+tasks.build.dependsOn tasks.jarJar
 
 publishing {
     publications {
@@ -188,8 +161,7 @@ publishing {
             artifactId = base.archivesName.get()
 
             from components.java
-            fg.component(it)
-            jarJar.component(it)
+//            fg.component(it)
         }
     }
 

@@ -1,17 +1,17 @@
 package nl.requios.effortlessbuilding;
 
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static net.minecraftforge.common.ForgeConfigSpec.*;
+import static net.neoforged.neoforge.common.ModConfigSpec.*;
 
 public class ServerConfig {
     private static final Builder builder = new Builder();
     public static final ServerConfig.Validation validation = new ServerConfig.Validation(builder);
     public static final ServerConfig.Memory memory = new ServerConfig.Memory(builder);
-    public static final ForgeConfigSpec spec = builder.build();
+    public static final ModConfigSpec spec = builder.build();
 
     public static class Validation {
         public final BooleanValue allowInSurvival;

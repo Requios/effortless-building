@@ -26,7 +26,7 @@ import nl.requios.effortlessbuilding.buildmode.BuildModeEnum;
 import nl.requios.effortlessbuilding.buildmode.ModeOptions;
 import nl.requios.effortlessbuilding.buildmode.ModeOptions.ActionEnum;
 import nl.requios.effortlessbuilding.buildmode.ModeOptions.OptionEnum;
-import nl.requios.effortlessbuilding.capability.CapabilityHandler;
+import nl.requios.effortlessbuilding.attachment.AttachmentHandler;
 import nl.requios.effortlessbuilding.create.foundation.item.ItemDescription;
 import nl.requios.effortlessbuilding.create.foundation.item.TooltipHelper;
 import nl.requios.effortlessbuilding.create.foundation.utility.Color;
@@ -155,7 +155,7 @@ public class RadialMenu extends Screen {
 
 
 		//Add actions
-		boolean canReplace = CapabilityHandler.canReplaceBlocks(minecraft.player);
+		boolean canReplace = AttachmentHandler.canReplaceBlocks(minecraft.player);
 
 //		buttons.add(new MenuButton(ActionEnum.OPEN_PLAYER_SETTINGS, -buttonDistance - 65, -13, Direction.UP));
 		if (canReplace) {
@@ -337,7 +337,7 @@ public class RadialMenu extends Screen {
 		guiGraphics.drawString(font, credits, width - font.width(credits) - 4, height - 10, watermarkTextColor);
 
 		//Draw power level info
-		String powerLevelValue = minecraft.player.isCreative() ? "Creative" : String.valueOf(CapabilityHandler.getPowerLevel(minecraft.player));
+		String powerLevelValue = minecraft.player.isCreative() ? "Creative" : String.valueOf(AttachmentHandler.getPowerLevel(minecraft.player));
 		String powerLevelText = I18n.get("key.effortlessbuilding.power_level") + ": " + powerLevelValue;
 		guiGraphics.drawString(font, powerLevelText, width - font.width(powerLevelText) - 4, height - 22, minecraft.player.isCreative() ? watermarkTextColor : ChatFormatting.DARK_PURPLE.getColor());
 
@@ -345,19 +345,19 @@ public class RadialMenu extends Screen {
 		if (mouseX >= width - font.width(powerLevelText) - 14 && mouseX <= width && mouseY >= height - 24 && mouseY <= height) {
 			var tooltip = new ArrayList<Component>();
 			tooltip.add(Components.literal(powerLevelText).withStyle(ChatFormatting.DARK_PURPLE));
-			int placementReach = CapabilityHandler.getPlacementReach(minecraft.player, false);
+			int placementReach = AttachmentHandler.getPlacementReach(minecraft.player, false);
 			tooltip.add(Components.translatable("key.effortlessbuilding.placement_reach").withStyle(ChatFormatting.GRAY).append(": " + (placementReach == 0 ? "vanilla" : placementReach + " blocks")));
-			tooltip.add(Components.translatable("key.effortlessbuilding.max_blocks_per_axis").withStyle(ChatFormatting.GRAY).append(": " + CapabilityHandler.getMaxBlocksPerAxis(minecraft.player, false)));
-			tooltip.add(Components.translatable("key.effortlessbuilding.max_blocks_placed_at_once").withStyle(ChatFormatting.GRAY).append(": " + CapabilityHandler.getMaxBlocksPlacedAtOnce(minecraft.player, false)));
-			tooltip.add(Components.translatable("key.effortlessbuilding.max_mirror_radius").withStyle(ChatFormatting.GRAY).append(": " + CapabilityHandler.getMaxMirrorRadius(minecraft.player, false) + " blocks"));
+			tooltip.add(Components.translatable("key.effortlessbuilding.max_blocks_per_axis").withStyle(ChatFormatting.GRAY).append(": " + AttachmentHandler.getMaxBlocksPerAxis(minecraft.player, false)));
+			tooltip.add(Components.translatable("key.effortlessbuilding.max_blocks_placed_at_once").withStyle(ChatFormatting.GRAY).append(": " + AttachmentHandler.getMaxBlocksPlacedAtOnce(minecraft.player, false)));
+			tooltip.add(Components.translatable("key.effortlessbuilding.max_mirror_radius").withStyle(ChatFormatting.GRAY).append(": " + AttachmentHandler.getMaxMirrorRadius(minecraft.player, false) + " blocks"));
 
-			if (CapabilityHandler.canIncreasePowerLevel(minecraft.player) && !minecraft.player.isCreative()) {
+			if (AttachmentHandler.canIncreasePowerLevel(minecraft.player) && !minecraft.player.isCreative()) {
 				tooltip.add(Components.literal(""));
-				tooltip.add(Components.translatable("key.effortlessbuilding.next_power_level").withStyle(ChatFormatting.DARK_AQUA).append(": " + CapabilityHandler.getNextPowerLevel(minecraft.player)));
-				tooltip.add(Components.translatable("key.effortlessbuilding.placement_reach").withStyle(ChatFormatting.GRAY).append(": " + CapabilityHandler.getPlacementReach(minecraft.player, true) + " blocks"));
-				tooltip.add(Components.translatable("key.effortlessbuilding.max_blocks_per_axis").withStyle(ChatFormatting.GRAY).append(": " + CapabilityHandler.getMaxBlocksPerAxis(minecraft.player, true)));
-				tooltip.add(Components.translatable("key.effortlessbuilding.max_blocks_placed_at_once").withStyle(ChatFormatting.GRAY).append(": " + CapabilityHandler.getMaxBlocksPlacedAtOnce(minecraft.player, true)));
-				tooltip.add(Components.translatable("key.effortlessbuilding.max_mirror_radius").withStyle(ChatFormatting.GRAY).append(": " + CapabilityHandler.getMaxMirrorRadius(minecraft.player, true) + " blocks"));
+				tooltip.add(Components.translatable("key.effortlessbuilding.next_power_level").withStyle(ChatFormatting.DARK_AQUA).append(": " + AttachmentHandler.getNextPowerLevel(minecraft.player)));
+				tooltip.add(Components.translatable("key.effortlessbuilding.placement_reach").withStyle(ChatFormatting.GRAY).append(": " + AttachmentHandler.getPlacementReach(minecraft.player, true) + " blocks"));
+				tooltip.add(Components.translatable("key.effortlessbuilding.max_blocks_per_axis").withStyle(ChatFormatting.GRAY).append(": " + AttachmentHandler.getMaxBlocksPerAxis(minecraft.player, true)));
+				tooltip.add(Components.translatable("key.effortlessbuilding.max_blocks_placed_at_once").withStyle(ChatFormatting.GRAY).append(": " + AttachmentHandler.getMaxBlocksPlacedAtOnce(minecraft.player, true)));
+				tooltip.add(Components.translatable("key.effortlessbuilding.max_mirror_radius").withStyle(ChatFormatting.GRAY).append(": " + AttachmentHandler.getMaxMirrorRadius(minecraft.player, true) + " blocks"));
 				tooltip.add(Components.literal(""));
 				tooltip.addAll(TooltipHelper.cutTextComponent(Components.translatable("key.effortlessbuilding.next_power_level_how"), ChatFormatting.GRAY, ChatFormatting.WHITE));
 			}
@@ -485,7 +485,7 @@ public class RadialMenu extends Screen {
 	public static void playRadialMenuSound() {
 		final float volume = 0.1f;
 		if (volume >= 0.0001f) {
-			SimpleSoundInstance sound = new SimpleSoundInstance(SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.MASTER, volume,
+			SimpleSoundInstance sound = new SimpleSoundInstance(SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.MASTER, volume,
 					1.0f, RandomSource.create(), Minecraft.getInstance().player.blockPosition());
 			Minecraft.getInstance().getSoundManager().play(sound);
 		}

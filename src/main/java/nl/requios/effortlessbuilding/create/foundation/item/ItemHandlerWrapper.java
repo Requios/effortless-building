@@ -1,7 +1,7 @@
 package nl.requios.effortlessbuilding.create.foundation.item;
 
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
 
 public class ItemHandlerWrapper implements IItemHandlerModifiable {
 

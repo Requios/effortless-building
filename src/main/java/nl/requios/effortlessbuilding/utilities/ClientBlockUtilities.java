@@ -10,9 +10,9 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import nl.requios.effortlessbuilding.capability.CapabilityHandler;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import nl.requios.effortlessbuilding.attachment.AttachmentHandler;
 
 @OnlyIn(Dist.CLIENT)
 public class ClientBlockUtilities {
@@ -52,7 +52,7 @@ public class ClientBlockUtilities {
         Level world = player.level();
 
         //base distance off of player ability (config)
-        float raytraceRange = CapabilityHandler.getPlacementReach(player, false);
+        float raytraceRange = AttachmentHandler.getPlacementReach(player, false);
 
         Vec3 look = player.getLookAngle();
         Vec3 start = new Vec3(player.getX(), player.getY() + player.getEyeHeight(), player.getZ());

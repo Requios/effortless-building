@@ -3,6 +3,7 @@ package nl.requios.effortlessbuilding.create.foundation.utility.worldWrappers;
 import net.minecraft.core.*;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.TickRateManager;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.flag.FeatureFlagSet;
@@ -131,6 +132,11 @@ public class WrappedWorld extends Level {
 
 	@Override
 	public Entity getEntity(int id) {
+		return null;
+	}
+
+	@Override
+	public TickRateManager tickRateManager() {
 		return null;
 	}
 

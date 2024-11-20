@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import net.neoforged.neoforge.client.event.RenderTooltipEvent;
+import net.neoforged.neoforge.common.NeoForge;
 import org.joml.Matrix4f;
 
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -18,10 +20,8 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.ForgeHooksClient;
-import net.minecraftforge.client.event.RenderTooltipEvent;
-import net.minecraftforge.client.extensions.IForgeGuiGraphics;
-import net.minecraftforge.common.MinecraftForge;
+import net.neoforged.neoforge.client.ClientHooks;
+import net.neoforged.neoforge.client.extensions.IGuiGraphicsExtension;
 
 public class RemovedGuiUtils {
 	@Nonnull
@@ -38,7 +38,7 @@ public class RemovedGuiUtils {
 	public static void drawHoveringText(GuiGraphics graphics, List<? extends FormattedText> textLines, int mouseX,
 		int mouseY, int screenWidth, int screenHeight, int maxTextWidth, Font font) {
 		drawHoveringText(graphics, textLines, mouseX, mouseY, screenWidth, screenHeight, maxTextWidth,
-			IForgeGuiGraphics.DEFAULT_BACKGROUND_COLOR, IForgeGuiGraphics.DEFAULT_BORDER_COLOR_START, IForgeGuiGraphics.DEFAULT_BORDER_COLOR_END,
+			IGuiGraphicsExtension.DEFAULT_BACKGROUND_COLOR, IGuiGraphicsExtension.DEFAULT_BORDER_COLOR_START, IGuiGraphicsExtension.DEFAULT_BORDER_COLOR_END,
 			font);
 	}
 
@@ -53,7 +53,7 @@ public class RemovedGuiUtils {
 		List<? extends FormattedText> textLines, int mouseX, int mouseY, int screenWidth, int screenHeight,
 		int maxTextWidth, Font font) {
 		drawHoveringText(stack, graphics, textLines, mouseX, mouseY, screenWidth, screenHeight, maxTextWidth,
-			IForgeGuiGraphics.DEFAULT_BACKGROUND_COLOR, IForgeGuiGraphics.DEFAULT_BORDER_COLOR_START, IForgeGuiGraphics.DEFAULT_BORDER_COLOR_END,
+			IGuiGraphicsExtension.DEFAULT_BACKGROUND_COLOR, IGuiGraphicsExtension.DEFAULT_BORDER_COLOR_START, IGuiGraphicsExtension.DEFAULT_BORDER_COLOR_END,
 			font);
 	}
 
@@ -63,11 +63,11 @@ public class RemovedGuiUtils {
 		if (textLines.isEmpty())
 			return;
 
-		List<ClientTooltipComponent> list = ForgeHooksClient.gatherTooltipComponents(stack, textLines,
+		List<ClientTooltipComponent> list = ClientHooks.gatherTooltipComponents(stack, textLines,
 			stack.getTooltipImage(), mouseX, screenWidth, screenHeight, font);
 		RenderTooltipEvent.Pre event =
 			new RenderTooltipEvent.Pre(stack, graphics, mouseX, mouseY, screenWidth, screenHeight, font, list, null);
-		if (MinecraftForge.EVENT_BUS.post(event))
+		if (NeoForge.EVENT_BUS.post(event).isCanceled())
 			return;
 
 		PoseStack pStack = graphics.pose();
@@ -152,7 +152,7 @@ public class RemovedGuiUtils {
 		final int zLevel = 400;
 		RenderTooltipEvent.Color colorEvent = new RenderTooltipEvent.Color(stack, graphics, tooltipX, tooltipY,
 			font, backgroundColor, borderColorStart, borderColorEnd, list);
-		MinecraftForge.EVENT_BUS.post(colorEvent);
+		NeoForge.EVENT_BUS.post(colorEvent);
 		backgroundColor = colorEvent.getBackgroundStart();
 		borderColorStart = colorEvent.getBorderStart();
 		borderColorEnd = colorEvent.getBorderEnd();

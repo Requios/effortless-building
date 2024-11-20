@@ -1,15 +1,15 @@
 package nl.requios.effortlessbuilding.buildmode;
 
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.network.PacketDistributor;
 import nl.requios.effortlessbuilding.AllIcons;
 import nl.requios.effortlessbuilding.ClientEvents;
 import nl.requios.effortlessbuilding.EffortlessBuilding;
 import nl.requios.effortlessbuilding.EffortlessBuildingClient;
-import nl.requios.effortlessbuilding.network.PacketHandler;
-import nl.requios.effortlessbuilding.network.PerformRedoPacket;
-import nl.requios.effortlessbuilding.network.PerformUndoPacket;
+import nl.requios.effortlessbuilding.network.message.PerformRedoPacket;
+import nl.requios.effortlessbuilding.network.message.PerformUndoPacket;
 import nl.requios.effortlessbuilding.systems.BuildSettings;
 
 @OnlyIn(Dist.CLIENT)
@@ -69,8 +69,8 @@ public class ModeOptions {
 		if (action == null) return;
 
 		switch (action) {
-			case UNDO -> PacketHandler.INSTANCE.sendToServer(new PerformUndoPacket());
-			case REDO -> PacketHandler.INSTANCE.sendToServer(new PerformRedoPacket());
+			case UNDO -> PacketDistributor.SERVER.noArg().send(new PerformUndoPacket());
+			case REDO -> PacketDistributor.SERVER.noArg().send(new PerformRedoPacket());
 			case OPEN_MODIFIER_SETTINGS -> ClientEvents.openModifierSettings();
 			case OPEN_PLAYER_SETTINGS -> ClientEvents.openPlayerSettings();
 			case PREVIOUS_BUILD_MODE -> EffortlessBuildingClient.BUILD_MODES.activatePreviousBuildMode();

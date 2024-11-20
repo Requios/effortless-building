@@ -15,19 +15,22 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.network.PacketDistributor;
 import nl.requios.effortlessbuilding.ClientConfig;
 import nl.requios.effortlessbuilding.ClientEvents;
 import nl.requios.effortlessbuilding.EffortlessBuildingClient;
+import nl.requios.effortlessbuilding.attachment.AttachmentHandler;
 import nl.requios.effortlessbuilding.buildmode.BuildModeEnum;
-import nl.requios.effortlessbuilding.capability.CapabilityHandler;
 import nl.requios.effortlessbuilding.compatibility.CompatHelper;
 import nl.requios.effortlessbuilding.item.AbstractRandomizerBagItem;
-import nl.requios.effortlessbuilding.network.PacketHandler;
-import nl.requios.effortlessbuilding.network.ServerBreakBlocksPacket;
-import nl.requios.effortlessbuilding.network.ServerPlaceBlocksPacket;
-import nl.requios.effortlessbuilding.utilities.*;
+import nl.requios.effortlessbuilding.network.message.ServerBreakBlocksPacket;
+import nl.requios.effortlessbuilding.network.message.ServerPlaceBlocksPacket;
+import nl.requios.effortlessbuilding.utilities.BlockEntry;
+import nl.requios.effortlessbuilding.utilities.BlockSet;
+import nl.requios.effortlessbuilding.utilities.ClientBlockUtilities;
+import nl.requios.effortlessbuilding.utilities.SurvivalHelper;
 
 import java.util.HashSet;
 
@@ -91,7 +94,7 @@ public class BuilderChain {
                 blocks.skipFirst = buildMode == BuildModeEnum.DISABLED;
                 long placeTime = player.level().getGameTime();
                 if (blocks.size() > 1) placeTime += ClientConfig.visuals.appearAnimationLength.get();
-                PacketHandler.INSTANCE.sendToServer(new ServerPlaceBlocksPacket(blocks, placeTime));
+                PacketDistributor.SERVER.noArg().send(new ServerPlaceBlocksPacket(blocks, placeTime));
             }
         }
     }
@@ -105,7 +108,7 @@ public class BuilderChain {
 
         var player = Minecraft.getInstance().player;
         if (player == null) return;
-        if (!CapabilityHandler.canBreakFar(player)) return;
+        if (!AttachmentHandler.canBreakFar(player)) return;
 
         if (buildingState == BuildingState.IDLE){
             buildingState = BuildingState.BREAKING;
@@ -129,7 +132,7 @@ public class BuilderChain {
                 ClientBlockUtilities.playSoundIfFurtherThanNormal(player, blocks.getLastBlockEntry(), true);
                 player.swing(InteractionHand.MAIN_HAND);
                 blocks.skipFirst = buildMode == BuildModeEnum.DISABLED;
-                PacketHandler.INSTANCE.sendToServer(new ServerBreakBlocksPacket(blocks));
+                PacketDistributor.SERVER.noArg().send(new ServerBreakBlocksPacket(blocks));
             }
         }
     }
@@ -210,7 +213,7 @@ public class BuilderChain {
 
     private BlockEntry findStartPosition(Player player, BuildModeEnum buildMode) {
 
-        int maxReach = CapabilityHandler.getPlacementReach(player, false);
+        int maxReach = AttachmentHandler.getPlacementReach(player, false);
 
         //Determine if we should look far or nearby
         boolean shouldLookAtNear = buildMode == BuildModeEnum.DISABLED || maxReach < 3;
@@ -243,7 +246,7 @@ public class BuilderChain {
             //We can only break
 
             //Do not break far if we are not allowed to
-            if (!shouldLookAtNear && !CapabilityHandler.canBreakFar(player)) return null;
+            if (!shouldLookAtNear && !AttachmentHandler.canBreakFar(player)) return null;
         }
 
         var blockEntry = new BlockEntry(startPos);

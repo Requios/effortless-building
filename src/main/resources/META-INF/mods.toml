@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[47,)"
+loaderVersion="[2,)"
 license="GNU LESSER GENERAL PUBLIC LICENSE"
 issueTrackerURL="https://bitbucket.org/Requios/effortless-building/issues?status=new&status=open&status=submitted&is_spam=%21spam"
 showAsResourcePack=false
@@ -17,22 +17,25 @@ Makes building easier by providing tools like mirrors, arrays, build modes and a
     '''
 
 [[dependencies.effortlessbuilding]]
-    modId="forge"
-    mandatory=true
-    versionRange="[47.1.3,)"
+    modId="neoforge"
+    type="required"
+    versionRange="[20.4.167,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.effortlessbuilding]]
     modId="minecraft"
-    mandatory=true
-    versionRange="[1.20,1.21)"
+    type="required"
+    versionRange="[1.20.4,1.21)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.effortlessbuilding]]
     modId="flywheel"
-    mandatory=true
+    type="required"
     versionRange="[0.6.10,0.7)"
     ordering="AFTER"
     side="CLIENT"
+
+#[[accessTransformers]]
+#    file="META-INF/accesstransformer.cfg"

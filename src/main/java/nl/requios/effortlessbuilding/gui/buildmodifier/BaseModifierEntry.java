@@ -80,7 +80,7 @@ public abstract class BaseModifierEntry<T extends BaseModifier> extends Modifier
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int index, int y, int x, int width, int height, int mouseX, int mouseY, boolean p_230432_9_, float partialTicks) {
+    public void render(GuiGraphics guiGraphics, int index, int y, int x, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTicks) {
 
         left = x + width / 2 - BACKGROUND_WIDTH / 2;
         right = x + width / 2 + BACKGROUND_WIDTH / 2;

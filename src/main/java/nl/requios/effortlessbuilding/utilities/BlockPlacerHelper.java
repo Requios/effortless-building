@@ -7,9 +7,9 @@ import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.util.BlockSnapshot;
-import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.common.util.BlockSnapshot;
+import net.neoforged.neoforge.event.EventHooks;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 import nl.requios.effortlessbuilding.create.foundation.utility.BlockHelper;
 
 import java.util.List;
@@ -54,11 +54,11 @@ public class BlockPlacerHelper {
         boolean eventResult = false;
         if (blockSnapshots.size() > 1)
         {
-            eventResult = ForgeEventFactory.onMultiBlockPlace(player, blockSnapshots, side);
+            eventResult = EventHooks.onMultiBlockPlace(player, blockSnapshots, side);
         }
         else if (blockSnapshots.size() == 1)
         {
-            eventResult = ForgeEventFactory.onBlockPlace(player, blockSnapshots.get(0), side);
+            eventResult = EventHooks.onBlockPlace(player, blockSnapshots.get(0), side);
         }
 
         if (eventResult)

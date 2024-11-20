@@ -117,5 +117,15 @@
   "effortlessbuilding.tooltip.keybind": "[%1$s]",
 
   "effortlessbuilding.commands.powerlevel": "[Effortless Building] %s's Building Power Level is: %s",
-  "effortlessbuilding.commands.powerlevel.success": "[Effortless Building] Set %s's Building Power Level to: %s"
+  "effortlessbuilding.commands.powerlevel.success": "[Effortless Building] Set %s's Building Power Level to: %s",
+
+  "effortlessbuilding.networking.is_using_build_mode.failed": "Failed to set player build mode: %s",
+  "effortlessbuilding.networking.is_quick_replacing.failed": "Failed to set player quick replacing: %s",
+  "effortlessbuilding.networking.server_place_blocks.failed": "Failed to place blocks on the server: %s",
+  "effortlessbuilding.networking.server_break_blocks.failed": "Failed to break blocks on the server: %s",
+  "effortlessbuilding.networking.perform_undo.failed": "Failed to perform undo on the server: %s",
+  "effortlessbuilding.networking.perform_redo.failed": "Failed to perform redo on the server: %s",
+  "effortlessbuilding.networking.modifier_settings.failed": "Failed to set modifier settings: %s",
+  "effortlessbuilding.networking.power_level.failed": "Failed to set player power level: %s",
+  "effortlessbuilding.networking.translated_log.failed": "Failed to log a translated message: %s"
 }

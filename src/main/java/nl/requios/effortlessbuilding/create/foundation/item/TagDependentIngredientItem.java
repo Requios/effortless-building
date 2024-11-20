@@ -1,9 +1,8 @@
 package nl.requios.effortlessbuilding.create.foundation.item;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.tags.ITagManager;
 
 public class TagDependentIngredientItem extends Item {
 
@@ -15,8 +14,7 @@ public class TagDependentIngredientItem extends Item {
 	}
 
 	public boolean shouldHide() {
-		ITagManager<Item> tagManager = ForgeRegistries.ITEMS.tags();
-		return !tagManager.isKnownTagName(tag) || tagManager.getTag(tag).isEmpty();
+		return BuiltInRegistries.ITEM.getTag(tag).isEmpty() || BuiltInRegistries.ITEM.getTag(tag).get().size() == 0;
 	}
 
 }

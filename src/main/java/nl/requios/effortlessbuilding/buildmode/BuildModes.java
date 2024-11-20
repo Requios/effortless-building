@@ -6,11 +6,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.network.PacketDistributor;
 import nl.requios.effortlessbuilding.EffortlessBuilding;
-import nl.requios.effortlessbuilding.network.IsUsingBuildModePacket;
-import nl.requios.effortlessbuilding.network.PacketHandler;
+import nl.requios.effortlessbuilding.network.message.IsUsingBuildModePacket;
 import nl.requios.effortlessbuilding.utilities.BlockSet;
 
 @OnlyIn(Dist.CLIENT)
@@ -30,7 +30,7 @@ public class BuildModes {
 	public void setBuildMode(BuildModeEnum buildMode) {
 		this.buildMode = buildMode;
 
-		PacketHandler.INSTANCE.sendToServer(new IsUsingBuildModePacket(this.buildMode != BuildModeEnum.DISABLED));
+		PacketDistributor.SERVER.noArg().send(new IsUsingBuildModePacket(this.buildMode != BuildModeEnum.DISABLED));
 
 		EffortlessBuilding.log(Minecraft.getInstance().player, I18n.get(buildMode.getNameKey()), true);
 	}

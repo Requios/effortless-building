@@ -1,13 +1,11 @@
 package nl.requios.effortlessbuilding.gui.elements;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.client.gui.ScreenUtils;
+import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -16,6 +14,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
  */
 @ParametersAreNonnullByDefault
 public class GuiCheckBoxFixed extends Button {
+	private final ResourceLocation DISABLED_BUTTON = new ResourceLocation("textures/gui/sprites/widget/button_disabled");
 	private final int boxWidth;
 	private boolean isChecked;
 
@@ -30,10 +29,8 @@ public class GuiCheckBoxFixed extends Button {
 
 	@Override
 	public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partial) {
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
-		RenderSystem.setShaderTexture(0, WIDGETS_LOCATION);
 		//Is deprecated but still works
-		ScreenUtils.blitWithBorder(guiGraphics, this.getX(), this.getY(), 0, 46, this.boxWidth, this.height, 200, 20, 2, 3, 2, 2, 0);
+		guiGraphics.blitWithBorder(DISABLED_BUTTON, this.getX(), this.getY(), 0, 0, this.boxWidth, this.height, 200, 20, 2, 3, 2, 2);
 		int color = 14737632;
 
 		if (packedFGColor != 0) {

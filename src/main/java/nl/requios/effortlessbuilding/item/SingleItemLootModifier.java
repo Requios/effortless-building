@@ -1,18 +1,17 @@
 package nl.requios.effortlessbuilding.item;
 
+import com.google.common.base.Suppliers;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraftforge.common.loot.IGlobalLootModifier;
-import net.minecraftforge.common.loot.LootModifier;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
-import nl.requios.effortlessbuilding.EffortlessBuilding;
+import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
+import net.neoforged.neoforge.common.loot.LootModifier;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Supplier;
 
 //Adds a single item with a chance to any loot tables. Specify loot tables in the JSON file.
 //Add JSON files to resources/data/effortlessbuilding/loot_modifiers, and list them in resources/data/forge/loot_modifiers/global_loot_modifiers.json
@@ -21,21 +20,21 @@ import org.jetbrains.annotations.NotNull;
 //https://mcreator.net/wiki/minecraft-vanilla-loot-tables-list#toc-index-1
 public class SingleItemLootModifier extends LootModifier {
 
-    public static final RegistryObject<Codec<SingleItemLootModifier>> CODEC = EffortlessBuilding.LOOT_MODIFIERS.register("single_item_loot_modifier", () ->
-            RecordCodecBuilder.create(inst -> codecStart(inst).and(
-                    inst.group(
+    public static final Supplier<Codec<SingleItemLootModifier>> CODEC = Suppliers.memoize(() ->
+            RecordCodecBuilder.create(instance -> codecStart(instance).and(
+                    instance.group(
                             Codec.FLOAT.fieldOf("chance").forGetter(m -> m.chance),
-                            ForgeRegistries.ITEMS.getCodec().fieldOf("item").forGetter(m -> m.item)
-                    )).apply(inst, SingleItemLootModifier::new)
+                            ItemStack.SINGLE_ITEM_CODEC.fieldOf("item").forGetter(m -> m.stack)
+                    )).apply(instance, SingleItemLootModifier::new)
             ));
 
     private final float chance;
-    private final Item item;
+    private final ItemStack stack;
 
-    public SingleItemLootModifier(LootItemCondition[] conditionsIn, float chance, Item item) {
+    public SingleItemLootModifier(LootItemCondition[] conditionsIn, float chance, ItemStack stack) {
         super(conditionsIn);
         this.chance = chance;
-        this.item = item;
+        this.stack = stack;
     }
 
     @NotNull
@@ -47,7 +46,7 @@ public class SingleItemLootModifier extends LootModifier {
         //
         //with chance, add an item
         if (context.getRandom().nextFloat() < chance) {
-            generatedLoot.add(new ItemStack(item, 1));
+            generatedLoot.add(stack.copy());
         }
         return generatedLoot;
     }

@@ -1,8 +1,8 @@
 package nl.requios.effortlessbuilding;
 
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
-import static net.minecraftforge.common.ForgeConfigSpec.*;
+import static net.neoforged.neoforge.common.ModConfigSpec.*;
 
 public class CommonConfig {
 
@@ -11,7 +11,7 @@ public class CommonConfig {
 	public static final MaxBlocksPlacedAtOnce maxBlocksPlacedAtOnce = new MaxBlocksPlacedAtOnce(builder);
 	public static final MaxBlocksPerAxis maxBlocksPerAxis = new MaxBlocksPerAxis(builder);
 	public static final MaxMirrorRadius maxMirrorRadius = new MaxMirrorRadius(builder);
-	public static final ForgeConfigSpec spec = builder.build();
+	public static final ModConfigSpec spec = builder.build();
 
 	public static class Reach {
 		public final IntValue creative;

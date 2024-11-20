@@ -4,13 +4,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import nl.requios.effortlessbuilding.AllGuiTextures;
 import nl.requios.effortlessbuilding.AllIcons;
 import nl.requios.effortlessbuilding.buildmodifier.BaseModifier;
 import nl.requios.effortlessbuilding.buildmodifier.RadialMirror;
-import nl.requios.effortlessbuilding.capability.CapabilityHandler;
+import nl.requios.effortlessbuilding.attachment.AttachmentHandler;
 import nl.requios.effortlessbuilding.create.foundation.gui.widget.IconButton;
 import nl.requios.effortlessbuilding.create.foundation.gui.widget.ScrollInput;
 import nl.requios.effortlessbuilding.create.foundation.utility.Components;
@@ -107,7 +107,7 @@ public class RadialMirrorEntry extends BaseModifierEntry<RadialMirror> {
 
 		//Radius
 		radiusInput = new LabeledScrollInput(0, 0, 27, 18)
-			.withRange(0, CapabilityHandler.getMaxMirrorRadius(Minecraft.getInstance().player, false))
+			.withRange(0, AttachmentHandler.getMaxMirrorRadius(Minecraft.getInstance().player, false))
 			.titled(Minecraft.getInstance().player.isCreative() ?
 					Component.literal("Radius") :
 					Component.literal("Radius. Use Reach Upgrade items to increase maximum."))
@@ -141,8 +141,8 @@ public class RadialMirrorEntry extends BaseModifierEntry<RadialMirror> {
 	}
 
 	@Override
-	public void render(GuiGraphics guiGraphics, int index, int y, int x, int width, int height, int mouseX, int mouseY, boolean p_230432_9_, float partialTicks) {
-		super.render(guiGraphics, index, y, x, width, height, mouseX, mouseY, p_230432_9_, partialTicks);
+	public void render(GuiGraphics guiGraphics, int index, int y, int x, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTicks) {
+		super.render(guiGraphics, index, y, x, width, height, mouseX, mouseY, hovering, partialTicks);
 
 		//draw position inputs
 		for (int i = 0; i < 3; i++) {

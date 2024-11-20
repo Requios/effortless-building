@@ -1,34 +1,42 @@
 package nl.requios.effortlessbuilding;
 
 import com.mojang.serialization.Codec;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.loot.IGlobalLootModifier;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.network.IContainerFactory;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.DistExecutor;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.attachment.AttachmentType;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.network.IContainerFactory;
+import net.neoforged.neoforge.registries.DeferredItem;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
+import nl.requios.effortlessbuilding.attachment.PowerLevel;
 import nl.requios.effortlessbuilding.compatibility.CompatHelper;
 import nl.requios.effortlessbuilding.gui.DiamondRandomizerBagContainer;
 import nl.requios.effortlessbuilding.gui.GoldenRandomizerBagContainer;
 import nl.requios.effortlessbuilding.gui.RandomizerBagContainer;
-import nl.requios.effortlessbuilding.item.*;
+import nl.requios.effortlessbuilding.item.DiamondRandomizerBagItem;
+import nl.requios.effortlessbuilding.item.GoldenRandomizerBagItem;
+import nl.requios.effortlessbuilding.item.PowerLevelItem;
+import nl.requios.effortlessbuilding.item.RandomizerBagItem;
+import nl.requios.effortlessbuilding.item.ReachUpgrade1Item;
+import nl.requios.effortlessbuilding.item.ReachUpgrade2Item;
+import nl.requios.effortlessbuilding.item.ReachUpgrade3Item;
+import nl.requios.effortlessbuilding.item.SingleItemLootModifier;
 import nl.requios.effortlessbuilding.network.PacketHandler;
 import nl.requios.effortlessbuilding.proxy.ClientProxy;
 import nl.requios.effortlessbuilding.proxy.IProxy;
@@ -40,6 +48,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 @Mod(EffortlessBuilding.MODID)
 public class EffortlessBuilding {
@@ -55,42 +64,48 @@ public class EffortlessBuilding {
 	public static final ItemUsageTracker ITEM_USAGE_TRACKER = new ItemUsageTracker();
 
 	//Registration
-	private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
-	private static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.MENU_TYPES, EffortlessBuilding.MODID);
-	public static final DeferredRegister<Codec<? extends IGlobalLootModifier>> LOOT_MODIFIERS = DeferredRegister.create(ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, EffortlessBuilding.MODID);
+	private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MODID);
+	private static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(BuiltInRegistries.MENU, EffortlessBuilding.MODID);
+	private static final DeferredRegister<Codec<? extends IGlobalLootModifier>> LOOT_MODIFIERS = DeferredRegister.create(NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, EffortlessBuilding.MODID);
+	private static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister.create(NeoForgeRegistries.Keys.ATTACHMENT_TYPES, EffortlessBuilding.MODID);
 
-	public static final RegistryObject<Item> RANDOMIZER_BAG_ITEM = ITEMS.register("randomizer_bag", RandomizerBagItem::new);
-	public static final RegistryObject<Item> GOLDEN_RANDOMIZER_BAG_ITEM = ITEMS.register("golden_randomizer_bag", GoldenRandomizerBagItem::new);
-	public static final RegistryObject<Item> DIAMOND_RANDOMIZER_BAG_ITEM = ITEMS.register("diamond_randomizer_bag", DiamondRandomizerBagItem::new);
-	public static final RegistryObject<Item> REACH_UPGRADE_1_ITEM = ITEMS.register("reach_upgrade1", ReachUpgrade1Item::new);
-	public static final RegistryObject<Item> REACH_UPGRADE_2_ITEM = ITEMS.register("reach_upgrade2", ReachUpgrade2Item::new);
-	public static final RegistryObject<Item> REACH_UPGRADE_3_ITEM = ITEMS.register("reach_upgrade3", ReachUpgrade3Item::new);
-	public static final RegistryObject<Item> MUSCLES_ITEM = ITEMS.register("muscles", PowerLevelItem::new);
-	public static final RegistryObject<Item> ELASTIC_HAND_ITEM = ITEMS.register("elastic_hand", PowerLevelItem::new);
-	public static final RegistryObject<Item> BUILDING_TECHNIQUES_BOOK_ITEM = ITEMS.register("building_techniques_book", PowerLevelItem::new);
+	public static final DeferredItem<RandomizerBagItem> RANDOMIZER_BAG_ITEM = ITEMS.register("randomizer_bag", RandomizerBagItem::new);
+	public static final DeferredItem<GoldenRandomizerBagItem> GOLDEN_RANDOMIZER_BAG_ITEM = ITEMS.register("golden_randomizer_bag", GoldenRandomizerBagItem::new);
+	public static final DeferredItem<DiamondRandomizerBagItem> DIAMOND_RANDOMIZER_BAG_ITEM = ITEMS.register("diamond_randomizer_bag", DiamondRandomizerBagItem::new);
+	public static final DeferredItem<ReachUpgrade1Item> REACH_UPGRADE_1_ITEM = ITEMS.register("reach_upgrade1", ReachUpgrade1Item::new);
+	public static final DeferredItem<ReachUpgrade2Item> REACH_UPGRADE_2_ITEM = ITEMS.register("reach_upgrade2", ReachUpgrade2Item::new);
+	public static final DeferredItem<ReachUpgrade3Item> REACH_UPGRADE_3_ITEM = ITEMS.register("reach_upgrade3", ReachUpgrade3Item::new);
+	public static final DeferredItem<PowerLevelItem> MUSCLES_ITEM = ITEMS.register("muscles", PowerLevelItem::new);
+	public static final DeferredItem<PowerLevelItem> ELASTIC_HAND_ITEM = ITEMS.register("elastic_hand", PowerLevelItem::new);
+	public static final DeferredItem<PowerLevelItem> BUILDING_TECHNIQUES_BOOK_ITEM = ITEMS.register("building_techniques_book", PowerLevelItem::new);
 
-	public static final RegistryObject<MenuType<RandomizerBagContainer>> RANDOMIZER_BAG_CONTAINER = CONTAINERS.register("randomizer_bag", () -> registerContainer(RandomizerBagContainer::new));
-	public static final RegistryObject<MenuType<GoldenRandomizerBagContainer>> GOLDEN_RANDOMIZER_BAG_CONTAINER = CONTAINERS.register("golden_randomizer_bag", () -> registerContainer(GoldenRandomizerBagContainer::new));
-	public static final RegistryObject<MenuType<DiamondRandomizerBagContainer>> DIAMOND_RANDOMIZER_BAG_CONTAINER = CONTAINERS.register("diamond_randomizer_bag", () -> registerContainer(DiamondRandomizerBagContainer::new));
+	public static final Supplier<MenuType<RandomizerBagContainer>> RANDOMIZER_BAG_CONTAINER = CONTAINERS.register("randomizer_bag", () -> registerContainer(RandomizerBagContainer::new));
+	public static final Supplier<MenuType<GoldenRandomizerBagContainer>> GOLDEN_RANDOMIZER_BAG_CONTAINER = CONTAINERS.register("golden_randomizer_bag", () -> registerContainer(GoldenRandomizerBagContainer::new));
+	public static final Supplier<MenuType<DiamondRandomizerBagContainer>> DIAMOND_RANDOMIZER_BAG_CONTAINER = CONTAINERS.register("diamond_randomizer_bag", () -> registerContainer(DiamondRandomizerBagContainer::new));
 
+	public static final Supplier<Codec<SingleItemLootModifier>> SINGLE_ITEM_LOOT_MODIFIER = EffortlessBuilding.LOOT_MODIFIERS.register("single_item_loot_modifier", SingleItemLootModifier.CODEC);
 
-	public EffortlessBuilding() {
+	public static final Supplier<AttachmentType<PowerLevel>> POWER_LEVEL = ATTACHMENT_TYPES.register("power_level", () -> AttachmentType.serializable(PowerLevel::new).build());
+
+	public EffortlessBuilding(IEventBus modEventBus) {
 		instance = this;
 
 		ModLoadingContext modLoadingContext = ModLoadingContext.get();
-		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-		IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
+		IEventBus forgeEventBus = NeoForge.EVENT_BUS;
 
 		modEventBus.addListener(EffortlessBuilding::setup);
 		modEventBus.addListener(EffortlessBuilding::addTabContents);
+		modEventBus.addListener(PacketHandler::setupPackets);
 
-		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> EffortlessBuildingClient.onConstructorClient(modEventBus, forgeEventBus));
+		if (FMLEnvironment.dist.isClient()) {
+			EffortlessBuildingClient.onConstructorClient(modEventBus, forgeEventBus);
+		}
 
-		ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
-		CONTAINERS.register(FMLJavaModLoadingContext.get().getModEventBus());
+		ITEMS.register(modEventBus);
+		CONTAINERS.register(modEventBus);
 
-		var singleItemLootModifier = SingleItemLootModifier.CODEC; //load this class to register the loot modifier
-		LOOT_MODIFIERS.register(FMLJavaModLoadingContext.get().getModEventBus());
+		LOOT_MODIFIERS.register(modEventBus);
+		ATTACHMENT_TYPES.register(modEventBus);
 
 		//Register config
 		modLoadingContext.registerConfig(ModConfig.Type.COMMON, CommonConfig.spec);
@@ -99,8 +114,6 @@ public class EffortlessBuilding {
 	}
 
 	public static void setup(final FMLCommonSetupEvent event) {
-		PacketHandler.register();
-
 		CompatHelper.setup();
 	}
 
@@ -111,7 +124,7 @@ public class EffortlessBuilding {
 		}
 	}
 
-	public static <T extends AbstractContainerMenu> MenuType<T> registerContainer(IContainerFactory<T> fact){
+	public static <T extends AbstractContainerMenu> MenuType<T> registerContainer(IContainerFactory<T> fact) {
 		MenuType<T> type = new MenuType<T>(fact, FeatureFlags.REGISTRY.allFlags());
 		return type;
 	}

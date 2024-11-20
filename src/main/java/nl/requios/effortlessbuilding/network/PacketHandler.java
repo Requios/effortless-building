@@ -1,41 +1,43 @@
 package nl.requios.effortlessbuilding.network;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
+import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
 import nl.requios.effortlessbuilding.EffortlessBuilding;
-
-import java.util.Optional;
+import nl.requios.effortlessbuilding.network.message.IsQuickReplacingPacket;
+import nl.requios.effortlessbuilding.network.message.IsUsingBuildModePacket;
+import nl.requios.effortlessbuilding.network.message.ModifierSettingsPacket;
+import nl.requios.effortlessbuilding.network.message.PerformRedoPacket;
+import nl.requios.effortlessbuilding.network.message.PerformUndoPacket;
+import nl.requios.effortlessbuilding.network.message.PowerLevelPacket;
+import nl.requios.effortlessbuilding.network.message.ServerBreakBlocksPacket;
+import nl.requios.effortlessbuilding.network.message.ServerPlaceBlocksPacket;
+import nl.requios.effortlessbuilding.network.message.TranslatedLogPacket;
 
 public class PacketHandler {
-	private static final String PROTOCOL_VERSION = "1";
-	public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(
-			new ResourceLocation(EffortlessBuilding.MODID, "main"),
-			() -> PROTOCOL_VERSION,
-			PROTOCOL_VERSION::equals,
-			PROTOCOL_VERSION::equals
-			);
 
-	private static int id = 0;
+	public static void setupPackets(final RegisterPayloadHandlerEvent event) {
+		final IPayloadRegistrar registrar = event.registrar(EffortlessBuilding.MODID);
 
-	public static void register() {
-		INSTANCE.registerMessage(id++, IsUsingBuildModePacket.class, IsUsingBuildModePacket::encode, IsUsingBuildModePacket::decode,
-				IsUsingBuildModePacket.Handler::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
-		INSTANCE.registerMessage(id++, IsQuickReplacingPacket.class, IsQuickReplacingPacket::encode, IsQuickReplacingPacket::decode,
-				IsQuickReplacingPacket.Handler::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
-		INSTANCE.registerMessage(id++, ServerPlaceBlocksPacket.class, ServerPlaceBlocksPacket::encode, ServerPlaceBlocksPacket::decode,
-				ServerPlaceBlocksPacket.Handler::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
-		INSTANCE.registerMessage(id++, ServerBreakBlocksPacket.class, ServerBreakBlocksPacket::encode, ServerBreakBlocksPacket::decode,
-				ServerBreakBlocksPacket.Handler::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
-		INSTANCE.registerMessage(id++, PerformUndoPacket.class, PerformUndoPacket::encode, PerformUndoPacket::decode,
-				PerformUndoPacket.Handler::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
-		INSTANCE.registerMessage(id++, PerformRedoPacket.class, PerformRedoPacket::encode, PerformRedoPacket::decode,
-				PerformRedoPacket.Handler::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
-		INSTANCE.registerMessage(id++, ModifierSettingsPacket.class, ModifierSettingsPacket::encode, ModifierSettingsPacket::decode,
-				ModifierSettingsPacket.Handler::handle);
-		INSTANCE.registerMessage(id++, PowerLevelPacket.class, PowerLevelPacket::encode, PowerLevelPacket::decode,
-				PowerLevelPacket.Handler::handle);
+		registrar.play(IsUsingBuildModePacket.ID, IsUsingBuildModePacket::new, handler -> handler
+				.server(IsUsingBuildModePacket.Handler::handle));
+		registrar.play(IsQuickReplacingPacket.ID, IsQuickReplacingPacket::new, handler -> handler
+				.server(IsQuickReplacingPacket.Handler::handle));
+		registrar.play(ServerPlaceBlocksPacket.ID, ServerPlaceBlocksPacket::new, handler -> handler
+				.server(ServerPlaceBlocksPacket.Handler::handle));
+		registrar.play(ServerBreakBlocksPacket.ID, ServerBreakBlocksPacket::new, handler -> handler
+				.server(ServerBreakBlocksPacket.Handler::handle));
+		registrar.play(PerformUndoPacket.ID, PerformUndoPacket::new, handler -> handler
+				.server(PerformUndoPacket.Handler::handle));
+		registrar.play(PerformRedoPacket.ID, PerformRedoPacket::new, handler -> handler
+				.server(PerformRedoPacket.Handler::handle));
+
+		registrar.play(ModifierSettingsPacket.ID, ModifierSettingsPacket::new, handler -> handler
+				.server(ModifierSettingsPacket.ServerHandler::handleServer)
+				.server(ModifierSettingsPacket.ClientHandler::handleClient));
+
+		registrar.play(PowerLevelPacket.ID, PowerLevelPacket::new, handler -> handler
+				.client(PowerLevelPacket.Handler::handle));
+		registrar.play(TranslatedLogPacket.ID, TranslatedLogPacket::new, handler -> handler
+				.client(TranslatedLogPacket.Handler::handle));
 	}
-
 }

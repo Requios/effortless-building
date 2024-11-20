@@ -6,7 +6,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.ForgeEventFactory;
+import net.neoforged.neoforge.event.EventHooks;
 
 import javax.annotation.Nullable;
 import java.util.function.BiConsumer;
@@ -20,7 +20,7 @@ public abstract class AbstractBlockBreakQueue {
 			BlockHelper.destroyBlockAs(world, pos, playerEntity, toDamage, effectChance,
 				stack -> drop.accept(pos, stack));
 			if (toDamage.isEmpty() && !usedTool.isEmpty())
-				ForgeEventFactory.onPlayerDestroyItem(playerEntity, usedTool, InteractionHand.MAIN_HAND);
+				EventHooks.onPlayerDestroyItem(playerEntity, usedTool, InteractionHand.MAIN_HAND);
 		};
 	}
 

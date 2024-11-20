@@ -3,8 +3,8 @@ package nl.requios.effortlessbuilding.gui.buildmodifier;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import nl.requios.effortlessbuilding.ClientEvents;
 import nl.requios.effortlessbuilding.EffortlessBuildingClient;
 import nl.requios.effortlessbuilding.buildmodifier.Array;
@@ -41,8 +41,8 @@ public class ModifiersScreen extends AbstractSimiScreen {
 		int listL = this.width / 2 - listWidth / 2;
 		int listR = this.width / 2 + listWidth / 2;
 
-		list = new ModifiersScreenList(minecraft, listWidth, height - 80, 45, height - 45, 68);
-		list.setLeftPos(this.width / 2 - list.getWidth() / 2);
+		list = new ModifiersScreenList(minecraft, listWidth, height - 80, 45, 68);
+		list.setX(this.width / 2 - list.getWidth() / 2);
 
 		addRenderableWidget(list);
 

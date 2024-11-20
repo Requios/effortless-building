@@ -9,8 +9,8 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.text.DecimalFormat;
@@ -138,7 +138,7 @@ public class GuiNumberField {
 	}
 
 	public void update() {
-		textField.tick();
+//		textField.tick();
 	}
 
 	public boolean charTyped(char typedChar, int keyCode) {

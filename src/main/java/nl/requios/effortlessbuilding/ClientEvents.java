@@ -6,18 +6,18 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.client.event.ScreenEvent;
-import net.minecraftforge.client.settings.KeyConflictContext;
-import net.minecraftforge.client.settings.KeyModifier;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.neoforge.client.event.InputEvent;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.neoforge.client.event.ScreenEvent;
+import net.neoforged.neoforge.client.settings.KeyConflictContext;
+import net.neoforged.neoforge.client.settings.KeyModifier;
+import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod.EventBusSubscriber;
 import nl.requios.effortlessbuilding.buildmode.BuildModeEnum;
 import nl.requios.effortlessbuilding.buildmode.ModeOptions;
-import nl.requios.effortlessbuilding.capability.CapabilityHandler;
+import nl.requios.effortlessbuilding.attachment.AttachmentHandler;
 import nl.requios.effortlessbuilding.gui.buildmode.PlayerSettingsGui;
 import nl.requios.effortlessbuilding.gui.buildmode.RadialMenu;
 import nl.requios.effortlessbuilding.gui.buildmodifier.ModifiersScreen;
@@ -134,7 +134,7 @@ public class ClientEvents {
 
         //Radial menu
         if (keyBindings[0].isDown()) {
-            if (!CapabilityHandler.isDisabled(player)) {
+            if (!AttachmentHandler.isDisabled(player)) {
                 if (!RadialMenu.instance.isVisible()) {
                     Minecraft.getInstance().setScreen(RadialMenu.instance);
                 }
@@ -175,7 +175,7 @@ public class ClientEvents {
         if (player == null) return;
 
         //Disabled if max reach is 0, might be set in the config that way.
-        if (CapabilityHandler.isDisabled(player)) {
+        if (AttachmentHandler.isDisabled(player)) {
             EffortlessBuilding.log(player, "Build modifiers are disabled until your power level has increased. Increase your power level by consuming certain items.");
         } else {
             mc.setScreen(new ModifiersScreen());
@@ -188,7 +188,7 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    public static void onGuiOpen(ScreenEvent event) {
+    public static void onGuiOpen(ScreenEvent.Opening event) {
         Player player = Minecraft.getInstance().player;
         if (player != null) {
             EffortlessBuildingClient.BUILDER_CHAIN.cancel();

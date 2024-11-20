@@ -1,12 +1,12 @@
 package nl.requios.effortlessbuilding.systems;
 
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.network.PacketDistributor;
 import nl.requios.effortlessbuilding.buildmode.ModeOptions;
-import nl.requios.effortlessbuilding.capability.CapabilityHandler;
-import nl.requios.effortlessbuilding.network.IsQuickReplacingPacket;
-import nl.requios.effortlessbuilding.network.PacketHandler;
+import nl.requios.effortlessbuilding.attachment.AttachmentHandler;
+import nl.requios.effortlessbuilding.network.message.IsQuickReplacingPacket;
 
 @OnlyIn(Dist.CLIENT)
 public class BuildSettings {
@@ -26,7 +26,7 @@ public class BuildSettings {
 
     public void setReplaceMode(ReplaceMode replaceMode) {
         this.replaceMode = replaceMode;
-        PacketHandler.INSTANCE.sendToServer(new IsQuickReplacingPacket(isQuickReplacing()));
+        PacketDistributor.SERVER.noArg().send(new IsQuickReplacingPacket(isQuickReplacing()));
     }
 
     public ReplaceMode getReplaceMode() {
@@ -68,6 +68,6 @@ public class BuildSettings {
     }
 
     private boolean canReplaceBlocks(){
-        return Minecraft.getInstance().player != null && CapabilityHandler.canReplaceBlocks(Minecraft.getInstance().player);
+        return Minecraft.getInstance().player != null && AttachmentHandler.canReplaceBlocks(Minecraft.getInstance().player);
     }
 }

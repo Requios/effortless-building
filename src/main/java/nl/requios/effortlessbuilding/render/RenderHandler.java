@@ -13,18 +13,18 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RenderGuiEvent;
-import net.minecraftforge.client.event.RenderLevelStageEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.neoforge.client.event.RenderGuiEvent;
+import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
 import nl.requios.effortlessbuilding.EffortlessBuildingClient;
 import nl.requios.effortlessbuilding.systems.BuilderChain;
 
 /***
  * Main render class for Effortless Building
  */
-@EventBusSubscriber(Dist.CLIENT)
+@Mod.EventBusSubscriber(Dist.CLIENT)
 public class RenderHandler {
 
 	@SubscribeEvent
@@ -48,7 +48,7 @@ public class RenderHandler {
 	}
 
 	@SubscribeEvent
-	public static void onRenderGuiEvent(RenderGuiEvent event) {
+	public static void onRenderGuiEvent(RenderGuiEvent.Post event) {
 		renderSubText(event.getGuiGraphics());
 
 		drawStacks(event.getGuiGraphics());

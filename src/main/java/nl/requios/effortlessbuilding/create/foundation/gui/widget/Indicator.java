@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import nl.requios.effortlessbuilding.create.foundation.gui.AllGuiTextures;
+import org.jetbrains.annotations.NotNull;
 
 public class Indicator extends AbstractSimiWidget {
 
@@ -16,7 +17,7 @@ public class Indicator extends AbstractSimiWidget {
 	}
 
 	@Override
-	public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks ) {
+	public void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
 		if (!visible)
 			return;
 		AllGuiTextures toDraw;

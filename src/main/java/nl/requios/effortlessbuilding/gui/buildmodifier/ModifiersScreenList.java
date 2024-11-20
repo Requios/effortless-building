@@ -21,32 +21,26 @@ import java.util.Objects;
 //Based on Create's ConfigScreenList
 public class ModifiersScreenList extends ObjectSelectionList<ModifiersScreenList.Entry> implements TickableGuiEventListener {
 
-    public ModifiersScreenList(Minecraft mc, int width, int height, int y0, int y1, int itemHeight) {
-        super(mc, width, height, y0, y1, itemHeight);
+    public ModifiersScreenList(Minecraft mc, int width, int height, int y1, int itemHeight) {
+        super(mc, width, height, y1, itemHeight);
         setRenderBackground(false);
-        setRenderTopAndBottom(false);
-        setRenderSelection(false);
         headerHeight = 3;
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
+    public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
         Color c = new Color(0x60_000000);
-        UIRenderHelper.angledGradient(guiGraphics, 90, x0 + width / 2, y0, width, 5, c, Color.TRANSPARENT_BLACK);
-        UIRenderHelper.angledGradient(guiGraphics, -90, x0 + width / 2, y1, width, 5, c, Color.TRANSPARENT_BLACK);
-        UIRenderHelper.angledGradient(guiGraphics, 0, x0, y0 + height / 2, height, 5, c, Color.TRANSPARENT_BLACK);
-        UIRenderHelper.angledGradient(guiGraphics, 180, x1, y0 + height / 2, height, 5, c, Color.TRANSPARENT_BLACK);
+        UIRenderHelper.angledGradient(guiGraphics, 90, getX() + width / 2, getY(), width, 5, c, Color.TRANSPARENT_BLACK);
+        UIRenderHelper.angledGradient(guiGraphics, -90, getX() + width / 2, getY() + getHeight(), width, 5, c, Color.TRANSPARENT_BLACK);
+        UIRenderHelper.angledGradient(guiGraphics, 0, getX(), getY() + height / 2, height, 5, c, Color.TRANSPARENT_BLACK);
+        UIRenderHelper.angledGradient(guiGraphics, 180, getX() + getWidth(), getY() + height / 2, height, 5, c, Color.TRANSPARENT_BLACK);
 
-        super.render(guiGraphics, mouseX, mouseY, partialTicks);
+        super.renderWidget(guiGraphics, mouseX, mouseY, partialTicks);
     }
 
     @Override
-    protected void renderList(GuiGraphics guiGraphics, int p_239229_, int p_239230_, float p_239231_) {
-        Window window = minecraft.getWindow();
-        double d0 = window.getGuiScale();
-        RenderSystem.enableScissor((int) (this.x0 * d0), (int) (window.getHeight() - (this.y1 * d0)), (int) (this.width * d0), (int) (this.height * d0));
-        super.renderList(guiGraphics, p_239229_, p_239230_, p_239231_);
-        RenderSystem.disableScissor();
+    protected void renderList(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        super.renderList(guiGraphics, mouseX, mouseY, partialTick);
     }
     
     public void renderWindowForeground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
@@ -62,7 +56,7 @@ public class ModifiersScreenList extends ObjectSelectionList<ModifiersScreenList
         for(int i1 = 0; i1 < l; ++i1) {
             int j1 = this.getRowTop(i1);
             int k1 = j1 + itemHeight;
-            if (k1 >= this.y0 && j1 <= this.y1) {
+            if (k1 >= this.getY() && j1 <= (this.getY() + this.getHeight())) {
                 renderItemForeground(guiGraphics, pMouseX, pMouseY, pPartialTick, i1, i, j1, j, k);
             }
         }
@@ -86,7 +80,7 @@ public class ModifiersScreenList extends ObjectSelectionList<ModifiersScreenList
             return true;
         return super.keyPressed(pKeyCode, pScanCode, pModifiers);
     }
-    
+
     @Override
     public boolean charTyped(char pCodePoint, int pModifiers) {
         if (children().stream().anyMatch(e -> e.charTyped(pCodePoint, pModifiers)))
@@ -95,10 +89,10 @@ public class ModifiersScreenList extends ObjectSelectionList<ModifiersScreenList
     }
     
     @Override
-    public boolean mouseScrolled(double pMouseX, double pMouseY, double pDelta) {
-        if (children().stream().anyMatch(e -> e.mouseScrolled(pMouseX, pMouseY, pDelta)))
+    public boolean mouseScrolled(double pMouseX, double pMouseY, double scrollX, double scrollY) {
+        if (children().stream().anyMatch(e -> e.mouseScrolled(pMouseX, pMouseY, scrollX, scrollY)))
             return true;
-        return super.mouseScrolled(pMouseX, pMouseY, pDelta);
+        return super.mouseScrolled(pMouseX, pMouseY, scrollX, scrollY);
     }
     
     @Override
@@ -108,7 +102,7 @@ public class ModifiersScreenList extends ObjectSelectionList<ModifiersScreenList
 
     @Override
     protected int getScrollbarPosition() {
-        return x0 + this.width - 6;
+        return getX() + this.width - 6;
     }
 
     @Override
@@ -141,20 +135,19 @@ public class ModifiersScreenList extends ObjectSelectionList<ModifiersScreenList
         }
     
         @Override
-        public boolean mouseScrolled(double x, double y, double delta) {
-            return getGuiListeners().stream().anyMatch(l -> l.mouseScrolled(x, y, delta));
+        public boolean mouseScrolled(double x, double y, double scrollX, double scrollY) {
+            return getGuiListeners().stream().anyMatch(l -> l.mouseScrolled(x, y, scrollX, scrollY));
         }
     
         @Override
-        public void render(GuiGraphics guiGraphics, int index, int y, int x, int width, int height, int mouseX, int mouseY, boolean p_230432_9_, float partialTicks) {
+        public void render(GuiGraphics guiGraphics, int index, int y, int x, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTicks) {
     
 //            UIRenderHelper.streak(guiGraphics, 0, x - 10, y + height / 2, height - 6, width, 0xdd_000000);
 //            UIRenderHelper.streak(guiGraphics, 180, x + (int) (width * 1.35f) + 10, y + height / 2, height - 6, width / 8 * 7, 0xdd_000000);
     
         }
-        
+
         public void renderForeground(GuiGraphics guiGraphics, int index, int y, int x, int width, int height, int mouseX, int mouseY, boolean p_230432_9_, float partialTicks) {
-    
             for (var listener : listeners) {
                 if (listener instanceof AbstractSimiWidget simiWidget && simiWidget.isHoveredOrFocused()
                     && simiWidget.visible) {

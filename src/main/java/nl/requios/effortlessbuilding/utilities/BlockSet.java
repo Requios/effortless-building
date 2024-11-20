@@ -2,11 +2,11 @@ package nl.requios.effortlessbuilding.utilities;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.DistExecutor;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.fml.loading.FMLEnvironment;
 import nl.requios.effortlessbuilding.EffortlessBuilding;
-import nl.requios.effortlessbuilding.capability.CapabilityHandler;
+import nl.requios.effortlessbuilding.attachment.AttachmentHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -53,13 +53,17 @@ public class BlockSet extends HashMap<BlockPos, BlockEntry> implements Iterable<
     public void add(BlockEntry blockEntry) {
         if (!containsKey(blockEntry.blockPos)) {
             //check if we are clientside
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+            if(FMLEnvironment.dist.isClient()) {
                 if (!ClientSide.isFull(this))
                     put(blockEntry.blockPos, blockEntry);
-            });
-            DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> {
+            } else {
                 put(blockEntry.blockPos, blockEntry);
-            });
+            }
+//            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+//
+//            });
+//            DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> {
+//            });
         } else {
             if (logging) EffortlessBuilding.log("BlockSet already contains block at " + blockEntry.blockPos);
         }
@@ -102,7 +106,7 @@ public class BlockSet extends HashMap<BlockPos, BlockEntry> implements Iterable<
     public static class ClientSide {
         public static boolean isFull(BlockSet blockSet) {
             //Limit number of blocks you can place
-            int limit = CapabilityHandler.getMaxBlocksPlacedAtOnce(net.minecraft.client.Minecraft.getInstance().player, false);
+            int limit = AttachmentHandler.getMaxBlocksPlacedAtOnce(net.minecraft.client.Minecraft.getInstance().player, false);
             if (blockSet.size() >= limit) {
                 if (logging) EffortlessBuilding.log("BlockSet limit reached, not adding block.");
                 return true;
