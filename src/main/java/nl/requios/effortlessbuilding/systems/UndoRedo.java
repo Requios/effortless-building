@@ -1,24 +1,30 @@
 package nl.requios.effortlessbuilding.systems;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.util.BlockSnapshot;
 import nl.requios.effortlessbuilding.EffortlessBuilding;
 import nl.requios.effortlessbuilding.ServerConfig;
-import nl.requios.effortlessbuilding.utilities.*;
+import nl.requios.effortlessbuilding.utilities.BlockSet;
+import nl.requios.effortlessbuilding.utilities.FixedStack;
+import nl.requios.effortlessbuilding.utilities.InventoryHelper;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 //Server only
 public class UndoRedo {
 
-	public class UndoSet {
+	public static class UndoSet {
 		public final List<BlockSnapshot> blockSnapshots;
 
 		public UndoSet(List<BlockSnapshot> blockSnapshots) {

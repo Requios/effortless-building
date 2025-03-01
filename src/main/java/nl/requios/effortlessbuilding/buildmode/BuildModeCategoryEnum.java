@@ -1,6 +1,6 @@
 package nl.requios.effortlessbuilding.buildmode;
 
-import nl.requios.effortlessbuilding.create.foundation.utility.Color;
+import net.createmod.catnip.theme.Color;
 
 public enum BuildModeCategoryEnum {
     BASIC(new Color(0f, .5f, 1f, .8f)),

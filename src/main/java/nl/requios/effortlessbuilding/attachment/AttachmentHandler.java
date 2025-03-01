@@ -8,7 +8,7 @@ import nl.requios.effortlessbuilding.EffortlessBuilding;
 import nl.requios.effortlessbuilding.network.message.PowerLevelPacket;
 
 public class AttachmentHandler {
-    public static final ResourceLocation POWER_LEVEL_CAP = new ResourceLocation(EffortlessBuilding.MODID, "power_level");
+    public static final ResourceLocation POWER_LEVEL_CAP = EffortlessBuilding.asResource("power_level");
 
     public static void syncToClient(Player player) {
         PowerLevel powerLevel = player.getData(EffortlessBuilding.POWER_LEVEL);

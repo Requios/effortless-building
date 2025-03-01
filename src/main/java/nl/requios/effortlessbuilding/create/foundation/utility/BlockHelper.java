@@ -1,7 +1,10 @@
 package nl.requios.effortlessbuilding.create.foundation.utility;
 
+import net.createmod.catnip.nbt.NBTProcessors;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.SectionPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -16,6 +19,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.GameRules;
@@ -29,19 +33,41 @@ import net.minecraft.world.level.block.SlimeBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.material.FluidState;
-import net.neoforged.neoforge.common.IPlantable;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.SpecialPlantable;
+import net.neoforged.neoforge.event.level.BlockDropsEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class BlockHelper {
+	private static final List<IntegerProperty> COUNT_STATES = List.of(
+			BlockStateProperties.EGGS,
+			BlockStateProperties.PICKLES,
+			BlockStateProperties.CANDLES
+	);
+
+	private static final List<Block> VINELIKE_BLOCKS = List.of(
+			Blocks.VINE, Blocks.GLOW_LICHEN
+	);
+
+	private static final List<BooleanProperty> VINELIKE_STATES = List.of(
+			BlockStateProperties.UP,
+			BlockStateProperties.NORTH,
+			BlockStateProperties.EAST,
+			BlockStateProperties.SOUTH,
+			BlockStateProperties.WEST,
+			BlockStateProperties.DOWN
+	);
 
 	public static BlockState setZeroAge(BlockState blockState) {
 		if (blockState.hasProperty(BlockStateProperties.AGE_1))
@@ -78,44 +104,54 @@ public class BlockHelper {
 		Item required = getRequiredItem(block).getItem();
 
 		boolean needsTwo = block.hasProperty(BlockStateProperties.SLAB_TYPE)
-			&& block.getValue(BlockStateProperties.SLAB_TYPE) == SlabType.DOUBLE;
+				&& block.getValue(BlockStateProperties.SLAB_TYPE) == SlabType.DOUBLE;
 
 		if (needsTwo)
 			amount *= 2;
 
-		if (block.hasProperty(BlockStateProperties.EGGS))
-			amount *= block.getValue(BlockStateProperties.EGGS);
+		for (IntegerProperty property : COUNT_STATES)
+			if (block.hasProperty(property))
+				amount *= block.getValue(property);
 
-		if (block.hasProperty(BlockStateProperties.PICKLES))
-			amount *= block.getValue(BlockStateProperties.PICKLES);
+		if (VINELIKE_BLOCKS.contains(block.getBlock())) {
+			int vineCount = 0;
+
+			for (BooleanProperty vineState : VINELIKE_STATES) {
+				if (block.hasProperty(vineState) && block.getValue(vineState)) {
+					vineCount++;
+				}
+			}
+
+			amount += vineCount - 1;
+		}
 
 		{
 			// Try held Item first
 			int preferredSlot = player.getInventory().selected;
 			ItemStack itemstack = player.getInventory()
-				.getItem(preferredSlot);
+					.getItem(preferredSlot);
 			int count = itemstack.getCount();
 			if (itemstack.getItem() == required && count > 0) {
 				int taken = Math.min(count, amount - amountFound);
 				player.getInventory()
-					.setItem(preferredSlot, new ItemStack(itemstack.getItem(), count - taken));
+						.setItem(preferredSlot, new ItemStack(itemstack.getItem(), count - taken));
 				amountFound += taken;
 			}
 		}
 
 		// Search inventory
 		for (int i = 0; i < player.getInventory()
-			.getContainerSize(); ++i) {
+				.getContainerSize(); ++i) {
 			if (amountFound == amount)
 				break;
 
 			ItemStack itemstack = player.getInventory()
-				.getItem(i);
+					.getItem(i);
 			int count = itemstack.getCount();
 			if (itemstack.getItem() == required && count > 0) {
 				int taken = Math.min(count, amount - amountFound);
 				player.getInventory()
-					.setItem(i, new ItemStack(itemstack.getItem(), count - taken));
+						.setItem(i, new ItemStack(itemstack.getItem(), count - taken));
 				amountFound += taken;
 			}
 		}
@@ -124,7 +160,7 @@ public class BlockHelper {
 			// Give back 1 if uneven amount was removed
 			if (amountFound % 2 != 0)
 				player.getInventory()
-					.add(new ItemStack(required));
+						.add(new ItemStack(required));
 			amountFound /= 2;
 		}
 
@@ -144,68 +180,74 @@ public class BlockHelper {
 	}
 
 	public static void destroyBlock(Level world, BlockPos pos, float effectChance,
-		Consumer<ItemStack> droppedItemCallback) {
+	                                Consumer<ItemStack> droppedItemCallback) {
 		destroyBlockAs(world, pos, null, ItemStack.EMPTY, effectChance, droppedItemCallback);
 	}
 
 	public static boolean destroyBlockAs(Level world, BlockPos pos, @Nullable Player player, ItemStack usedTool,
-		float effectChance, Consumer<ItemStack> droppedItemCallback) {
+	                                  float effectChance, Consumer<ItemStack> droppedItemCallback) {
 		FluidState fluidState = world.getFluidState(pos);
 		BlockState state = world.getBlockState(pos);
-		
+
 		if (world.random.nextFloat() < effectChance)
 			world.levelEvent(2001, pos, Block.getId(state));
-		BlockEntity tileentity = state.hasBlockEntity() ? world.getBlockEntity(pos) : null;
-		
+		BlockEntity blockEntity = state.hasBlockEntity() ? world.getBlockEntity(pos) : null;
+
 		if (player != null) {
 			BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(world, pos, state, player);
 			NeoForge.EVENT_BUS.post(event);
 			if (event.isCanceled())
 				return false;
 
-			if (event.getExpToDrop() > 0 && world instanceof ServerLevel)
-				state.getBlock()
-					.popExperience((ServerLevel) world, pos, event.getExpToDrop());
-
 			usedTool.mineBlock(world, state, pos, player);
 			player.awardStat(Stats.BLOCK_MINED.get(state.getBlock()));
 		}
 
-		if (world instanceof ServerLevel && world.getGameRules()
-			.getBoolean(GameRules.RULE_DOBLOCKDROPS) && !world.restoringBlockSnapshots
-			&& (player == null || !player.isCreative())) {
-			for (ItemStack itemStack : Block.getDrops(state, (ServerLevel) world, pos, tileentity, player, usedTool))
+		if (world instanceof ServerLevel serverLevel && world.getGameRules()
+				.getBoolean(GameRules.RULE_DOBLOCKDROPS) && !world.restoringBlockSnapshots
+				&& (player == null || !player.isCreative())) {
+			List<ItemStack> drops = Block.getDrops(state, serverLevel, pos, blockEntity, player, usedTool);
+			if (player != null) {
+				BlockDropsEvent event = new BlockDropsEvent(serverLevel, pos, state, blockEntity, List.of(), player, usedTool);
+				NeoForge.EVENT_BUS.post(event);
+				if (!event.isCanceled()) {
+					if ( event.getDroppedExperience() > 0)
+						state.getBlock().popExperience(serverLevel, pos, event.getDroppedExperience());
+				}
+			}
+			for (ItemStack itemStack : drops)
 				droppedItemCallback.accept(itemStack);
 
 			// Simulating IceBlock#playerDestroy. Not calling method directly as it would drop item
 			// entities as a side-effect
-			if (state.getBlock() instanceof IceBlock && usedTool.getEnchantmentLevel(Enchantments.SILK_TOUCH) == 0) {
+			Registry<Enchantment> enchantmentRegistry = world.registryAccess().registryOrThrow(Registries.ENCHANTMENT);
+			if (state.getBlock() instanceof IceBlock && usedTool.getEnchantmentLevel(enchantmentRegistry.getHolderOrThrow(Enchantments.SILK_TOUCH)) == 0) {
 				if (world.dimensionType()
-					.ultraWarm())
+						.ultraWarm())
 					return false;
 
-				BlockState belowState = world.getBlockState(pos.below());
-				if (belowState.blocksMotion() || belowState.liquid())
+				BlockState blockstate = world.getBlockState(pos.below());
+				if (blockstate.blocksMotion() || blockstate.liquid())
 					world.setBlockAndUpdate(pos, Blocks.WATER.defaultBlockState());
-				return true;
+				return false;
 			}
 
 			state.spawnAfterBreak((ServerLevel) world, pos, ItemStack.EMPTY, true);
 		}
-		
+
 		world.setBlockAndUpdate(pos, fluidState.createLegacyBlock());
 		return true;
 	}
 
 	public static boolean isSolidWall(BlockGetter reader, BlockPos fromPos, Direction toDirection) {
 		return hasBlockSolidSide(reader.getBlockState(fromPos.relative(toDirection)), reader,
-			fromPos.relative(toDirection), toDirection.getOpposite());
+				fromPos.relative(toDirection), toDirection.getOpposite());
 	}
 
 	public static boolean noCollisionInSpace(BlockGetter reader, BlockPos pos) {
 		return reader.getBlockState(pos)
-			.getCollisionShape(reader, pos)
-			.isEmpty();
+				.getCollisionShape(reader, pos)
+				.isEmpty();
 	}
 
 	private static void placeRailWithoutUpdate(Level world, BlockState state, BlockPos target) {
@@ -218,18 +260,33 @@ public class BlockHelper {
 			chunk.getSections()[idx] = chunksection;
 		}
 		BlockState old = chunksection.setBlockState(SectionPos.sectionRelative(target.getX()),
-			SectionPos.sectionRelative(target.getY()), SectionPos.sectionRelative(target.getZ()), state);
+				SectionPos.sectionRelative(target.getY()), SectionPos.sectionRelative(target.getZ()), state);
 		chunk.setUnsaved(true);
 		world.markAndNotifyBlock(target, chunk, old, state, 82, 512);
 
 		world.setBlock(target, state, 82);
 		world.neighborChanged(target, world.getBlockState(target.below())
-			.getBlock(), target.below());
+				.getBlock(), target.below());
 	}
 
-	public static boolean placeSchematicBlock(Level world, Player player, BlockState state, BlockPos target, ItemStack stack,
-		@Nullable CompoundTag data) {
-		BlockEntity existingTile = world.getBlockEntity(target);
+	public static CompoundTag prepareBlockEntityData(BlockState blockState, BlockEntity blockEntity) {
+		CompoundTag data = null;
+		if (blockEntity == null)
+			return null;
+		RegistryAccess access = blockEntity.getLevel().registryAccess();
+		if (blockEntity instanceof IPartialSafeNBT safeNbtBE) {
+			data = new CompoundTag();
+			safeNbtBE.writeSafe(data, access);
+			data = NBTProcessors.process(blockState, blockEntity, data, true);
+		}
+
+		return data;
+	}
+
+	public static void placeSchematicBlock(Level world, BlockState state, BlockPos target, ItemStack stack,
+	                                       @Nullable CompoundTag data) {
+		BlockEntity existingBlockEntity = world.getBlockEntity(target);
+		boolean alreadyPlaced = false;
 
 		// Piston
 		if (state.hasProperty(BlockStateProperties.EXTENDED))
@@ -239,58 +296,69 @@ public class BlockHelper {
 
 		if (state.getBlock() == Blocks.COMPOSTER)
 			state = Blocks.COMPOSTER.defaultBlockState();
-		else if (state.getBlock() != Blocks.SEA_PICKLE && state.getBlock() instanceof IPlantable)
-			state = ((IPlantable) state.getBlock()).getPlant(world, target);
+		else if (state.getBlock() != Blocks.SEA_PICKLE && state.getBlock() instanceof SpecialPlantable specialPlantable) {
+			alreadyPlaced = true;
+			if (specialPlantable.canPlacePlantAtPosition(stack, world, target, null))
+				specialPlantable.spawnPlantAtPosition(stack, world, target, null);
+		}
 		else if (state.is(BlockTags.CAULDRONS))
 			state = Blocks.CAULDRON.defaultBlockState();
 
 		if (world.dimensionType()
-			.ultraWarm() && state.getFluidState().is(FluidTags.WATER)) {
+				.ultraWarm() && state.getFluidState().is(FluidTags.WATER)) {
 			int i = target.getX();
 			int j = target.getY();
 			int k = target.getZ();
 			world.playSound(null, target, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 0.5F,
-				2.6F + (world.random.nextFloat() - world.random.nextFloat()) * 0.8F);
+					2.6F + (world.random.nextFloat() - world.random.nextFloat()) * 0.8F);
 
 			for (int l = 0; l < 8; ++l) {
 				world.addParticle(ParticleTypes.LARGE_SMOKE, i + Math.random(), j + Math.random(), k + Math.random(),
-					0.0D, 0.0D, 0.0D);
+						0.0D, 0.0D, 0.0D);
 			}
 			Block.dropResources(state, world, target);
-			return true;
+			return;
 		}
 
-		if (state.getBlock() instanceof BaseRailBlock) {
+		//noinspection StatementWithEmptyBody
+		if (alreadyPlaced) {
+			// pass
+		} else if (state.getBlock() instanceof BaseRailBlock) {
 			placeRailWithoutUpdate(world, state, target);
 		} else {
-			world.setBlock(target, state, 2); //Changed flag from 18 to 3
+			world.setBlock(target, state, 18);
 		}
 
 		if (data != null) {
-//			if (existingTile instanceof IMergeableTE mergeable) {
-//				BlockEntity loaded = BlockEntity.loadStatic(target, state, data);
-//				if (existingTile.getType()
-//					.equals(loaded.getType())) {
-//					mergeable.accept(loaded);
-//					return;
+//			if (existingBlockEntity instanceof IMergeableBE mergeable) {
+//				BlockEntity loaded = BlockEntity.loadStatic(target, state, data, world.registryAccess());
+//				if (loaded != null) {
+//					if (existingBlockEntity.getType()
+//							.equals(loaded.getType())) {
+//						mergeable.accept(loaded);
+//						return;
+//					}
 //				}
 //			}
-			BlockEntity tile = world.getBlockEntity(target);
-			if (tile != null) {
+			BlockEntity blockEntity = world.getBlockEntity(target);
+			if (blockEntity != null) {
 				data.putInt("x", target.getX());
 				data.putInt("y", target.getY());
 				data.putInt("z", target.getZ());
-//				if (tile instanceof KineticTileEntity)
-//					((KineticTileEntity) tile).warnOfMovement();
-				tile.load(data);
+//				if (blockEntity instanceof KineticBlockEntity kbe)
+//					kbe.warnOfMovement();
+//				if (blockEntity instanceof IMultiBlockEntityContainer imbe)
+//					if (!imbe.isController())
+//						data.put("Controller", NbtUtils.writeBlockPos(imbe.getController()));
+				blockEntity.loadWithComponents(data, world.registryAccess());
 			}
 		}
 
 		try {
-			state.getBlock().setPlacedBy(world, target, state, null, stack);
-		} catch (Exception ignored) {
+			state.getBlock()
+					.setPlacedBy(world, target, state, null, stack);
+		} catch (Exception e) {
 		}
-		return true;
 	}
 
 	public static double getBounceMultiplier(Block block) {
@@ -302,22 +370,9 @@ public class BlockHelper {
 	}
 
 	public static boolean hasBlockSolidSide(BlockState p_220056_0_, BlockGetter p_220056_1_, BlockPos p_220056_2_,
-		Direction p_220056_3_) {
+	                                        Direction p_220056_3_) {
 		return !p_220056_0_.is(BlockTags.LEAVES)
-			&& Block.isFaceFull(p_220056_0_.getCollisionShape(p_220056_1_, p_220056_2_), p_220056_3_);
-	}
-
-	public static boolean extinguishFire(Level world, @Nullable Player p_175719_1_, BlockPos p_175719_2_,
-		Direction p_175719_3_) {
-		p_175719_2_ = p_175719_2_.relative(p_175719_3_);
-		if (world.getBlockState(p_175719_2_)
-			.getBlock() == Blocks.FIRE) {
-			world.levelEvent(p_175719_1_, 1009, p_175719_2_, 0);
-			world.removeBlock(p_175719_2_, false);
-			return true;
-		} else {
-			return false;
-		}
+				&& Block.isFaceFull(p_220056_0_.getCollisionShape(p_220056_1_, p_220056_2_), p_220056_3_);
 	}
 
 	public static BlockState copyProperties(BlockState fromState, BlockState toState) {
@@ -328,7 +383,7 @@ public class BlockHelper {
 	}
 
 	public static <T extends Comparable<T>> BlockState copyProperty(Property<T> property, BlockState fromState,
-		BlockState toState) {
+	                                                                BlockState toState) {
 		if (fromState.hasProperty(property) && toState.hasProperty(property)) {
 			return toState.setValue(property, fromState.getValue(property));
 		}

@@ -7,7 +7,6 @@ import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.items.ItemStackHandler;
 
 public abstract class GhostItemMenu<T> extends MenuBase<T> implements IClearableMenu {
@@ -88,7 +87,7 @@ public abstract class GhostItemMenu<T> extends MenuBase<T> implements IClearable
 			ItemStack stackToInsert = playerInventory.getItem(index);
 			for (int i = 0; i < ghostInventory.getSlots(); i++) {
 				ItemStack stack = ghostInventory.getStackInSlot(i);
-				if (!allowRepeats() && ItemHandlerHelper.canItemStacksStack(stack, stackToInsert))
+				if (!allowRepeats() && ItemStack.isSameItemSameComponents(stack, stackToInsert))
 					break;
 				if (stack.isEmpty()) {
 					ItemStack copy = stackToInsert.copy();

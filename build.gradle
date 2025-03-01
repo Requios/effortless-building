@@ -9,7 +9,7 @@ plugins {
 
 jarJar.enable()
 
-boolean flywheelInWorkspace = findProject(':Flywheel') != null
+boolean ponderInWorkspace = findProject(':Ponder') != null
 
 ext.buildNumber = System.getenv('BUILD_NUMBER')
 
@@ -19,7 +19,7 @@ base {
     archivesName = "effortlessbuilding-${artifact_minecraft_version}"
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + ' (' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 
@@ -47,9 +47,9 @@ runs {
         // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
         systemProperty 'neoforge.enabledGameTestNamespaces', "effortlessbuilding"
 
-        if (flywheelInWorkspace) {
+        if (ponderInWorkspace) {
             dependencies {
-                runtime project(':Flywheel')
+                runtime project(':Ponder')
             }
         }
     }
@@ -74,6 +74,11 @@ repositories {
         name = 'tterrag maven'
         url = 'https://maven.tterrag.com'
     }
+    maven {
+        // Ponder, Flywheel
+        url = "https://maven.createmod.net"
+    }
+    maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven" } // NeoForge config api port, needed by ponder
     exclusiveContent {
         forRepository {
             maven {
@@ -101,15 +106,24 @@ repositories {
 dependencies {
     implementation "net.neoforged:neoforge:${neo_version}"
 
-    jarJar("com.jozufozu.flywheel:flywheel-forge-${flywheel_minecraft_version}:${flywheel_version}") {
-        version { prefer "0.6.10" }
+    jarJar("dev.engine-room.flywheel:flywheel-neoforge-${flywheel_minecraft_version}:${flywheel_version}") {
+        version {
+            strictly "[1.0.0-9,2.0)"
+        }
     }
 
-    if (flywheelInWorkspace) {
-        implementation project(':Flywheel')
+    compileOnly("dev.engine-room.flywheel:flywheel-neoforge-api-${flywheel_minecraft_version}:${flywheel_version}")
+    runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${flywheel_minecraft_version}:${flywheel_version}")
+    runtimeOnly("dev.engine-room.vanillin:vanillin-neoforge-${flywheel_minecraft_version}:${vanillin_version}")
+
+    if (ponderInWorkspace) {
+        implementation(project(":ponder:Common"))
+        implementation(project(":ponder:NeoForge"))
     } else {
-        implementation "com.jozufozu.flywheel:flywheel-forge-${flywheel_minecraft_version}:${flywheel_version}"
+        implementation("net.createmod.ponder:Ponder-NeoForge-${minecraft_version}:${ponder_version}")
     }
+
+    jarJar("net.createmod.ponder:Ponder-NeoForge-${minecraft_version}:${ponder_version}")
 }
 
 sourceSets.main.resources {
@@ -118,6 +132,14 @@ sourceSets.main.resources {
 }
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}
+
+// IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
 }
 
 compileJava {

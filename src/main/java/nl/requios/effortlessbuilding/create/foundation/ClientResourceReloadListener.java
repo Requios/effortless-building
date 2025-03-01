@@ -1,6 +1,6 @@
 package nl.requios.effortlessbuilding.create.foundation;
 
-import nl.requios.effortlessbuilding.create.foundation.utility.LangNumberFormat;
+import net.createmod.catnip.lang.LangNumberFormat;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 

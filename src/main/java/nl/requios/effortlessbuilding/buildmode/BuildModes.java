@@ -30,7 +30,7 @@ public class BuildModes {
 	public void setBuildMode(BuildModeEnum buildMode) {
 		this.buildMode = buildMode;
 
-		PacketDistributor.SERVER.noArg().send(new IsUsingBuildModePacket(this.buildMode != BuildModeEnum.DISABLED));
+		PacketDistributor.sendToServer(new IsUsingBuildModePacket(this.buildMode != BuildModeEnum.DISABLED));
 
 		EffortlessBuilding.log(Minecraft.getInstance().player, I18n.get(buildMode.getNameKey()), true);
 	}

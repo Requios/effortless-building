@@ -94,7 +94,7 @@ public class BuilderChain {
                 blocks.skipFirst = buildMode == BuildModeEnum.DISABLED;
                 long placeTime = player.level().getGameTime();
                 if (blocks.size() > 1) placeTime += ClientConfig.visuals.appearAnimationLength.get();
-                PacketDistributor.SERVER.noArg().send(new ServerPlaceBlocksPacket(blocks, placeTime));
+                PacketDistributor.sendToServer(new ServerPlaceBlocksPacket(blocks, placeTime));
             }
         }
     }
@@ -132,7 +132,7 @@ public class BuilderChain {
                 ClientBlockUtilities.playSoundIfFurtherThanNormal(player, blocks.getLastBlockEntry(), true);
                 player.swing(InteractionHand.MAIN_HAND);
                 blocks.skipFirst = buildMode == BuildModeEnum.DISABLED;
-                PacketDistributor.SERVER.noArg().send(new ServerBreakBlocksPacket(blocks));
+                PacketDistributor.sendToServer(new ServerBreakBlocksPacket(blocks));
             }
         }
     }

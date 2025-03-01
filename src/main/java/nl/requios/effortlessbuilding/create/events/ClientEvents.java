@@ -2,46 +2,46 @@ package nl.requios.effortlessbuilding.create.events;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.levelWrappers.WrappedClientLevel;
+import net.createmod.catnip.render.DefaultSuperRenderTypeBuffer;
+import net.createmod.catnip.render.SuperRenderTypeBuffer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.event.ViewportEvent;
-import net.neoforged.neoforge.event.TickEvent;
-import net.neoforged.neoforge.event.TickEvent.ClientTickEvent;
 import net.neoforged.neoforge.event.level.LevelEvent;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
 import nl.requios.effortlessbuilding.create.Create;
 import nl.requios.effortlessbuilding.create.CreateClient;
-import nl.requios.effortlessbuilding.create.foundation.render.SuperRenderTypeBuffer;
-import nl.requios.effortlessbuilding.create.foundation.utility.AnimationTickHolder;
 import nl.requios.effortlessbuilding.create.foundation.utility.CameraAngleAnimationService;
-import nl.requios.effortlessbuilding.create.foundation.utility.worldWrappers.WrappedClientWorld;
 
-@Mod.EventBusSubscriber(Dist.CLIENT)
+@EventBusSubscriber(Dist.CLIENT)
 public class ClientEvents {
 
 	private static final String ITEM_PREFIX = "item." + Create.ID;
 	private static final String BLOCK_PREFIX = "block." + Create.ID;
 
 	@SubscribeEvent
-	public static void onTick(ClientTickEvent event) {
-		if (!isGameActive() || event.phase != TickEvent.Phase.END) return;
+	public static void onTick(ClientTickEvent.Post event) {
+		if (!isGameActive()) return;
 
 		AnimationTickHolder.tick();
 
 		CreateClient.GHOST_BLOCKS.tickGhosts();
-		CreateClient.OUTLINER.tickOutlines();
+//		CreateClient.OUTLINER.tickOutlines();
 		CameraAngleAnimationService.tick();
 	}
 
 	@SubscribeEvent
 	public static void onLoadWorld(LevelEvent.Load event) {
 		LevelAccessor world = event.getLevel();
-		if (world.isClientSide() && world instanceof ClientLevel && !(world instanceof WrappedClientWorld)) {
+		if (world.isClientSide() && world instanceof ClientLevel && !(world instanceof WrappedClientLevel)) {
 			CreateClient.invalidateRenderers();
 			AnimationTickHolder.reset();
 		}
@@ -67,11 +67,11 @@ public class ClientEvents {
 		PoseStack ms = event.getPoseStack();
 		ms.pushPose();
 		ms.translate(-cameraPos.x(), -cameraPos.y(), -cameraPos.z());
-		SuperRenderTypeBuffer buffer = SuperRenderTypeBuffer.getInstance();
+		SuperRenderTypeBuffer buffer = DefaultSuperRenderTypeBuffer.getInstance();
 
 		CreateClient.GHOST_BLOCKS.renderAll(ms, buffer);
 
-		CreateClient.OUTLINER.renderOutlines(ms, buffer, pt);
+//		CreateClient.OUTLINER.renderOutlines(ms, buffer, pt);
 		buffer.draw();
 		RenderSystem.enableCull();
 

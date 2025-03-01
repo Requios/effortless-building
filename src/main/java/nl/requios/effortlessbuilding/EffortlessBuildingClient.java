@@ -1,15 +1,17 @@
 package nl.requios.effortlessbuilding;
 
-import net.minecraft.client.gui.screens.MenuScreens;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import nl.requios.effortlessbuilding.buildmode.BuildModes;
 import nl.requios.effortlessbuilding.buildmodifier.BuildModifiers;
 import nl.requios.effortlessbuilding.gui.DiamondRandomizerBagScreen;
 import nl.requios.effortlessbuilding.gui.GoldenRandomizerBagScreen;
 import nl.requios.effortlessbuilding.gui.RandomizerBagScreen;
 import nl.requios.effortlessbuilding.render.BlockPreviews;
-import nl.requios.effortlessbuilding.systems.*;
+import nl.requios.effortlessbuilding.systems.BuildSettings;
+import nl.requios.effortlessbuilding.systems.BuilderChain;
+import nl.requios.effortlessbuilding.systems.BuilderFilter;
+import nl.requios.effortlessbuilding.systems.ItemUsageTracker;
 
 public class EffortlessBuildingClient {
 
@@ -22,12 +24,12 @@ public class EffortlessBuildingClient {
     public static final ItemUsageTracker ITEM_USAGE_TRACKER = new ItemUsageTracker();
 
     public static void onConstructorClient(IEventBus modEventBus, IEventBus forgeEventBus) {
-        modEventBus.addListener(EffortlessBuildingClient::clientSetup);
+        modEventBus.addListener(EffortlessBuildingClient::registerMenuScreens);
     }
 
-    public static void clientSetup(final FMLClientSetupEvent event) {
-        MenuScreens.register(EffortlessBuilding.RANDOMIZER_BAG_CONTAINER.get(), RandomizerBagScreen::new);
-        MenuScreens.register(EffortlessBuilding.GOLDEN_RANDOMIZER_BAG_CONTAINER.get(), GoldenRandomizerBagScreen::new);
-        MenuScreens.register(EffortlessBuilding.DIAMOND_RANDOMIZER_BAG_CONTAINER.get(), DiamondRandomizerBagScreen::new);
+    public static void registerMenuScreens(final RegisterMenuScreensEvent event) {
+        event.register(EffortlessBuilding.RANDOMIZER_BAG_CONTAINER.get(), RandomizerBagScreen::new);
+        event.register(EffortlessBuilding.GOLDEN_RANDOMIZER_BAG_CONTAINER.get(), GoldenRandomizerBagScreen::new);
+        event.register(EffortlessBuilding.DIAMOND_RANDOMIZER_BAG_CONTAINER.get(), DiamondRandomizerBagScreen::new);
     }
 }

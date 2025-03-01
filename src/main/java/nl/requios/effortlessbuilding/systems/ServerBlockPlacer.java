@@ -4,9 +4,15 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.world.entity.player.Player;
 import nl.requios.effortlessbuilding.EffortlessBuilding;
 import nl.requios.effortlessbuilding.ServerConfig;
-import nl.requios.effortlessbuilding.utilities.*;
+import nl.requios.effortlessbuilding.utilities.BlockEntry;
+import nl.requios.effortlessbuilding.utilities.BlockPlacerHelper;
+import nl.requios.effortlessbuilding.utilities.BlockSet;
+import nl.requios.effortlessbuilding.utilities.BlockUtilities;
+import nl.requios.effortlessbuilding.utilities.InventoryHelper;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 // Receives block placement requests from the client and places them
 public class ServerBlockPlacer {

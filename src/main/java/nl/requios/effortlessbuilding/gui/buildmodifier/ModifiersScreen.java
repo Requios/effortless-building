@@ -1,5 +1,6 @@
 package nl.requios.effortlessbuilding.gui.buildmodifier;
 
+import net.createmod.catnip.gui.widget.BoxWidget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
@@ -13,7 +14,6 @@ import nl.requios.effortlessbuilding.buildmodifier.Mirror;
 import nl.requios.effortlessbuilding.buildmodifier.RadialMirror;
 import nl.requios.effortlessbuilding.create.foundation.gui.AbstractSimiScreen;
 import nl.requios.effortlessbuilding.create.foundation.gui.AllIcons;
-import nl.requios.effortlessbuilding.create.foundation.gui.widget.BoxWidget;
 import nl.requios.effortlessbuilding.create.foundation.utility.Components;
 
 import javax.annotation.Nonnull;

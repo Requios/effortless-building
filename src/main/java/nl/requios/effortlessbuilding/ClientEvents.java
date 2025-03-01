@@ -7,17 +7,17 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.ScreenEvent;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import net.neoforged.neoforge.client.settings.KeyModifier;
-import net.neoforged.neoforge.event.TickEvent;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod.EventBusSubscriber;
+import nl.requios.effortlessbuilding.attachment.AttachmentHandler;
 import nl.requios.effortlessbuilding.buildmode.BuildModeEnum;
 import nl.requios.effortlessbuilding.buildmode.ModeOptions;
-import nl.requios.effortlessbuilding.attachment.AttachmentHandler;
 import nl.requios.effortlessbuilding.gui.buildmode.PlayerSettingsGui;
 import nl.requios.effortlessbuilding.gui.buildmode.RadialMenu;
 import nl.requios.effortlessbuilding.gui.buildmodifier.ModifiersScreen;
@@ -55,31 +55,31 @@ public class ClientEvents {
 //        @SubscribeEvent
 //        public static void registerShaders(RegisterShadersEvent event) throws IOException {
 //            event.registerShader(new ShaderInstance(event.getResourceManager(),
-//                            new ResourceLocation(EffortlessBuilding.MODID, "dissolve"),
+//                            EffortlessBuilding.modLoc("dissolve"),
 //                            DefaultVertexFormat.BLOCK),
 //                    shaderInstance -> BuildRenderTypes.dissolveShaderInstance = shaderInstance);
 //        }
     }
 
     @SubscribeEvent
-    public static void onClientTick(TickEvent.ClientTickEvent event) {
+    public static void onClientTickPre(ClientTickEvent.Pre event) {
         if (!isGameActive()) return;
 
-        if (event.phase == TickEvent.Phase.START) {
+        EffortlessBuildingClient.BUILDER_CHAIN.onTick();
 
-            EffortlessBuildingClient.BUILDER_CHAIN.onTick();
+        onMouseInput();
 
-            onMouseInput();
+        EffortlessBuildingClient.BLOCK_PREVIEWS.onTick();
+    }
 
-            EffortlessBuildingClient.BLOCK_PREVIEWS.onTick();
+    @SubscribeEvent
+    public static void onClientTickPost(ClientTickEvent.Post event) {
+        if (!isGameActive()) return;
 
-        } else if (event.phase == TickEvent.Phase.END) {
-            Screen gui = Minecraft.getInstance().screen;
-            if (gui == null || !gui.isPauseScreen()) {
-                ticksInGame++;
-            }
+        Screen gui = Minecraft.getInstance().screen;
+        if (gui == null || !gui.isPauseScreen()) {
+            ticksInGame++;
         }
-
     }
 
     private static void onMouseInput() {

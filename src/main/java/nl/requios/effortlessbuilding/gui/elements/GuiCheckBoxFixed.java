@@ -14,7 +14,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
  */
 @ParametersAreNonnullByDefault
 public class GuiCheckBoxFixed extends Button {
-	private final ResourceLocation DISABLED_BUTTON = new ResourceLocation("textures/gui/sprites/widget/button_disabled");
+	private final ResourceLocation DISABLED_BUTTON = ResourceLocation.withDefaultNamespace("textures/gui/sprites/widget/button_disabled");
 	private final int boxWidth;
 	private boolean isChecked;
 

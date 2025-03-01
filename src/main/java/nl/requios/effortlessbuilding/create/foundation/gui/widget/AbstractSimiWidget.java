@@ -1,10 +1,10 @@
 package nl.requios.effortlessbuilding.create.foundation.gui.widget;
 
+import net.createmod.catnip.gui.TickableGuiEventListener;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
-import nl.requios.effortlessbuilding.create.foundation.gui.TickableGuiEventListener;
 import nl.requios.effortlessbuilding.create.foundation.utility.Components;
 
 import javax.annotation.Nonnull;

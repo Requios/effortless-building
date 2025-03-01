@@ -1,5 +1,6 @@
 package nl.requios.effortlessbuilding.attachment;
 
+import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.common.util.INBTSerializable;
@@ -93,13 +94,13 @@ public class PowerLevel implements INBTSerializable<CompoundTag> {
 		return player.getAbilities().instabuild;
 	}
 
-	public CompoundTag serializeNBT() {
+	public CompoundTag serializeNBT(Provider provider) {
 		CompoundTag tag = new CompoundTag();
 		tag.putInt("powerLevel", getPowerLevel());
 		return tag;
 	}
-	
-	public void deserializeNBT(CompoundTag nbt) {
+
+	public void deserializeNBT(Provider provider, CompoundTag nbt) {
 		setPowerLevel(nbt.getInt("powerLevel"));
 	}
 }

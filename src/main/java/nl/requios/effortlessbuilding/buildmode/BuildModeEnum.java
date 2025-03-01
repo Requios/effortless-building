@@ -1,7 +1,18 @@
 package nl.requios.effortlessbuilding.buildmode;
 
 import nl.requios.effortlessbuilding.AllIcons;
-import nl.requios.effortlessbuilding.buildmode.buildmodes.*;
+import nl.requios.effortlessbuilding.buildmode.buildmodes.Circle;
+import nl.requios.effortlessbuilding.buildmode.buildmodes.Cube;
+import nl.requios.effortlessbuilding.buildmode.buildmodes.Cylinder;
+import nl.requios.effortlessbuilding.buildmode.buildmodes.DiagonalLine;
+import nl.requios.effortlessbuilding.buildmode.buildmodes.DiagonalWall;
+import nl.requios.effortlessbuilding.buildmode.buildmodes.Disabled;
+import nl.requios.effortlessbuilding.buildmode.buildmodes.Floor;
+import nl.requios.effortlessbuilding.buildmode.buildmodes.Line;
+import nl.requios.effortlessbuilding.buildmode.buildmodes.Single;
+import nl.requios.effortlessbuilding.buildmode.buildmodes.SlopeFloor;
+import nl.requios.effortlessbuilding.buildmode.buildmodes.Sphere;
+import nl.requios.effortlessbuilding.buildmode.buildmodes.Wall;
 
 public enum BuildModeEnum {
     DISABLED("normal", new Disabled(), BuildModeCategoryEnum.BASIC, AllIcons.I_DISABLE),

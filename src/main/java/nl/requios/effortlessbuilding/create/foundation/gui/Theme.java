@@ -1,11 +1,16 @@
 package nl.requios.effortlessbuilding.create.foundation.gui;
 
-import nl.requios.effortlessbuilding.create.foundation.utility.Color;
-import nl.requios.effortlessbuilding.create.foundation.utility.Couple;
+import net.createmod.catnip.data.Couple;
+import net.createmod.catnip.theme.Color;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class Theme {
 

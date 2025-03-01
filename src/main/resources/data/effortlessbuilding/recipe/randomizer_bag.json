@@ -1,0 +1,20 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " # ",
+        "#O#",
+        " # "
+    ],
+    "key": {
+        "#": {
+            "item": "minecraft:leather"
+        },
+		"O": {
+            "tag": "minecraft:planks"
+        }
+    },
+    "result": {
+        "count": 1,
+        "id": "effortlessbuilding:randomizer_bag"
+    }
+}

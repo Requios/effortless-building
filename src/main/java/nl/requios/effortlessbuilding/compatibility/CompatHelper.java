@@ -1,11 +1,11 @@
 package nl.requios.effortlessbuilding.compatibility;
 
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.IItemHandler;
 import nl.requios.effortlessbuilding.create.foundation.item.ItemHelper;
 import nl.requios.effortlessbuilding.item.AbstractRandomizerBagItem;

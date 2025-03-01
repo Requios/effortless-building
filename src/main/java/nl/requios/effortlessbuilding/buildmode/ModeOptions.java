@@ -69,8 +69,8 @@ public class ModeOptions {
 		if (action == null) return;
 
 		switch (action) {
-			case UNDO -> PacketDistributor.SERVER.noArg().send(new PerformUndoPacket());
-			case REDO -> PacketDistributor.SERVER.noArg().send(new PerformRedoPacket());
+			case UNDO -> PacketDistributor.sendToServer(new PerformUndoPacket());
+			case REDO -> PacketDistributor.sendToServer(new PerformRedoPacket());
 			case OPEN_MODIFIER_SETTINGS -> ClientEvents.openModifierSettings();
 			case OPEN_PLAYER_SETTINGS -> ClientEvents.openPlayerSettings();
 			case PREVIOUS_BUILD_MODE -> EffortlessBuildingClient.BUILD_MODES.activatePreviousBuildMode();

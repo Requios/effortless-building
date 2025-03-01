@@ -1,6 +1,8 @@
 package nl.requios.effortlessbuilding.create.foundation.item;
 
 import com.google.common.base.Strings;
+import net.createmod.catnip.data.Couple;
+import net.createmod.catnip.lang.ClientFontHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -12,8 +14,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import nl.requios.effortlessbuilding.create.foundation.item.ItemDescription.Palette;
 import nl.requios.effortlessbuilding.create.foundation.utility.Components;
-import nl.requios.effortlessbuilding.create.foundation.utility.Couple;
-import nl.requios.effortlessbuilding.create.foundation.utility.FontHelper;
 import nl.requios.effortlessbuilding.create.foundation.utility.Lang;
 
 import java.text.BreakIterator;
@@ -81,7 +81,7 @@ public class TooltipHelper {
 		}
 
 		Font font = Minecraft.getInstance().font;
-		List<String> lines = FontHelper.cutString(font, markedUp, maxWidthPerLine);
+		List<String> lines = ClientFontHelper.cutString(font, markedUp, maxWidthPerLine);
 
 		// Format
 		String lineStart = Strings.repeat(" ", indent);

@@ -2,6 +2,7 @@ package nl.requios.effortlessbuilding.create.foundation.item.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -14,7 +15,6 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import nl.requios.effortlessbuilding.create.foundation.render.RenderTypes;
-import nl.requios.effortlessbuilding.create.foundation.utility.Iterate;
 
 public class PartialItemModelRenderer {
 

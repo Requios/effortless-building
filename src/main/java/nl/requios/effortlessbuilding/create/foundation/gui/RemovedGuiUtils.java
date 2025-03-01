@@ -1,18 +1,7 @@
 package nl.requios.effortlessbuilding.create.foundation.gui;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
-import net.neoforged.neoforge.client.event.RenderTooltipEvent;
-import net.neoforged.neoforge.common.NeoForge;
-import org.joml.Matrix4f;
-
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
-
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
@@ -21,7 +10,14 @@ import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.ClientHooks;
+import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 import net.neoforged.neoforge.client.extensions.IGuiGraphicsExtension;
+import net.neoforged.neoforge.common.NeoForge;
+import org.joml.Matrix4f;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RemovedGuiUtils {
 	@Nonnull
@@ -179,8 +175,7 @@ public class RemovedGuiUtils {
 		graphics.fillGradient(tooltipX - 3, tooltipY + tooltipHeight + 2,
 			tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 3, zLevel, borderColorEnd, borderColorEnd);
 
-		MultiBufferSource.BufferSource renderType = MultiBufferSource.immediate(Tesselator.getInstance()
-			.getBuilder());
+		MultiBufferSource.BufferSource renderType = graphics.bufferSource();
 		pStack.translate(0.0D, 0.0D, zLevel);
 
 		for (int lineNumber = 0; lineNumber < list.size(); ++lineNumber) {

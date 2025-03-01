@@ -2,6 +2,7 @@ package nl.requios.effortlessbuilding.item;
 
 import com.google.common.base.Suppliers;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.world.item.ItemStack;
@@ -20,8 +21,8 @@ import java.util.function.Supplier;
 //https://mcreator.net/wiki/minecraft-vanilla-loot-tables-list#toc-index-1
 public class SingleItemLootModifier extends LootModifier {
 
-    public static final Supplier<Codec<SingleItemLootModifier>> CODEC = Suppliers.memoize(() ->
-            RecordCodecBuilder.create(instance -> codecStart(instance).and(
+    public static final Supplier<MapCodec<SingleItemLootModifier>> CODEC = Suppliers.memoize(() ->
+            RecordCodecBuilder.mapCodec(instance -> codecStart(instance).and(
                     instance.group(
                             Codec.FLOAT.fieldOf("chance").forGetter(m -> m.chance),
                             ItemStack.SINGLE_ITEM_CODEC.fieldOf("item").forGetter(m -> m.stack)
@@ -52,7 +53,7 @@ public class SingleItemLootModifier extends LootModifier {
     }
 
     @Override
-    public Codec<? extends IGlobalLootModifier> codec() {
+    public MapCodec<? extends IGlobalLootModifier> codec() {
         return CODEC.get();
     }
 }

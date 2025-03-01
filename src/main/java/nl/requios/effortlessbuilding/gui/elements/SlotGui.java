@@ -2,6 +2,7 @@ package nl.requios.effortlessbuilding.gui.elements;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.BufferUploader;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
@@ -223,7 +224,7 @@ public abstract class SlotGui extends AbstractContainerEventHandler implements R
 	protected void renderList(GuiGraphics guiGraphics, int p_renderList_1_, int p_renderList_2_, int p_renderList_3_, int p_renderList_4_, float p_renderList_5_) {
 		int i = this.getItemCount();
 		Tesselator tessellator = Tesselator.getInstance();
-		BufferBuilder bufferbuilder = tessellator.getBuilder();
+		BufferBuilder bufferbuilder;
 
 		for (int j = 0; j < i; ++j) {
 			int k = p_renderList_2_ + j * this.itemHeight + this.headerHeight;
@@ -238,19 +239,19 @@ public abstract class SlotGui extends AbstractContainerEventHandler implements R
 				RenderSystem.setShader(GameRenderer::getPositionShader);
 				float f = this.isFocused() ? 1.0F : 0.5F;
 				RenderSystem.setShaderColor(f, f, f, 1.0F);
-				bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
-				bufferbuilder.vertex(i1, k + l + 2, 0.0D).endVertex();
-				bufferbuilder.vertex(j1, k + l + 2, 0.0D).endVertex();
-				bufferbuilder.vertex(j1, k - 2, 0.0D).endVertex();
-				bufferbuilder.vertex(i1, k - 2, 0.0D).endVertex();
-				tessellator.end();
+				bufferbuilder = tessellator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
+				bufferbuilder.addVertex(i1, k + l + 2, 0.0F);
+				bufferbuilder.addVertex(j1, k + l + 2, 0.0F);
+				bufferbuilder.addVertex(j1, k - 2, 0.0F);
+				bufferbuilder.addVertex(i1, k - 2, 0.0F);
+				BufferUploader.drawWithShader(bufferbuilder.buildOrThrow());
 				RenderSystem.setShaderColor(0.0F, 0.0F, 0.0F, 1.0F);
-				bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
-				bufferbuilder.vertex(i1 + 1, k + l + 1, 0.0D).endVertex();
-				bufferbuilder.vertex(j1 - 1, k + l + 1, 0.0D).endVertex();
-				bufferbuilder.vertex(j1 - 1, k - 1, 0.0D).endVertex();
-				bufferbuilder.vertex(i1 + 1, k - 1, 0.0D).endVertex();
-				tessellator.end();
+				bufferbuilder = tessellator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
+				bufferbuilder.addVertex(i1 + 1, k + l + 1, 0.0F);
+				bufferbuilder.addVertex(j1 - 1, k + l + 1, 0.0F);
+				bufferbuilder.addVertex(j1 - 1, k - 1, 0.0F);
+				bufferbuilder.addVertex(i1 + 1, k - 1, 0.0F);
+				BufferUploader.drawWithShader(bufferbuilder.buildOrThrow());
 				RenderSystem.setShader(GameRenderer::getPositionTexShader);
 			}
 

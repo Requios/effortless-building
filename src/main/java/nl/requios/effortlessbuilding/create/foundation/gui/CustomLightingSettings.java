@@ -1,10 +1,10 @@
 package nl.requios.effortlessbuilding.create.foundation.gui;
 
-import org.joml.Matrix4f;
-import org.joml.Vector3f;
-
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.math.Axis;
+import net.createmod.catnip.gui.ILightingSettings;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 public class CustomLightingSettings implements ILightingSettings {
 
@@ -39,7 +39,7 @@ public class CustomLightingSettings implements ILightingSettings {
 
 	@Override
 	public void applyLighting() {
-		RenderSystem.setupLevelDiffuseLighting(light1, light2, lightMatrix);
+		RenderSystem.setShaderLights(light1, light2);
 	}
 
 	public static Builder builder() {

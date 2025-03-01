@@ -1,11 +1,13 @@
 package nl.requios.effortlessbuilding.create.foundation.utility;
 
-import nl.requios.effortlessbuilding.create.Create;
+import net.createmod.catnip.lang.LangBuilder;
+import net.createmod.catnip.lang.LangNumberFormat;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.fluids.FluidStack;
+import nl.requios.effortlessbuilding.create.Create;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +65,7 @@ public class Lang {
 	}
 
 	public static LangBuilder fluidName(FluidStack stack) {
-		return builder().add(stack.getDisplayName()
+		return builder().add(stack.getHoverName()
 			.copy());
 	}
 

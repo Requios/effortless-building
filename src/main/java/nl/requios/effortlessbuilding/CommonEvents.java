@@ -7,13 +7,12 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.LogicalSide;
-import net.neoforged.fml.common.Mod.EventBusSubscriber;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
-import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.tick.LevelTickEvent;
 import nl.requios.effortlessbuilding.attachment.PowerLevel;
 import nl.requios.effortlessbuilding.compatibility.CompatHelper;
 import nl.requios.effortlessbuilding.network.message.ModifierSettingsPacket;
@@ -37,10 +36,10 @@ public class CommonEvents {
 	}
 
 	@SubscribeEvent
-	public static void onTick(TickEvent.LevelTickEvent event) {
-		if (event.phase != TickEvent.Phase.START) return;
-		if (event.side == LogicalSide.CLIENT) return;
-		if (event.level.dimension() != Level.OVERWORLD) return;
+	public static void onTick(LevelTickEvent.Pre event) {
+		Level level = event.getLevel();
+		if (level.isClientSide) return;
+		if (!level.dimension().equals(Level.OVERWORLD)) return;
 
 		EffortlessBuilding.SERVER_BLOCK_PLACER.tick();
 	}

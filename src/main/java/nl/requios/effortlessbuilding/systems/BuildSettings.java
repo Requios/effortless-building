@@ -4,8 +4,8 @@ import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.PacketDistributor;
-import nl.requios.effortlessbuilding.buildmode.ModeOptions;
 import nl.requios.effortlessbuilding.attachment.AttachmentHandler;
+import nl.requios.effortlessbuilding.buildmode.ModeOptions;
 import nl.requios.effortlessbuilding.network.message.IsQuickReplacingPacket;
 
 @OnlyIn(Dist.CLIENT)
@@ -26,7 +26,7 @@ public class BuildSettings {
 
     public void setReplaceMode(ReplaceMode replaceMode) {
         this.replaceMode = replaceMode;
-        PacketDistributor.SERVER.noArg().send(new IsQuickReplacingPacket(isQuickReplacing()));
+        PacketDistributor.sendToServer(new IsQuickReplacingPacket(isQuickReplacing()));
     }
 
     public ReplaceMode getReplaceMode() {

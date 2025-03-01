@@ -16,7 +16,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class GoldenRandomizerBagScreen extends AbstractContainerScreen<GoldenRandomizerBagContainer> {
 	private Inventory inventory;
 
-	private static final ResourceLocation guiTextures = new ResourceLocation(EffortlessBuilding.MODID, "textures/gui/container/goldenrandomizerbag.png");
+	private static final ResourceLocation guiTextures = EffortlessBuilding.asResource("textures/gui/container/goldenrandomizerbag.png");
 
 	public GoldenRandomizerBagScreen(GoldenRandomizerBagContainer randomizerBagContainer, Inventory playerInventory, Component title) {
 		super(randomizerBagContainer, playerInventory, title);

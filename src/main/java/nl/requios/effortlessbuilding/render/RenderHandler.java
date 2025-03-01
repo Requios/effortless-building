@@ -1,9 +1,8 @@
 package nl.requios.effortlessbuilding.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.ByteBufferBuilder;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -14,17 +13,17 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RenderGuiEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
 import nl.requios.effortlessbuilding.EffortlessBuildingClient;
 import nl.requios.effortlessbuilding.systems.BuilderChain;
 
 /***
  * Main render class for Effortless Building
  */
-@Mod.EventBusSubscriber(Dist.CLIENT)
+@EventBusSubscriber(Dist.CLIENT)
 public class RenderHandler {
 
 	@SubscribeEvent
@@ -33,8 +32,9 @@ public class RenderHandler {
 		Vec3 cameraPos = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
 
 		PoseStack ms = event.getPoseStack();
-		BufferBuilder bufferBuilder = Tesselator.getInstance().getBuilder();
-		MultiBufferSource.BufferSource buffer = MultiBufferSource.immediate(bufferBuilder);
+//		BufferBuilder bufferBuilder = Tesselator.getInstance().getBuilder();
+//		MultiBufferSource.BufferSource buffer = MultiBufferSource.immediate(bufferBuilder);
+		MultiBufferSource.BufferSource buffer = MultiBufferSource.immediate(new ByteBufferBuilder(1536));
 
 		ms.pushPose();
 		ms.translate(-cameraPos.x(), -cameraPos.y(), -cameraPos.z());
@@ -130,7 +130,8 @@ public class RenderHandler {
 		Font font = Minecraft.getInstance().font;
 		String text = String.valueOf(stack.getCount());
 		ms.translate(0.0D, 0.0D, 200.0F);
-		MultiBufferSource.BufferSource multibuffersource$buffersource = MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
+//		MultiBufferSource.BufferSource multibuffersource$buffersource = MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
+		MultiBufferSource.BufferSource multibuffersource$buffersource = MultiBufferSource.immediate(new ByteBufferBuilder(1536));
 		font.drawInBatch(text, (float)(x + 19 - 2 - font.width(text)), (float)(y + 6 + 3), missing ? ChatFormatting.RED.getColor() : ChatFormatting.WHITE.getColor(), true, ms.last().pose(), multibuffersource$buffersource, Font.DisplayMode.NORMAL, 0, 15728880);
 		multibuffersource$buffersource.endBatch();
 		ms.popPose();

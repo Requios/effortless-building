@@ -1,15 +1,15 @@
 package nl.requios.effortlessbuilding.create.foundation.utility;
 
-import net.neoforged.neoforge.common.util.NonNullSupplier;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
 public class ResetableLazy<T> implements Supplier<T> {
 
-	private final NonNullSupplier<T> supplier;
+	private final Supplier<@NotNull T> supplier;
 	private T value;
 
-	public ResetableLazy(NonNullSupplier<T> supplier) {
+	public ResetableLazy(Supplier<@NotNull T> supplier) {
 		this.supplier = supplier;
 	}
 
@@ -25,7 +25,7 @@ public class ResetableLazy<T> implements Supplier<T> {
 		value = null;
 	}
 
-	public static <T> ResetableLazy<T> of(NonNullSupplier<T> supplier) {
+	public static <T> ResetableLazy<T> of(Supplier<@NotNull T> supplier) {
 		return new ResetableLazy<>(supplier);
 	}
 

@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "x#x",
+        "#O#",
+        "x#x"
+    ],
+    "key": {
+        "O": {
+            "item": "minecraft:end_crystal"
+        },
+		"#": {
+            "item": "minecraft:chorus_fruit"
+        },
+		"x": {
+			"item": "minecraft:ghast_tear"
+		}
+    },
+    "result": {
+      "count": 1,
+      "id": "effortlessbuilding:reach_upgrade3"
+    }
+}

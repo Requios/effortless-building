@@ -2,6 +2,8 @@ package nl.requios.effortlessbuilding.create.foundation.gui;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.gui.TickableGuiEventListener;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
@@ -106,7 +108,7 @@ public abstract class AbstractSimiScreen extends Screen {
 
 	@Override
 	public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-		partialTicks = minecraft.getFrameTime();
+		partialTicks = AnimationTickHolder.getPartialTicksUI();
 		PoseStack ms = graphics.pose();
 		
 		ms.pushPose();

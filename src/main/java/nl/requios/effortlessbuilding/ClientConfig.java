@@ -2,7 +2,9 @@ package nl.requios.effortlessbuilding;
 
 import net.neoforged.neoforge.common.ModConfigSpec;
 
-import static net.neoforged.neoforge.common.ModConfigSpec.*;
+import static net.neoforged.neoforge.common.ModConfigSpec.BooleanValue;
+import static net.neoforged.neoforge.common.ModConfigSpec.Builder;
+import static net.neoforged.neoforge.common.ModConfigSpec.IntValue;
 
 public class ClientConfig {
 

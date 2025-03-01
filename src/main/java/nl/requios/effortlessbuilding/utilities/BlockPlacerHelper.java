@@ -6,6 +6,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.util.BlockSnapshot;
 import net.neoforged.neoforge.event.EventHooks;
@@ -42,7 +43,7 @@ public class BlockPlacerHelper {
         var itemStack = new ItemStack(blockEntry.item);
 
         level.captureBlockSnapshots = true;
-        BlockHelper.placeSchematicBlock(level, player, blockEntry.newBlockState, blockEntry.blockPos, itemStack, null);
+        BlockHelper.placeSchematicBlock(level, blockEntry.newBlockState, blockEntry.blockPos, itemStack, null);
         level.captureBlockSnapshots = false;
 
         //Find out if we get to keep the placed block by sending a forge event
@@ -67,7 +68,7 @@ public class BlockPlacerHelper {
             for (BlockSnapshot blocksnapshot : Lists.reverse(blockSnapshots))
             {
                 level.restoringBlockSnapshots = true;
-                blocksnapshot.restore(true, false);
+                blocksnapshot.restore(Block.UPDATE_NONE);
                 level.restoringBlockSnapshots = false;
             }
         }
@@ -75,8 +76,8 @@ public class BlockPlacerHelper {
         {
             for (BlockSnapshot snap : blockSnapshots)
             {
-                int updateFlag = snap.getFlag();
-                BlockState oldBlock = snap.getReplacedBlock();
+                int updateFlag = snap.getFlags();
+                BlockState oldBlock = snap.getState();
                 BlockState newBlock = level.getBlockState(snap.getPos());
                 newBlock.onPlace(level, snap.getPos(), oldBlock, false);
 

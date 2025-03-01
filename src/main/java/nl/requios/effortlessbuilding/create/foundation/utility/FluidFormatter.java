@@ -1,5 +1,6 @@
 package nl.requios.effortlessbuilding.create.foundation.utility;
 
+import net.createmod.catnip.data.Couple;
 import net.minecraft.network.chat.MutableComponent;
 
 public class FluidFormatter {

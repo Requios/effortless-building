@@ -9,6 +9,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -18,7 +19,6 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.capabilities.Capabilities;
@@ -142,11 +142,11 @@ public abstract class AbstractRandomizerBagItem extends Item {
 			ItemStack toPlace = pickRandomStack(bagInventory);
 			if (toPlace.isEmpty()) return InteractionResult.FAIL;
 
-			if (!world.getBlockState(pos).getBlock().canBeReplaced(world.getBlockState(pos), Fluids.EMPTY)) {
+			BlockPlaceContext blockItemUseContext = new BlockPlaceContext(new UseOnContext(player, ctx.getHand(), new BlockHitResult(hitVec, facing, pos, false)));
+			if (!world.getBlockState(pos).canBeReplaced(blockItemUseContext)) {
 				pos = pos.relative(facing);
 			}
 
-			BlockPlaceContext blockItemUseContext = new BlockPlaceContext(new UseOnContext(player, ctx.getHand(), new BlockHitResult(hitVec, facing, pos, false)));
 			BlockState blockState = Block.byItem(toPlace.getItem()).getStateForPlacement(blockItemUseContext);
 
 			var blockEntry = new BlockEntry(pos, blockState, toPlace.getItem());
@@ -180,18 +180,17 @@ public abstract class AbstractRandomizerBagItem extends Item {
 	}
 
 	@Override
-	public int getUseDuration(ItemStack p_77626_1_) {
+	public int getUseDuration(ItemStack stack, LivingEntity entity) {
 		return 1;
 	}
-
-//	@Nullable
+	//	@Nullable
 //	@Override
 //	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
 //		return new ItemHandlerCapabilityProvider(getInventorySize()); TODO: Re-enable itemhandler cap on randomizer bag item!
 //	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag flag) {
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag tooltipFlag) {
 		tooltip.add(Component.literal(ChatFormatting.YELLOW + "*Experimental* Only works in singleplayer"));
 		tooltip.add(Component.literal(ChatFormatting.BLUE + "Rightclick" + ChatFormatting.GRAY + " to place a random block"));
 		tooltip.add(Component.literal(ChatFormatting.BLUE + "Sneak + rightclick" + ChatFormatting.GRAY + " to open inventory"));

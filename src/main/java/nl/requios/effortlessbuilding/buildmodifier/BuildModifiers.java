@@ -1,12 +1,12 @@
 package nl.requios.effortlessbuilding.buildmodifier;
 
+import net.createmod.catnip.nbt.NBTHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.PacketDistributor;
-import nl.requios.effortlessbuilding.create.foundation.utility.NBTHelper;
 import nl.requios.effortlessbuilding.network.message.ModifierSettingsPacket;
 import nl.requios.effortlessbuilding.utilities.BlockSet;
 
@@ -96,7 +96,7 @@ public class BuildModifiers {
 	}
 
 	public void save() {
-		PacketDistributor.SERVER.noArg().send(new ModifierSettingsPacket(serializeNBT()));
+		PacketDistributor.sendToServer(new ModifierSettingsPacket(serializeNBT()));
 
 		//Save locally as well?
 //		var listTag = NBTHelper.writeCompoundList(modifierSettingsList, BaseModifier::serializeNBT);

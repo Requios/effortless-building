@@ -1,13 +1,13 @@
 package nl.requios.effortlessbuilding.create.foundation.utility;
 
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.fml.util.thread.EffectiveSide;
-import nl.requios.effortlessbuilding.create.Create;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.fml.util.thread.EffectiveSide;
+import nl.requios.effortlessbuilding.create.Create;
 
 /** Deprecated so simi doensn't forget to remove debug calls **/
 @OnlyIn(value = Dist.CLIENT)

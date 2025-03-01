@@ -3,12 +3,12 @@ package nl.requios.effortlessbuilding.gui.buildmode;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.resources.sounds.SimpleSoundInstance;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ObjectSelectionList;
-import net.minecraft.sounds.SoundEvents;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
@@ -196,10 +196,10 @@ public class PlayerSettingsGui extends Screen {
 //			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 //			float f = 32.0F;
 //			bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-//			bufferbuilder.vertex(this.x0, this.y1, 0.0D).color(20, 20, 20, 180).endVertex();
-//			bufferbuilder.vertex(this.x1, this.y1, 0.0D).color(20, 20, 20, 180).endVertex();
-//			bufferbuilder.vertex(this.x1, this.y0, 0.0D).color(20, 20, 20, 180).endVertex();
-//			bufferbuilder.vertex(this.x0, this.y0, 0.0D).color(20, 20, 20, 180).endVertex();
+//			bufferbuilder.addVertex(this.x0, this.y1, 0.0D).setColor(20, 20, 20, 180);
+//			bufferbuilder.addVertex(this.x1, this.y1, 0.0D).setColor(20, 20, 20, 180);
+//			bufferbuilder.addVertex(this.x1, this.y0, 0.0D).setColor(20, 20, 20, 180);
+//			bufferbuilder.addVertex(this.x0, this.y0, 0.0D).setColor(20, 20, 20, 180);
 //			tessellator.end();
 //			int k = this.getRowLeft();
 //			int l = this.y0 + 4 - (int) this.getScrollAmount();
@@ -217,16 +217,16 @@ public class PlayerSettingsGui extends Screen {
 //			RenderSystem.setShader(GameRenderer::getPositionColorShader);
 ////            int i1 = 4;
 ////            bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-////            bufferbuilder.pos((double)this.x0, (double)(this.y0 + 4), 0.0D).tex(0.0F, 1.0F).color(0, 0, 0, 0).endVertex();
-////            bufferbuilder.pos((double)this.x1, (double)(this.y0 + 4), 0.0D).tex(1.0F, 1.0F).color(0, 0, 0, 0).endVertex();
-////            bufferbuilder.pos((double)this.x1, (double)this.y0, 0.0D).tex(1.0F, 0.0F).color(0, 0, 0, 255).endVertex();
-////            bufferbuilder.pos((double)this.x0, (double)this.y0, 0.0D).tex(0.0F, 0.0F).color(0, 0, 0, 255).endVertex();
+////            bufferbuilder.pos((double)this.x0, (double)(this.y0 + 4), 0.0D).tex(0.0F, 1.0F).setColor(0, 0, 0, 0);
+////            bufferbuilder.pos((double)this.x1, (double)(this.y0 + 4), 0.0D).tex(1.0F, 1.0F).setColor(0, 0, 0, 0);
+////            bufferbuilder.pos((double)this.x1, (double)this.y0, 0.0D).tex(1.0F, 0.0F).setColor(0, 0, 0, 255);
+////            bufferbuilder.pos((double)this.x0, (double)this.y0, 0.0D).tex(0.0F, 0.0F).setColor(0, 0, 0, 255);
 ////            tessellator.draw();
 ////            bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-////            bufferbuilder.pos((double)this.x0, (double)this.y1, 0.0D).tex(0.0F, 1.0F).color(0, 0, 0, 255).endVertex();
-////            bufferbuilder.pos((double)this.x1, (double)this.y1, 0.0D).tex(1.0F, 1.0F).color(0, 0, 0, 255).endVertex();
-////            bufferbuilder.pos((double)this.x1, (double)(this.y1 - 4), 0.0D).tex(1.0F, 0.0F).color(0, 0, 0, 0).endVertex();
-////            bufferbuilder.pos((double)this.x0, (double)(this.y1 - 4), 0.0D).tex(0.0F, 0.0F).color(0, 0, 0, 0).endVertex();
+////            bufferbuilder.pos((double)this.x0, (double)this.y1, 0.0D).tex(0.0F, 1.0F).setColor(0, 0, 0, 255);
+////            bufferbuilder.pos((double)this.x1, (double)this.y1, 0.0D).tex(1.0F, 1.0F).setColor(0, 0, 0, 255);
+////            bufferbuilder.pos((double)this.x1, (double)(this.y1 - 4), 0.0D).tex(1.0F, 0.0F).setColor(0, 0, 0, 0);
+////            bufferbuilder.pos((double)this.x0, (double)(this.y1 - 4), 0.0D).tex(0.0F, 0.0F).setColor(0, 0, 0, 0);
 ////            tessellator.draw();
 //
 //			//SCROLLBAR
@@ -240,22 +240,22 @@ public class PlayerSettingsGui extends Screen {
 //				}
 //
 //				bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-//				bufferbuilder.vertex(i, this.y1, 0.0D).uv(0.0F, 1.0F).color(0, 0, 0, 255).endVertex();
-//				bufferbuilder.vertex(j, this.y1, 0.0D).uv(1.0F, 1.0F).color(0, 0, 0, 255).endVertex();
-//				bufferbuilder.vertex(j, this.y0, 0.0D).uv(1.0F, 0.0F).color(0, 0, 0, 255).endVertex();
-//				bufferbuilder.vertex(i, this.y0, 0.0D).uv(0.0F, 0.0F).color(0, 0, 0, 255).endVertex();
+//				bufferbuilder.addVertex(i, this.y1, 0.0D).uv(0.0F, 1.0F).setColor(0, 0, 0, 255);
+//				bufferbuilder.addVertex(j, this.y1, 0.0D).uv(1.0F, 1.0F).setColor(0, 0, 0, 255);
+//				bufferbuilder.addVertex(j, this.y0, 0.0D).uv(1.0F, 0.0F).setColor(0, 0, 0, 255);
+//				bufferbuilder.addVertex(i, this.y0, 0.0D).uv(0.0F, 0.0F).setColor(0, 0, 0, 255);
 //				tessellator.end();
 //				bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-//				bufferbuilder.vertex(i, l1 + k1, 0.0D).uv(0.0F, 1.0F).color(128, 128, 128, 255).endVertex();
-//				bufferbuilder.vertex(j, l1 + k1, 0.0D).uv(1.0F, 1.0F).color(128, 128, 128, 255).endVertex();
-//				bufferbuilder.vertex(j, l1, 0.0D).uv(1.0F, 0.0F).color(128, 128, 128, 255).endVertex();
-//				bufferbuilder.vertex(i, l1, 0.0D).uv(0.0F, 0.0F).color(128, 128, 128, 255).endVertex();
+//				bufferbuilder.addVertex(i, l1 + k1, 0.0D).uv(0.0F, 1.0F).setColor(128, 128, 128, 255);
+//				bufferbuilder.addVertex(j, l1 + k1, 0.0D).uv(1.0F, 1.0F).setColor(128, 128, 128, 255);
+//				bufferbuilder.addVertex(j, l1, 0.0D).uv(1.0F, 0.0F).setColor(128, 128, 128, 255);
+//				bufferbuilder.addVertex(i, l1, 0.0D).uv(0.0F, 0.0F).setColor(128, 128, 128, 255);
 //				tessellator.end();
 //				bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-//				bufferbuilder.vertex(i, l1 + k1 - 1, 0.0D).uv(0.0F, 1.0F).color(192, 192, 192, 255).endVertex();
-//				bufferbuilder.vertex(j - 1, l1 + k1 - 1, 0.0D).uv(1.0F, 1.0F).color(192, 192, 192, 255).endVertex();
-//				bufferbuilder.vertex(j - 1, l1, 0.0D).uv(1.0F, 0.0F).color(192, 192, 192, 255).endVertex();
-//				bufferbuilder.vertex(i, l1, 0.0D).uv(0.0F, 0.0F).color(192, 192, 192, 255).endVertex();
+//				bufferbuilder.addVertex(i, l1 + k1 - 1, 0.0D).uv(0.0F, 1.0F).setColor(192, 192, 192, 255);
+//				bufferbuilder.addVertex(j - 1, l1 + k1 - 1, 0.0D).uv(1.0F, 1.0F).setColor(192, 192, 192, 255);
+//				bufferbuilder.addVertex(j - 1, l1, 0.0D).uv(1.0F, 0.0F).setColor(192, 192, 192, 255);
+//				bufferbuilder.addVertex(i, l1, 0.0D).uv(0.0F, 0.0F).setColor(192, 192, 192, 255);
 //				tessellator.end();
 //			}
 //

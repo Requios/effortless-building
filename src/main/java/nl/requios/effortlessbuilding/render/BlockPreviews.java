@@ -1,18 +1,23 @@
 package nl.requios.effortlessbuilding.render;
 
+import net.createmod.catnip.data.Pair;
+import net.createmod.catnip.outliner.Outliner;
+import net.createmod.catnip.theme.Color;
 import net.minecraft.client.Minecraft;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import nl.requios.effortlessbuilding.*;
+import nl.requios.effortlessbuilding.ClientConfig;
+import nl.requios.effortlessbuilding.ClientEvents;
+import nl.requios.effortlessbuilding.EffortlessBuilding;
+import nl.requios.effortlessbuilding.EffortlessBuildingClient;
 import nl.requios.effortlessbuilding.buildmode.BuildModeEnum;
 import nl.requios.effortlessbuilding.create.AllSpecialTextures;
 import nl.requios.effortlessbuilding.create.CreateClient;
-import nl.requios.effortlessbuilding.create.foundation.utility.Color;
 import nl.requios.effortlessbuilding.systems.BuilderChain;
 import nl.requios.effortlessbuilding.utilities.BlockEntry;
 import nl.requios.effortlessbuilding.utilities.BlockSet;
@@ -76,25 +81,25 @@ public class BlockPreviews {
 			if (ClientConfig.visuals.showBlockPreviews.get() && blocks.size() < ClientConfig.visuals.maxBlockPreviews.get()) {
 				renderBlockPreviews(blocks, false, 0f);
 
-				CreateClient.OUTLINER.showCluster(outlineID, coordinates)
+				Outliner.getInstance().showCluster(outlineID, coordinates)
 						.withFaceTexture(AllSpecialTextures.CHECKERED)
-						.disableNormals()
+						.disableLineNormals()
 						.lineWidth(1 / 32f)
 						.colored(new Color(1f, 1f, 1f, 1f));
 			} else {
 				//Thicker outline without block previews
-				CreateClient.OUTLINER.showCluster(outlineID, coordinates)
+				Outliner.getInstance().showCluster(outlineID, coordinates)
 						.withFaceTexture(AllSpecialTextures.HIGHLIGHT_CHECKERED)
-						.disableNormals()
+						.disableLineNormals()
 						.lineWidth(1 / 16f)
 						.colored(new Color(1f, 1f, 1f, 1f));
 			}
 
 		} else {
 			//Breaking
-			CreateClient.OUTLINER.showCluster(outlineID, coordinates)
+			Outliner.getInstance().showCluster(outlineID, coordinates)
 					.withFaceTexture(AllSpecialTextures.THIN_CHECKERED)
-					.disableNormals()
+					.disableLineNormals()
 					.lineWidth(1 / 16f)
 					.colored(new Color(0.8f, 0.1f, 0.1f, 1f));
 		}
@@ -153,8 +158,8 @@ public class BlockPreviews {
 			}
 		}
 
-		CreateClient.OUTLINER.showAABB("break", aabb)
-				.disableNormals()
+		Outliner.getInstance().showAABB("break", aabb)
+				.disableLineNormals()
 				.lineWidth(1 / 64f)
 				.colored(0x222222);
 	}
@@ -227,7 +232,7 @@ public class BlockPreviews {
 
 		placedBlocksList.add(new PlacedBlocksEntry(ClientEvents.ticksInGame, false, new BlockSet(blocks)));
 
-		CreateClient.OUTLINER.keep(blocks.firstPos, ClientConfig.visuals.appearAnimationLength.get());
+		Outliner.getInstance().keep(Pair.of(blocks.firstPos, ClientConfig.visuals.appearAnimationLength.get()));
 	}
 
 	public void onBlocksBroken(BlockSet blocks) {
@@ -236,7 +241,7 @@ public class BlockPreviews {
 
 		placedBlocksList.add(new PlacedBlocksEntry(ClientEvents.ticksInGame, true, new BlockSet(blocks)));
 
-		CreateClient.OUTLINER.keep(blocks.firstPos, ClientConfig.visuals.breakAnimationLength.get());
+		Outliner.getInstance().keep(Pair.of(blocks.firstPos, ClientConfig.visuals.breakAnimationLength.get()));
 	}
 
 	private void sortOnDistanceToPlayer(List<BlockPos> coordinates, Player player) {

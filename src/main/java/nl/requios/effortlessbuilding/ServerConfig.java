@@ -5,7 +5,10 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 import java.util.Arrays;
 import java.util.List;
 
-import static net.neoforged.neoforge.common.ModConfigSpec.*;
+import static net.neoforged.neoforge.common.ModConfigSpec.BooleanValue;
+import static net.neoforged.neoforge.common.ModConfigSpec.Builder;
+import static net.neoforged.neoforge.common.ModConfigSpec.ConfigValue;
+import static net.neoforged.neoforge.common.ModConfigSpec.IntValue;
 
 public class ServerConfig {
     private static final Builder builder = new Builder();

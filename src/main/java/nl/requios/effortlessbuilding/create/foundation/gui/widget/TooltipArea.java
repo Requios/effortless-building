@@ -1,9 +1,9 @@
 package nl.requios.effortlessbuilding.create.foundation.gui.widget;
 
-import java.util.List;
-
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+
+import java.util.List;
 
 public class TooltipArea extends AbstractSimiWidget {
 

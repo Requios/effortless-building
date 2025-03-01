@@ -103,13 +103,13 @@ public class ModifierRenderer {
 		if (drawPlanes) {
 			VertexConsumer buffer = RenderHandler.beginPlanes(renderTypeBuffer);
 
-			buffer.vertex(matrixPos, (float) posA.x, (float) posA.y, (float) posA.z).color(c.getRed(), c.getGreen(), c.getBlue(), planeAlpha).endVertex();
-			buffer.vertex(matrixPos, (float) posA.x, (float) posB.y, (float) posA.z).color(c.getRed(), c.getGreen(), c.getBlue(), planeAlpha).endVertex();
-			buffer.vertex(matrixPos, (float) posB.x, (float) posA.y, (float) posB.z).color(c.getRed(), c.getGreen(), c.getBlue(), planeAlpha).endVertex();
-			buffer.vertex(matrixPos, (float) posB.x, (float) posB.y, (float) posB.z).color(c.getRed(), c.getGreen(), c.getBlue(), planeAlpha).endVertex();
+			buffer.addVertex(matrixPos, (float) posA.x, (float) posA.y, (float) posA.z).setColor(c.getRed(), c.getGreen(), c.getBlue(), planeAlpha);
+			buffer.addVertex(matrixPos, (float) posA.x, (float) posB.y, (float) posA.z).setColor(c.getRed(), c.getGreen(), c.getBlue(), planeAlpha);
+			buffer.addVertex(matrixPos, (float) posB.x, (float) posA.y, (float) posB.z).setColor(c.getRed(), c.getGreen(), c.getBlue(), planeAlpha);
+			buffer.addVertex(matrixPos, (float) posB.x, (float) posB.y, (float) posB.z).setColor(c.getRed(), c.getGreen(), c.getBlue(), planeAlpha);
 			//backface (using triangle strip)
-			buffer.vertex(matrixPos, (float) posA.x, (float) posA.y, (float) posA.z).color(c.getRed(), c.getGreen(), c.getBlue(), planeAlpha).endVertex();
-			buffer.vertex(matrixPos, (float) posA.x, (float) posB.y, (float) posA.z).color(c.getRed(), c.getGreen(), c.getBlue(), planeAlpha).endVertex();
+			buffer.addVertex(matrixPos, (float) posA.x, (float) posA.y, (float) posA.z).setColor(c.getRed(), c.getGreen(), c.getBlue(), planeAlpha);
+			buffer.addVertex(matrixPos, (float) posA.x, (float) posB.y, (float) posA.z).setColor(c.getRed(), c.getGreen(), c.getBlue(), planeAlpha);
 
 			RenderHandler.endPlanes(renderTypeBuffer);
 		}
@@ -118,11 +118,11 @@ public class ModifierRenderer {
 			VertexConsumer buffer = RenderHandler.beginLines(renderTypeBuffer);
 
 			Vec3 middle = posA.add(posB).scale(0.5);
-			buffer.vertex(matrixPos, (float) posA.x, (float) middle.y, (float) posA.z).color(c.getRed(), c.getGreen(), c.getBlue(), lineAlpha).endVertex();
-			buffer.vertex(matrixPos, (float) posB.x, (float) middle.y, (float) posB.z).color(c.getRed(), c.getGreen(), c.getBlue(), lineAlpha).endVertex();
+			buffer.addVertex(matrixPos, (float) posA.x, (float) middle.y, (float) posA.z).setColor(c.getRed(), c.getGreen(), c.getBlue(), lineAlpha);
+			buffer.addVertex(matrixPos, (float) posB.x, (float) middle.y, (float) posB.z).setColor(c.getRed(), c.getGreen(), c.getBlue(), lineAlpha);
 			if (drawVerticalLines) {
-				buffer.vertex(matrixPos, (float) middle.x, (float) posA.y, (float) middle.z).color(c.getRed(), c.getGreen(), c.getBlue(), lineAlpha).endVertex();
-				buffer.vertex(matrixPos, (float) middle.x, (float) posB.y, (float) middle.z).color(c.getRed(), c.getGreen(), c.getBlue(), lineAlpha).endVertex();
+				buffer.addVertex(matrixPos, (float) middle.x, (float) posA.y, (float) middle.z).setColor(c.getRed(), c.getGreen(), c.getBlue(), lineAlpha);
+				buffer.addVertex(matrixPos, (float) middle.x, (float) posB.y, (float) middle.z).setColor(c.getRed(), c.getGreen(), c.getBlue(), lineAlpha);
 			}
 
 			RenderHandler.endLines(renderTypeBuffer);
@@ -137,13 +137,13 @@ public class ModifierRenderer {
 		if (drawPlanes) {
 			VertexConsumer buffer = RenderHandler.beginPlanes(renderTypeBuffer);
 
-			buffer.vertex(matrixPos, (float) posA.x, (float) posA.y, (float) posA.z).color(c.getRed(), c.getGreen(), c.getBlue(), planeAlpha).endVertex();
-			buffer.vertex(matrixPos, (float) posA.x, (float) posA.y, (float) posB.z).color(c.getRed(), c.getGreen(), c.getBlue(), planeAlpha).endVertex();
-			buffer.vertex(matrixPos, (float) posB.x, (float) posA.y, (float) posA.z).color(c.getRed(), c.getGreen(), c.getBlue(), planeAlpha).endVertex();
-			buffer.vertex(matrixPos, (float) posB.x, (float) posA.y, (float) posB.z).color(c.getRed(), c.getGreen(), c.getBlue(), planeAlpha).endVertex();
+			buffer.addVertex(matrixPos, (float) posA.x, (float) posA.y, (float) posA.z).setColor(c.getRed(), c.getGreen(), c.getBlue(), planeAlpha);
+			buffer.addVertex(matrixPos, (float) posA.x, (float) posA.y, (float) posB.z).setColor(c.getRed(), c.getGreen(), c.getBlue(), planeAlpha);
+			buffer.addVertex(matrixPos, (float) posB.x, (float) posA.y, (float) posA.z).setColor(c.getRed(), c.getGreen(), c.getBlue(), planeAlpha);
+			buffer.addVertex(matrixPos, (float) posB.x, (float) posA.y, (float) posB.z).setColor(c.getRed(), c.getGreen(), c.getBlue(), planeAlpha);
 			//backface (using triangle strip)
-			buffer.vertex(matrixPos, (float) posA.x, (float) posA.y, (float) posA.z).color(c.getRed(), c.getGreen(), c.getBlue(), planeAlpha).endVertex();
-			buffer.vertex(matrixPos, (float) posA.x, (float) posA.y, (float) posB.z).color(c.getRed(), c.getGreen(), c.getBlue(), planeAlpha).endVertex();
+			buffer.addVertex(matrixPos, (float) posA.x, (float) posA.y, (float) posA.z).setColor(c.getRed(), c.getGreen(), c.getBlue(), planeAlpha);
+			buffer.addVertex(matrixPos, (float) posA.x, (float) posA.y, (float) posB.z).setColor(c.getRed(), c.getGreen(), c.getBlue(), planeAlpha);
 
 			RenderHandler.endPlanes(renderTypeBuffer);
 		}
@@ -152,10 +152,10 @@ public class ModifierRenderer {
 			VertexConsumer buffer = RenderHandler.beginLines(renderTypeBuffer);
 
 			Vec3 middle = posA.add(posB).scale(0.5);
-			buffer.vertex(matrixPos, (float) middle.x, (float) middle.y, (float) posA.z).color(c.getRed(), c.getGreen(), c.getBlue(), lineAlpha).endVertex();
-			buffer.vertex(matrixPos, (float) middle.x, (float) middle.y, (float) posB.z).color(c.getRed(), c.getGreen(), c.getBlue(), lineAlpha).endVertex();
-			buffer.vertex(matrixPos, (float) posA.x, (float) middle.y, (float) middle.z).color(c.getRed(), c.getGreen(), c.getBlue(), lineAlpha).endVertex();
-			buffer.vertex(matrixPos, (float) posB.x, (float) middle.y, (float) middle.z).color(c.getRed(), c.getGreen(), c.getBlue(), lineAlpha).endVertex();
+			buffer.addVertex(matrixPos, (float) middle.x, (float) middle.y, (float) posA.z).setColor(c.getRed(), c.getGreen(), c.getBlue(), lineAlpha);
+			buffer.addVertex(matrixPos, (float) middle.x, (float) middle.y, (float) posB.z).setColor(c.getRed(), c.getGreen(), c.getBlue(), lineAlpha);
+			buffer.addVertex(matrixPos, (float) posA.x, (float) middle.y, (float) middle.z).setColor(c.getRed(), c.getGreen(), c.getBlue(), lineAlpha);
+			buffer.addVertex(matrixPos, (float) posB.x, (float) middle.y, (float) middle.z).setColor(c.getRed(), c.getGreen(), c.getBlue(), lineAlpha);
 
 			RenderHandler.endLines(renderTypeBuffer);
 		}
@@ -169,12 +169,12 @@ public class ModifierRenderer {
 
 		Vec3 pos = m.position.add(epsilon);
 
-		buffer.vertex(matrixPos, (float) pos.x - m.radius, (float) pos.y, (float) pos.z).color(colorX.getRed(), colorX.getGreen(), colorX.getBlue(), lineAlpha).endVertex();
-		buffer.vertex(matrixPos, (float) pos.x + m.radius, (float) pos.y, (float) pos.z).color(colorX.getRed(), colorX.getGreen(), colorX.getBlue(), lineAlpha).endVertex();
-		buffer.vertex(matrixPos, (float) pos.x, (float) pos.y - m.radius, (float) pos.z).color(colorY.getRed(), colorY.getGreen(), colorY.getBlue(), lineAlpha).endVertex();
-		buffer.vertex(matrixPos, (float) pos.x, (float) pos.y + m.radius, (float) pos.z).color(colorY.getRed(), colorY.getGreen(), colorY.getBlue(), lineAlpha).endVertex();
-		buffer.vertex(matrixPos, (float) pos.x, (float) pos.y, (float) pos.z - m.radius).color(colorZ.getRed(), colorZ.getGreen(), colorZ.getBlue(), lineAlpha).endVertex();
-		buffer.vertex(matrixPos, (float) pos.x, (float) pos.y, (float) pos.z + m.radius).color(colorZ.getRed(), colorZ.getGreen(), colorZ.getBlue(), lineAlpha).endVertex();
+		buffer.addVertex(matrixPos, (float) pos.x - m.radius, (float) pos.y, (float) pos.z).setColor(colorX.getRed(), colorX.getGreen(), colorX.getBlue(), lineAlpha);
+		buffer.addVertex(matrixPos, (float) pos.x + m.radius, (float) pos.y, (float) pos.z).setColor(colorX.getRed(), colorX.getGreen(), colorX.getBlue(), lineAlpha);
+		buffer.addVertex(matrixPos, (float) pos.x, (float) pos.y - m.radius, (float) pos.z).setColor(colorY.getRed(), colorY.getGreen(), colorY.getBlue(), lineAlpha);
+		buffer.addVertex(matrixPos, (float) pos.x, (float) pos.y + m.radius, (float) pos.z).setColor(colorY.getRed(), colorY.getGreen(), colorY.getBlue(), lineAlpha);
+		buffer.addVertex(matrixPos, (float) pos.x, (float) pos.y, (float) pos.z - m.radius).setColor(colorZ.getRed(), colorZ.getGreen(), colorZ.getBlue(), lineAlpha);
+		buffer.addVertex(matrixPos, (float) pos.x, (float) pos.y, (float) pos.z + m.radius).setColor(colorZ.getRed(), colorZ.getGreen(), colorZ.getBlue(), lineAlpha);
 
 		RenderHandler.endLines(renderTypeBuffer);
 	}

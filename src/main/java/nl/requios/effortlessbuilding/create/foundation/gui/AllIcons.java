@@ -3,6 +3,9 @@ package nl.requios.effortlessbuilding.create.foundation.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.createmod.catnip.gui.element.DelegatedStencilElement;
+import net.createmod.catnip.gui.element.ScreenElement;
+import net.createmod.catnip.theme.Color;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -12,9 +15,6 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import nl.requios.effortlessbuilding.create.Create;
-import nl.requios.effortlessbuilding.create.foundation.gui.element.DelegatedStencilElement;
-import nl.requios.effortlessbuilding.create.foundation.gui.element.ScreenElement;
-import nl.requios.effortlessbuilding.create.foundation.utility.Color;
 import org.joml.Matrix4f;
 
 public class AllIcons implements ScreenElement {
@@ -202,11 +202,10 @@ public class AllIcons implements ScreenElement {
 
 	@OnlyIn(Dist.CLIENT)
 	private void vertex(VertexConsumer builder, Matrix4f matrix, Vec3 vec, Color rgb, float u, float v, int light) {
-		builder.vertex(matrix, (float) vec.x, (float) vec.y, (float) vec.z)
-			.color(rgb.getRed(), rgb.getGreen(), rgb.getBlue(), 255)
-			.uv(u, v)
-			.uv2(light)
-			.endVertex();
+		builder.addVertex(matrix, (float) vec.x, (float) vec.y, (float) vec.z)
+				.setColor(rgb.getRed(), rgb.getGreen(), rgb.getBlue(), 255)
+				.setUv(u, v)
+				.setLight(light);
 	}
 
 	@OnlyIn(Dist.CLIENT)

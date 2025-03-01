@@ -1,10 +1,10 @@
 package nl.requios.effortlessbuilding.buildmode.buildmodes;
 
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import nl.requios.effortlessbuilding.attachment.AttachmentHandler;
 import nl.requios.effortlessbuilding.buildmode.ModeOptions;
 import nl.requios.effortlessbuilding.buildmode.ThreeClicksBuildMode;
-import nl.requios.effortlessbuilding.attachment.AttachmentHandler;
 
 import java.util.ArrayList;
 import java.util.List;

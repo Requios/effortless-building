@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "x#x",
+        "#O#",
+        "x#x"
+    ],
+    "key": {
+        "O": {
+            "item": "minecraft:leather"
+        },
+		"#": {
+            "item": "minecraft:diamond"
+        },
+		"x": {
+            "item": "minecraft:amethyst_shard"
+        }
+    },
+    "result": {
+        "count": 1,
+        "id": "effortlessbuilding:diamond_randomizer_bag"
+    }
+}

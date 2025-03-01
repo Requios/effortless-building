@@ -1,17 +1,15 @@
 package nl.requios.effortlessbuilding.gui.buildmodifier;
 
-import com.mojang.blaze3d.platform.Window;
-import com.mojang.blaze3d.systems.RenderSystem;
+import net.createmod.catnip.gui.TickableGuiEventListener;
+import net.createmod.catnip.gui.UIRenderHelper;
+import net.createmod.catnip.theme.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.network.chat.Component;
-import nl.requios.effortlessbuilding.create.foundation.gui.TickableGuiEventListener;
-import nl.requios.effortlessbuilding.create.foundation.gui.UIRenderHelper;
 import nl.requios.effortlessbuilding.create.foundation.gui.widget.AbstractSimiWidget;
-import nl.requios.effortlessbuilding.create.foundation.utility.Color;
 import nl.requios.effortlessbuilding.create.foundation.utility.Components;
 
 import java.util.ArrayList;
@@ -23,7 +21,7 @@ public class ModifiersScreenList extends ObjectSelectionList<ModifiersScreenList
 
     public ModifiersScreenList(Minecraft mc, int width, int height, int y1, int itemHeight) {
         super(mc, width, height, y1, itemHeight);
-        setRenderBackground(false);
+//        setRenderBackground(false);
         headerHeight = 3;
     }
 
@@ -36,11 +34,6 @@ public class ModifiersScreenList extends ObjectSelectionList<ModifiersScreenList
         UIRenderHelper.angledGradient(guiGraphics, 180, getX() + getWidth(), getY() + height / 2, height, 5, c, Color.TRANSPARENT_BLACK);
 
         super.renderWidget(guiGraphics, mouseX, mouseY, partialTicks);
-    }
-
-    @Override
-    protected void renderList(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        super.renderList(guiGraphics, mouseX, mouseY, partialTick);
     }
     
     public void renderWindowForeground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {

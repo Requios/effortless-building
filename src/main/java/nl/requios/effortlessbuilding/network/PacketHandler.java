@@ -1,7 +1,8 @@
 package nl.requios.effortlessbuilding.network;
 
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
-import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import nl.requios.effortlessbuilding.EffortlessBuilding;
 import nl.requios.effortlessbuilding.network.message.IsQuickReplacingPacket;
 import nl.requios.effortlessbuilding.network.message.IsUsingBuildModePacket;
@@ -15,29 +16,24 @@ import nl.requios.effortlessbuilding.network.message.TranslatedLogPacket;
 
 public class PacketHandler {
 
-	public static void setupPackets(final RegisterPayloadHandlerEvent event) {
-		final IPayloadRegistrar registrar = event.registrar(EffortlessBuilding.MODID);
+	public static void setupPackets(final RegisterPayloadHandlersEvent event) {
+		final PayloadRegistrar registrar = event.registrar(EffortlessBuilding.MODID);
 
-		registrar.play(IsUsingBuildModePacket.ID, IsUsingBuildModePacket::new, handler -> handler
-				.server(IsUsingBuildModePacket.Handler::handle));
-		registrar.play(IsQuickReplacingPacket.ID, IsQuickReplacingPacket::new, handler -> handler
-				.server(IsQuickReplacingPacket.Handler::handle));
-		registrar.play(ServerPlaceBlocksPacket.ID, ServerPlaceBlocksPacket::new, handler -> handler
-				.server(ServerPlaceBlocksPacket.Handler::handle));
-		registrar.play(ServerBreakBlocksPacket.ID, ServerBreakBlocksPacket::new, handler -> handler
-				.server(ServerBreakBlocksPacket.Handler::handle));
-		registrar.play(PerformUndoPacket.ID, PerformUndoPacket::new, handler -> handler
-				.server(PerformUndoPacket.Handler::handle));
-		registrar.play(PerformRedoPacket.ID, PerformRedoPacket::new, handler -> handler
-				.server(PerformRedoPacket.Handler::handle));
+		registrar.playToServer(IsUsingBuildModePacket.ID, IsUsingBuildModePacket.CODEC, IsUsingBuildModePacket.Handler::handle);
+		registrar.playToServer(IsQuickReplacingPacket.ID, IsQuickReplacingPacket.CODEC, IsQuickReplacingPacket.Handler::handle);
+		registrar.playToServer(ServerPlaceBlocksPacket.ID, ServerPlaceBlocksPacket.CODEC, ServerPlaceBlocksPacket.Handler::handle);
+		registrar.playToServer(ServerBreakBlocksPacket.ID, ServerBreakBlocksPacket.CODEC, ServerBreakBlocksPacket.Handler::handle);
+		registrar.playToServer(PerformUndoPacket.ID, PerformUndoPacket.CODEC, PerformUndoPacket.Handler::handle);
+		registrar.playToServer(PerformRedoPacket.ID, PerformRedoPacket.CODEC, PerformRedoPacket.Handler::handle);
 
-		registrar.play(ModifierSettingsPacket.ID, ModifierSettingsPacket::new, handler -> handler
-				.server(ModifierSettingsPacket.ServerHandler::handleServer)
-				.server(ModifierSettingsPacket.ClientHandler::handleClient));
+		registrar.playBidirectional(ModifierSettingsPacket.ID, ModifierSettingsPacket.CODEC,
+				new DirectionalPayloadHandler<>(
+						ModifierSettingsPacket.ClientHandler::handleClient,
+						ModifierSettingsPacket.ServerHandler::handleServer
+				)
+		);
 
-		registrar.play(PowerLevelPacket.ID, PowerLevelPacket::new, handler -> handler
-				.client(PowerLevelPacket.Handler::handle));
-		registrar.play(TranslatedLogPacket.ID, TranslatedLogPacket::new, handler -> handler
-				.client(TranslatedLogPacket.Handler::handle));
+		registrar.playToClient(PowerLevelPacket.ID, PowerLevelPacket.CODEC, PowerLevelPacket.Handler::handle);
+		registrar.playToClient(TranslatedLogPacket.ID, TranslatedLogPacket.CODEC, TranslatedLogPacket.Handler::handle);
 	}
 }

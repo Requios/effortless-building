@@ -21,7 +21,7 @@ public class SurvivalHelper {
 
 		if (player.isCreative()) return true;
 
-		return EventHooks.doPlayerHarvestCheck(player, blockState, true);
+		return EventHooks.doPlayerHarvestCheck(player, blockState, world, pos);
 	}
 
 	public static boolean doesBecomeDoubleSlab(Player player, BlockPos pos) {

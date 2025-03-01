@@ -3,9 +3,9 @@ package nl.requios.effortlessbuilding.buildmode.buildmodes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+import nl.requios.effortlessbuilding.attachment.AttachmentHandler;
 import nl.requios.effortlessbuilding.buildmode.BuildModes;
 import nl.requios.effortlessbuilding.buildmode.TwoClicksBuildMode;
-import nl.requios.effortlessbuilding.attachment.AttachmentHandler;
 
 import java.util.ArrayList;
 import java.util.List;

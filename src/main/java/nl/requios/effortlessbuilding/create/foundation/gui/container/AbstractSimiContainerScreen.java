@@ -1,6 +1,8 @@
 package nl.requios.effortlessbuilding.create.foundation.gui.container;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.gui.TickableGuiEventListener;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
@@ -15,7 +17,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import nl.requios.effortlessbuilding.create.foundation.gui.TickableGuiEventListener;
 import nl.requios.effortlessbuilding.create.foundation.gui.widget.AbstractSimiWidget;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -92,7 +93,7 @@ public abstract class AbstractSimiContainerScreen<T extends AbstractContainerMen
 
 	@Override
 	public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-		partialTicks = minecraft.getFrameTime();
+		partialTicks = AnimationTickHolder.getPartialTicksUI();
 
 		super.render(graphics, mouseX, mouseY, partialTicks);
 

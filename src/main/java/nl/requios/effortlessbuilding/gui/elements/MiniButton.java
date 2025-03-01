@@ -1,7 +1,7 @@
 package nl.requios.effortlessbuilding.gui.elements;
 
+import net.createmod.catnip.gui.widget.ElementWidget;
 import net.minecraft.network.chat.Component;
-import nl.requios.effortlessbuilding.create.foundation.gui.widget.ElementWidget;
 
 public class MiniButton extends ElementWidget {
     public MiniButton(int x, int y) {

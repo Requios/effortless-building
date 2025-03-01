@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "x#x",
+        "#O#",
+        "x#x"
+    ],
+    "key": {
+        "O": {
+            "item": "minecraft:leather"
+        },
+		"#": {
+            "item": "minecraft:gold_ingot"
+        },
+		"x": {
+			"item": "minecraft:quartz"
+		}
+    },
+    "result": {
+      "count": 1,
+      "id": "effortlessbuilding:golden_randomizer_bag"
+    }
+}

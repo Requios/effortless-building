@@ -1,10 +1,10 @@
 package nl.requios.effortlessbuilding.utilities;
 
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import nl.requios.effortlessbuilding.EffortlessBuilding;
 
 import java.util.Map;

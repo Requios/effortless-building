@@ -17,7 +17,6 @@ import nl.requios.effortlessbuilding.attachment.AttachmentHandler;
 import nl.requios.effortlessbuilding.attachment.PowerLevel;
 import nl.requios.effortlessbuilding.create.foundation.item.TooltipHelper;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
@@ -51,7 +50,7 @@ public class PowerLevelItem extends Item {
                 if (!world.isClientSide) {
                     EffortlessBuilding.log(player, "Already reached maximum power level!");
 
-                    world.playSound((Player) null, player.blockPosition(), SoundEvents.ARMOR_EQUIP_LEATHER, SoundSource.PLAYERS, 1f, 1f);
+                    world.playSound((Player) null, player.blockPosition(), SoundEvents.ARMOR_EQUIP_LEATHER.value(), SoundSource.PLAYERS, 1f, 1f);
                 }
 
                 return InteractionResultHolder.fail(player.getItemInHand(hand));
@@ -62,7 +61,7 @@ public class PowerLevelItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag isAdvanced) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag tooltipFlag) {
         tooltip.addAll(TooltipHelper.cutTextComponent(Component.translatable(getDescriptionId() + ".desc"), ChatFormatting.GRAY, ChatFormatting.GRAY));
         tooltip.addAll(TooltipHelper.cutTextComponent(Component.translatable("key.effortlessbuilding.upgrade_power_level"), ChatFormatting.BLUE, ChatFormatting.BLUE));
     }

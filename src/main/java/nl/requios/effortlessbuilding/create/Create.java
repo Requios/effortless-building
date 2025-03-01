@@ -11,6 +11,6 @@ public class Create {
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public static ResourceLocation asResource(String path) {
-        return new ResourceLocation(EffortlessBuilding.MODID, path);
+        return ResourceLocation.fromNamespaceAndPath(EffortlessBuilding.MODID, path);
     }
 }

@@ -1,12 +1,12 @@
 package nl.requios.effortlessbuilding.create.events;
 
+import net.createmod.catnip.data.WorldAttached;
 import net.minecraft.world.level.LevelAccessor;
-import net.neoforged.neoforge.event.level.LevelEvent;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
-import nl.requios.effortlessbuilding.create.foundation.utility.WorldAttached;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.level.LevelEvent;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public class CommonEvents {
 
 	@SubscribeEvent

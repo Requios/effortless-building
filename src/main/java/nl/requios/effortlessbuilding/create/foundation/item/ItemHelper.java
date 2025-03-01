@@ -1,9 +1,9 @@
 package nl.requios.effortlessbuilding.create.foundation.item;
 
-import net.neoforged.neoforge.items.ItemHandlerHelper;
-import nl.requios.effortlessbuilding.create.foundation.utility.Pair;
+import net.createmod.catnip.data.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
@@ -40,9 +40,9 @@ public class ItemHelper {
 
 	public static void addToList(ItemStack stack, List<ItemStack> stacks) {
 		for (ItemStack s : stacks) {
-			if (!ItemHandlerHelper.canItemStacksStack(stack, s))
+			if (!ItemStack.isSameItemSameComponents(stack, s))
 				continue;
-			int transferred = Math.min(s.getMaxStackSize() - s.getCount(), stack.getCount());
+			int transferred = Math.min(s.getOrDefault(DataComponents.MAX_STACK_SIZE, 64) - s.getCount(), stack.getCount());
 			s.grow(transferred);
 			stack.shrink(transferred);
 		}
@@ -199,7 +199,7 @@ public class ItemHelper {
 
 			if (!extracting.isEmpty() && !hasEnoughItems && potentialOtherMatch) {
 				ItemStack blackListed = extracting.copy();
-				test = test.and(i -> !ItemHandlerHelper.canItemStacksStack(i, blackListed));
+				test = test.and(i -> !ItemStack.isSameItemSameComponents(i, blackListed));
 				continue;
 			}
 
@@ -254,7 +254,7 @@ public class ItemHelper {
 	}
 
 	public static boolean canItemStackAmountsStack(ItemStack a, ItemStack b) {
-		return ItemHandlerHelper.canItemStacksStack(a, b) && a.getCount() + b.getCount() <= a.getMaxStackSize();
+		return ItemStack.isSameItemSameComponents(a, b) && a.getCount() + b.getCount() <= a.getOrDefault(DataComponents.MAX_STACK_SIZE, 64);
 	}
 
 	public static ItemStack findFirstMatch(IItemHandler inv, Predicate<ItemStack> test) {

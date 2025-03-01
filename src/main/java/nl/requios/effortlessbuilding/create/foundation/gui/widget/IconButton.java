@@ -1,10 +1,10 @@
 package nl.requios.effortlessbuilding.create.foundation.gui.widget;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.createmod.catnip.gui.element.ScreenElement;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import nl.requios.effortlessbuilding.create.foundation.gui.AllGuiTextures;
-import nl.requios.effortlessbuilding.create.foundation.gui.element.ScreenElement;
 
 public class IconButton extends AbstractSimiWidget {
 
