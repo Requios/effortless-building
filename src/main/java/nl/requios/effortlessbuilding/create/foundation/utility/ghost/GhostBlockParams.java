@@ -1,9 +1,9 @@
 package nl.requios.effortlessbuilding.create.foundation.utility.ghost;
 
+import net.createmod.catnip.theme.Color;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import nl.requios.effortlessbuilding.create.foundation.utility.Color;
 
 import java.util.function.Supplier;
 

@@ -1,9 +1,10 @@
 package nl.requios.effortlessbuilding.create.foundation.utility.ghost;
 
-import com.jozufozu.flywheel.core.model.ModelUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import nl.requios.effortlessbuilding.create.foundation.render.SuperRenderTypeBuffer;
+import net.createmod.catnip.render.SuperRenderTypeBuffer;
+import net.createmod.catnip.theme.Color;
+import net.createmod.ponder.render.VirtualRenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.LightTexture;
@@ -19,7 +20,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.data.ModelData;
-import nl.requios.effortlessbuilding.create.foundation.utility.Color;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -56,10 +56,10 @@ public abstract class GhostBlockRenderer {
 			ms.pushPose();
 			ms.translate(pos.getX(), pos.getY(), pos.getZ());
 
-			for (RenderType layer : model.getRenderTypes(state, RandomSource.create(42L), ModelUtil.VIRTUAL_DATA)) {
+			for (RenderType layer : model.getRenderTypes(state, RandomSource.create(42L), VirtualRenderHelper.VIRTUAL_DATA)) {
 				VertexConsumer vb = buffer.getEarlyBuffer(layer);
 				renderer.renderModel(ms.last(), vb, state, model, 1f, 1f, 1f, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY,
-					ModelUtil.VIRTUAL_DATA, layer);
+						VirtualRenderHelper.VIRTUAL_DATA, layer);
 			}
 
 			ms.popPose();
@@ -92,8 +92,7 @@ public abstract class GhostBlockRenderer {
 			ms.translate(-.5, -.5, -.5);
 
 			renderModel(ms.last(), vb, state, model, color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), alpha,
-				LevelRenderer.getLightColor(mc.level, pos), OverlayTexture.NO_OVERLAY,
-				ModelUtil.VIRTUAL_DATA, layer);
+				LevelRenderer.getLightColor(mc.level, pos), OverlayTexture.NO_OVERLAY, VirtualRenderHelper.VIRTUAL_DATA, layer);
 
 			ms.popPose();
 		}

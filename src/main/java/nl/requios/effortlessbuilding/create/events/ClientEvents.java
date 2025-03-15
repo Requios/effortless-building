@@ -2,6 +2,7 @@ package nl.requios.effortlessbuilding.create.events;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.createmod.catnip.outliner.Outliner;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.level.LevelAccessor;
@@ -16,10 +17,11 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import nl.requios.effortlessbuilding.create.Create;
 import nl.requios.effortlessbuilding.create.CreateClient;
-import nl.requios.effortlessbuilding.create.foundation.render.SuperRenderTypeBuffer;
 import nl.requios.effortlessbuilding.create.foundation.utility.AnimationTickHolder;
 import nl.requios.effortlessbuilding.create.foundation.utility.CameraAngleAnimationService;
 import nl.requios.effortlessbuilding.create.foundation.utility.worldWrappers.WrappedClientWorld;
+import net.createmod.catnip.render.DefaultSuperRenderTypeBuffer;
+import net.createmod.catnip.render.SuperRenderTypeBuffer;
 
 @EventBusSubscriber(Dist.CLIENT)
 public class ClientEvents {
@@ -34,7 +36,7 @@ public class ClientEvents {
 		AnimationTickHolder.tick();
 
 		CreateClient.GHOST_BLOCKS.tickGhosts();
-		CreateClient.OUTLINER.tickOutlines();
+//		Outliner.getInstance().tickOutlines();
 		CameraAngleAnimationService.tick();
 	}
 
@@ -67,11 +69,11 @@ public class ClientEvents {
 		PoseStack ms = event.getPoseStack();
 		ms.pushPose();
 		ms.translate(-cameraPos.x(), -cameraPos.y(), -cameraPos.z());
-		SuperRenderTypeBuffer buffer = SuperRenderTypeBuffer.getInstance();
+		SuperRenderTypeBuffer buffer = DefaultSuperRenderTypeBuffer.getInstance();
 
 		CreateClient.GHOST_BLOCKS.renderAll(ms, buffer);
 
-		CreateClient.OUTLINER.renderOutlines(ms, buffer, pt);
+//		Outliner.getInstance().renderOutlines(ms, buffer, pt);
 		buffer.draw();
 		RenderSystem.enableCull();
 

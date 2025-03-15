@@ -6,14 +6,15 @@ showAsResourcePack=false
 
 [[mods]]
     modId="effortlessbuilding"
+    # The Implementation-Version property in the jar's MANIFEST.MF file will be used as the mod version at runtime
     version="${file.jarVersion}"
-    displayName="Effortless Building"
+    displayName="${mod_name}"
     displayURL="https://minecraft.curseforge.com/projects/effortless-building"
     logoFile="logo.png"
-    credits=""
-    authors="Requios"
+    #credits=""
+    authors="${mod_author}"
     description='''
-Makes building easier by providing tools like mirrors, arrays, build modes and a block randomizer. For survival and creative mode.
+${mod_description}
     '''
 
 [[dependencies.effortlessbuilding]]
@@ -33,6 +34,13 @@ Makes building easier by providing tools like mirrors, arrays, build modes and a
 [[dependencies.effortlessbuilding]]
     modId="flywheel"
     mandatory=true
-    versionRange="[0.6.10,0.7)"
+    versionRange="[1.0.0,2.0)"
     ordering="AFTER"
     side="CLIENT"
+
+[[dependencies.effortlessbuilding]]
+    modId = "ponder"
+    mandatory = true
+    versionRange = "[0.8,)"
+    ordering = "AFTER"
+    side = "BOTH"

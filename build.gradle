@@ -13,90 +13,88 @@ buildscript {
 }
 
 plugins {
-    id 'com.matthewprenger.cursegradle' version "${cursegradle_version}"
+    id "idea"
+    id "eclipse"
+    id "maven-publish"
+    id "net.neoforged.moddev.legacyforge" version "2.0.74"
+    id "org.jetbrains.gradle.plugin.idea-ext" version "1.1.8" // https://github.com/JetBrains/gradle-idea-ext-plugin
 }
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'org.parchmentmc.librarian.forgegradle'
-apply plugin: 'eclipse'
-apply plugin: 'maven-publish'
-apply plugin: 'org.spongepowered.mixin'
 
-jarJar.enable()
-
-boolean flywheelInWorkspace = findProject(':Flywheel') != null
+apply from: "./gradle/java.gradle"
+apply from: "gradle/property_loader.gradle"
 
 ext.buildNumber = System.getenv('BUILD_NUMBER')
 
-version = mod_version
 group = 'nl.requios.effortlessbuilding'
 base {
     archivesName = "effortlessbuilding-${artifact_minecraft_version}"
+    version = mod_version
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + ' (' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 
-minecraft {
-    mappings channel: 'parchment', version: "${parchment_version}-${minecraft_version}"
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+legacyForge {
+    version = "$minecraft_version-$forge_version"
+
+    if (file('src/main/resources/META-INF/accesstransformer.cfg').exists()) {
+        accessTransformers.from "src/main/resources/META-INF/accesstransformer.cfg"
+    }
+
+    parchment {
+        minecraftVersion = minecraft_version
+        mappingsVersion = parchment_version
+    }
 
     runs {
-        client {
-            workingDirectory project.file('run')
-            arg '-mixin.config=flywheel.mixins.json'
+        // applies to all the run configs below
+        configureEach {
+            systemProperty 'forge.logging.markers', ''
+            systemProperty 'forge.logging.console.level', 'info'
+            jvmArguments = ["-XX:+IgnoreUnrecognizedVMOptions", "-XX:+AllowEnhancedClassRedefinition"]
+            //jvmArgs("-XX:-OmitStackTraceInFastThrow") // uncomment when you get exceptions with null messages etc
             //jvmArgs '-XX:+UnlockCommercialFeatures' // uncomment for profiling
-            property 'forge.logging.console.level', 'info'
 
-            mods {
-                effortlessbuilding {
-                    source sourceSets.main
-                }
+            systemProperty 'mixin.debug.export', 'true'
+            systemProperty 'mixin.debug.verbose', 'true'
 
-                if (flywheelInWorkspace) {
-                    flywheel {
-                        source project(":Flywheel").sourceSets.main
-                    }
-                }
-            }
+            programArgument '-mixin.config=ponder.mixins.json'
+        }
+
+        client {
+            client()
+
+            gameDirectory = project.file('run')
         }
 
         server {
-            workingDirectory project.file('run/server')
-            property 'forge.logging.console.level', 'info'
-            mods {
-                effortlessbuilding {
-                    source sourceSets.main
-                }
-            }
+            server()
+
+            gameDirectory = project.file('run/server')
         }
 
         data {
-            workingDirectory project.file('run')
-            property 'forge.logging.markers', 'REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.console.level', 'debug'
-            args '--mod', 'effortlessbuilding', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources')
-            mods {
-                effortlessbuilding {
-                    source sourceSets.main
-                }
+            data()
 
-                if (flywheelInWorkspace) {
-                    flywheel {
-                        source project(":Flywheel").sourceSets.main
-                    }
-                }
-            }
+            gameDirectory = project.file('run')
+            systemProperty 'forge.logging.markers', 'REGISTRIES,REGISTRYDUMP'
+            systemProperty 'forge.logging.console.level', 'debug'
+            programArguments.addAll("--mod", mod_id as String, "--all", "--output", file("src/generated/resources/").getAbsolutePath(), "--existing", file("src/main/resources").getAbsolutePath())
+        }
+
+        gameTestServer {
+            type = "gameTestServer"
+
+            gameDirectory = project.file('run/gametest')
+            // setForceExit false <- FIXME 1.20
         }
     }
 }
 
 repositories {
-    maven {
-        // location of the maven for Registrate and Flywheel
-        name = 'tterrag maven'
-        url = 'https://maven.tterrag.com'
-    }
+    maven { url = "https://maven.createmod.net" } // Ponder, Flywheel
+    maven { url = "https://maven.tterrag.com" } // Registrate
 
     maven {
         url = 'https://www.cursemaven.com'
@@ -119,17 +117,18 @@ repositories {
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    jarJar("net.createmod.ponder:Ponder-Forge-${minecraft_version}:${ponder_version}")
 
-    jarJar("com.jozufozu.flywheel:flywheel-forge-${flywheel_minecraft_version}:${flywheel_version}") {
-        jarJar.ranged(it, '[0.6.11,)')
-    }
+    modCompileOnly("dev.engine-room.flywheel:flywheel-forge-api-${flywheel_minecraft_version}:${flywheel_version}")
+    modRuntimeOnly(jarJar("dev.engine-room.flywheel:flywheel-forge-${flywheel_minecraft_version}:${flywheel_version}") {
+        version {
+            strictly "[1.0,2.0)"
+            prefer flywheel_version
+        }
+    })
+    modRuntimeOnly("dev.engine-room.vanillin:vanillin-forge-${flywheel_minecraft_version}:${vanillin_version}")
 
-    if (flywheelInWorkspace) {
-        implementation project(':Flywheel')
-    } else {
-        implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-${flywheel_minecraft_version}:${flywheel_version}")
-    }
+    modImplementation("net.createmod.ponder:Ponder-Forge-${minecraft_version}:${ponder_version}")
 
     // Prevent Mixin annotation processor from getting into IntelliJ's annotation processor settings
     // This allows 'Settings > Build, Execution, and Deployment > Build Tools > Gradle > Build and run using' set to IntelliJ to work correctly
@@ -144,6 +143,13 @@ sourceSets.main.resources {
 }
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}
+
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
 }
 
 compileJava {
@@ -179,24 +185,17 @@ java {
     withJavadocJar()
 }
 
-jar.finalizedBy('reobfJar')
-tasks.jarJar.finalizedBy('reobfJarJar')
+tasks.build.dependsOn tasks.jarJar
 
-publishing {
+project.publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifactId = base.archivesName.get()
-
+            artifactId base.archivesName.get()
             from components.java
-            fg.component(it)
-            jarJar.component(it)
-        }
-    }
 
-    repositories {
-        if (project.hasProperty('mavendir')) {
-            maven { url mavendir }
+            artifact(tasks.jar) {
+                classifier = "all"
+            }
         }
     }
 }
-
