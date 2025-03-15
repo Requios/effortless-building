@@ -8,13 +8,13 @@ showAsResourcePack=false
     modId="effortlessbuilding"
     # The Implementation-Version property in the jar's MANIFEST.MF file will be used as the mod version at runtime
     version="${file.jarVersion}"
-    displayName="${mod_name}"
+    displayName="Effortless Building"
     displayURL="https://minecraft.curseforge.com/projects/effortless-building"
     logoFile="logo.png"
     #credits=""
-    authors="${mod_author}"
+    authors="Requios"
     description='''
-${mod_description}
+Makes building easier by providing tools like mirrors, arrays, build modes and a block randomizer. For survival and creative mode.
     '''
 
 [[dependencies.effortlessbuilding]]
