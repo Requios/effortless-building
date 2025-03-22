@@ -19,23 +19,27 @@ Makes building easier by providing tools like mirrors, arrays, build modes and a
 [[dependencies.effortlessbuilding]]
     modId="neoforge"
     type="required"
-    versionRange="[21.1.1,)"
+    versionRange="[21.1.129,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.effortlessbuilding]]
     modId="minecraft"
     type="required"
-    versionRange="[1.21.1,1.21.2)"
+    versionRange="[1.21.1]"
     ordering="NONE"
     side="BOTH"
 
-#[[dependencies.effortlessbuilding]]
-#    modId="flywheel"
-#    type="required"
-#    versionRange="[0.6.10,0.7)"
-#    ordering="AFTER"
-#    side="CLIENT"
+[[dependencies.effortlessbuilding]]
+    modId="flywheel"
+    mandatory=true
+    versionRange="[1.0.0,2.0)"
+    ordering="AFTER"
+    side="CLIENT"
 
-#[[accessTransformers]]
-#    file="META-INF/accesstransformer.cfg"
+[[dependencies.effortlessbuilding]]
+    modId = "ponder"
+    mandatory = true
+    versionRange = "[0.8,)"
+    ordering = "AFTER"
+    side = "BOTH"
