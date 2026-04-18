@@ -27,10 +27,9 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.network.NetworkHooks;
-import nl.requios.effortlessbuilding.EffortlessBuilding;
 import nl.requios.effortlessbuilding.systems.ServerBuildState;
 import nl.requios.effortlessbuilding.utilities.BlockEntry;
-import nl.requios.effortlessbuilding.utilities.BlockSet;
+import nl.requios.effortlessbuilding.utilities.BlockPlacerHelper;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -112,6 +111,21 @@ public abstract class AbstractRandomizerBagItem extends Item {
         rand.setSeed(currentSeed);
     }
 
+    /**
+     * Consume a specified amount of an item from the bag inventory.
+     */
+    protected void consumeFromBag(IItemHandler bagInventory, Item item, int amount) {
+        int remaining = amount;
+        for (int i = 0; i < bagInventory.getSlots() && remaining > 0; i++) {
+            ItemStack stack = bagInventory.getStackInSlot(i);
+            if (!stack.isEmpty() && stack.getItem() == item) {
+                int taken = Math.min(remaining, stack.getCount());
+                bagInventory.extractItem(i, taken, false);
+                remaining -= taken;
+            }
+        }
+    }
+
     @Override
     public InteractionResult useOn(UseOnContext ctx) {
         Player player = ctx.getPlayer();
@@ -145,6 +159,9 @@ public abstract class AbstractRandomizerBagItem extends Item {
             ItemStack toPlace = pickRandomStack(bagInventory);
             if (toPlace.isEmpty()) return InteractionResult.FAIL;
 
+            //Check if bag has enough items
+            if (!player.isCreative() && toPlace.getCount() <= 0) return InteractionResult.FAIL;
+
             if (!world.getBlockState(pos).getBlock().canBeReplaced(world.getBlockState(pos), Fluids.EMPTY)) {
                 pos = pos.relative(facing);
             }
@@ -153,8 +170,13 @@ public abstract class AbstractRandomizerBagItem extends Item {
             BlockState blockState = Block.byItem(toPlace.getItem()).getStateForPlacement(blockItemUseContext);
 
             var blockEntry = new BlockEntry(pos, blockState, toPlace.getItem());
-            var blockSet = new BlockSet(List.of(blockEntry), pos, pos, false);
-            EffortlessBuilding.SERVER_BLOCK_PLACER.applyBlockSet(player, blockSet);
+            
+            //Place block directly and consume from bag instead of player inventory
+            if (BlockPlacerHelper.placeBlock(player, blockEntry)) {
+                if (!player.isCreative()) {
+                    consumeFromBag(bagInventory, toPlace.getItem(), 1);
+                }
+            }
         }
         return InteractionResult.SUCCESS;
     }
@@ -190,12 +212,48 @@ public abstract class AbstractRandomizerBagItem extends Item {
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        return new ItemHandlerCapabilityProvider(getInventorySize());
+        return new ItemHandlerCapabilityProvider(getInventorySize(), stack);
+    }
+
+    @Nullable
+    @Override
+    public CompoundTag getShareTag(ItemStack stack) {
+        CompoundTag baseTag = stack.getTag();
+        CompoundTag capTag = serializeBagInventory(stack);
+        CompoundTag combined = baseTag != null ? baseTag.copy() : new CompoundTag();
+        if (capTag != null) {
+            combined.put("BagInventory", capTag);
+        }
+        return combined;
+    }
+
+    @Override
+    public void readShareTag(ItemStack stack, @Nullable CompoundTag nbt) {
+        if (nbt != null && nbt.contains("BagInventory")) {
+            CompoundTag capTag = nbt.getCompound("BagInventory");
+            nbt.remove("BagInventory");
+            stack.setTag(nbt.isEmpty() ? null : nbt);
+            // Apply capability data
+            IItemHandler handler = getBagInventory(stack);
+            if (handler instanceof net.minecraftforge.items.ItemStackHandler ish) {
+                ish.deserializeNBT(capTag);
+            }
+        } else {
+            super.readShareTag(stack, nbt);
+        }
+    }
+
+    @Nullable
+    private CompoundTag serializeBagInventory(ItemStack stack) {
+        IItemHandler handler = getBagInventory(stack);
+        if (handler instanceof net.minecraftforge.items.ItemStackHandler ish) {
+            return ish.serializeNBT();
+        }
+        return null;
     }
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.literal(ChatFormatting.YELLOW + "*Experimental* Only works in singleplayer"));
         tooltip.add(Component.literal(ChatFormatting.BLUE + "Rightclick" + ChatFormatting.GRAY + " to place a random block"));
         tooltip.add(Component.literal(ChatFormatting.BLUE + "Sneak + rightclick" + ChatFormatting.GRAY + " to open inventory"));
     }

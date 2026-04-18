@@ -5,7 +5,10 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.items.IItemHandler;
 import nl.requios.effortlessbuilding.EffortlessBuilding;
+import nl.requios.effortlessbuilding.item.AbstractRandomizerBagItem;
 
 import java.util.Map;
 
@@ -34,6 +37,12 @@ public class InventoryHelper {
 	}
 
 	public static int findTotalItemsInInventory(Player player, Item item) {
+		// If holding a bag, only count items inside that bag
+		ItemStack heldItem = player.getMainHandItem();
+		if (!heldItem.isEmpty() && heldItem.getItem() instanceof AbstractRandomizerBagItem) {
+			return countItemInBag(heldItem, item);
+		}
+
 		int total = 0;
 		for (ItemStack invStack : player.getInventory().items) {
 			if (!invStack.isEmpty() && invStack.getItem().equals(item)) {
@@ -52,6 +61,16 @@ public class InventoryHelper {
 
 	public static void removeFromInventory(Player player, Item item, int amount) {
 		if (player.isCreative()) return;
+
+		// If holding a bag, only consume from that bag
+		ItemStack heldItem = player.getMainHandItem();
+		if (!heldItem.isEmpty() && heldItem.getItem() instanceof AbstractRandomizerBagItem) {
+			int removed = removeFromBag(heldItem, item, amount);
+			if (removed != amount) {
+				EffortlessBuilding.logError(player.getDisplayName().getString() + " tried to remove " + amount + " " + item + " from bag but only removed " + removed);
+			}
+			return;
+		}
 
 		//From BlockHelper.findAndRemoveInInventory
 		int amountFound = 0;
@@ -90,5 +109,33 @@ public class InventoryHelper {
 		if (amountFound != amount) {
 			EffortlessBuilding.logError(player.getDisplayName().getString() + " tried to remove " + amount + " " + item + " from inventory but only removed " + amountFound);
 		}
+	}
+
+	private static int countItemInBag(ItemStack bag, Item item) {
+		IItemHandler handler = bag.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
+		if (handler == null) return 0;
+		int total = 0;
+		for (int i = 0; i < handler.getSlots(); i++) {
+			ItemStack stack = handler.getStackInSlot(i);
+			if (!stack.isEmpty() && stack.getItem() == item) {
+				total += stack.getCount();
+			}
+		}
+		return total;
+	}
+
+	private static int removeFromBag(ItemStack bag, Item item, int amount) {
+		IItemHandler handler = bag.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
+		if (handler == null) return 0;
+		int removed = 0;
+		for (int i = 0; i < handler.getSlots() && removed < amount; i++) {
+			ItemStack stack = handler.getStackInSlot(i);
+			if (!stack.isEmpty() && stack.getItem() == item) {
+				int taken = Math.min(amount - removed, stack.getCount());
+				handler.extractItem(i, taken, false);
+				removed += taken;
+			}
+		}
+		return removed;
 	}
 }
