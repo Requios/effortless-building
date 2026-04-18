@@ -119,18 +119,20 @@ public class CommonEvents {
 
 	@SubscribeEvent
 	public static void onClone(PlayerEvent.Clone event) {
-		// If not dead, player is returning from the End
-		if (!event.isWasDeath()) return;
-
 		Player original = event.getOriginal();
 		Player clone = event.getEntity();
 
-		// Copy the power level from the original player to the clone
+		// Revive caps on the original so we can read them
+		original.reviveCaps();
+
+		// Copy the power level from the original player to the clone (on death and dimension change)
 		original.getCapability(CapabilityHandler.POWER_LEVEL_CAPABILITY).ifPresent(dataOriginal ->
 				clone.getCapability(CapabilityHandler.POWER_LEVEL_CAPABILITY).ifPresent(dataClone -> {
 					dataClone.setPowerLevel(dataOriginal.getPowerLevel());
 				})
 		);
+
+		original.invalidateCaps();
 	}
 
 	@SubscribeEvent
@@ -154,8 +156,10 @@ public class CommonEvents {
 			return;
 		}
 
-		//TODO check if this is needed
 		ServerBuildState.handleNewPlayer(player);
+
+		// Sync power level to client after respawn
+		CapabilityHandler.syncToClient(player);
 	}
 
 	@SubscribeEvent
@@ -170,6 +174,7 @@ public class CommonEvents {
 		//Undo redo has no dimension data, so clear it
 		EffortlessBuilding.UNDO_REDO.clear(player);
 
-		//TODO disable build mode and modifiers?
+		// Sync power level to client after dimension change
+		CapabilityHandler.syncToClient(player);
 	}
 }
