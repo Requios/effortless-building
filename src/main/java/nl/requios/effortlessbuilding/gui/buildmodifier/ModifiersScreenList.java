@@ -30,17 +30,6 @@ public class ModifiersScreenList extends ObjectSelectionList<ModifiersScreenList
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
-        Color c = new Color(0x60_000000);
-        UIRenderHelper.angledGradient(guiGraphics, 90, x0 + width / 2, y0, width, 5, c, Color.TRANSPARENT_BLACK);
-        UIRenderHelper.angledGradient(guiGraphics, -90, x0 + width / 2, y1, width, 5, c, Color.TRANSPARENT_BLACK);
-        UIRenderHelper.angledGradient(guiGraphics, 0, x0, y0 + height / 2, height, 5, c, Color.TRANSPARENT_BLACK);
-        UIRenderHelper.angledGradient(guiGraphics, 180, x1, y0 + height / 2, height, 5, c, Color.TRANSPARENT_BLACK);
-
-        super.render(guiGraphics, mouseX, mouseY, partialTicks);
-    }
-
-    @Override
     protected void renderList(GuiGraphics guiGraphics, int p_239229_, int p_239230_, float p_239231_) {
         Window window = minecraft.getWindow();
         double d0 = window.getGuiScale();
