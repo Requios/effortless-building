@@ -364,7 +364,12 @@ public class BuilderChain {
     }
 
     public BlockEntry getStartPos() {
-        if (getPretendBuildingState() == BuildingState.BREAKING) return new BlockEntry(getStartPosForBreaking());
+        if (getPretendBuildingState() == BuildingState.BREAKING) {
+            //Do not wrap a missing position, callers rely on null to detect clicking in air
+            var startPosForBreaking = getStartPosForBreaking();
+            if (startPosForBreaking == null) return null;
+            return new BlockEntry(startPosForBreaking);
+        }
         return getStartPosForPlacing();
     }
 
