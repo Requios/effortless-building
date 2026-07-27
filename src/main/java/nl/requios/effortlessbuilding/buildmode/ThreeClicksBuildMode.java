@@ -45,6 +45,13 @@ public abstract class ThreeClicksBuildMode extends BaseBuildMode {
 
 			var player = Minecraft.getInstance().player;
 			var secondPos = findSecondPos(player, firstBlockEntry.blockPos, true);
+
+			//If no second position can be found, reset and try again
+			if (secondPos == null) {
+				clicks = 0;
+				return false;
+			}
+
 			secondBlockEntry = new BlockEntry(secondPos);
 		} else {
 			//Third click, place blocks
