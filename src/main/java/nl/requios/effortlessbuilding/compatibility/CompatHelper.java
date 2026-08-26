@@ -44,6 +44,9 @@ public class CompatHelper {
 				if (itemStack.getItem() instanceof AbstractRandomizerBagItem) {
 					AbstractRandomizerBagItem randomizerBagItem = (AbstractRandomizerBagItem) itemStack.getItem();
 					itemStack = randomizerBagItem.pickRandomStack(randomizerBagItem.getBagInventory(itemStack));
+				} else {
+					//Picked a non-block item, which can never resolve to a block; without this the loop never ends
+					return ItemStack.EMPTY;
 				}
 			}
 			return itemStack;
